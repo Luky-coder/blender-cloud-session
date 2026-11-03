@@ -14,7 +14,7 @@ import bpy
 from mathutils import Vector
 
 from . import core
-from .core import TAU, Builder, K, Pose, damp, frame_matrix, surface
+from .core import TAU, Builder, K, Pose, damp, frame_matrix, jitter, surface
 from .elements import ELEMENTS
 
 
@@ -76,10 +76,10 @@ class Family:
             P = Vector(st["path"][0])
             d = Vector(st["dir"]).normalized()
             Mk = frame_matrix(P - d * 0.012 * s, d, up=(0, 0, 1) if abs(d.z) < 0.9 else (0, 1, 0))
-            knot = [B.cone(f"Noeud_Col_{i}", Mk, 0.028 * s, 0.013 * s, 0.04 * s, "corps", seg=12),
+            knot = [B.cone(f"Noeud_Col_{i}", Mk, 0.028 * s, 0.013 * s, 0.04 * s, "corps", seg=8),
                     B.ring(f"Noeud_Bourrelet_{i}", Mk @ Vector((0, 0, 0.045 * s)), 0.017 * s, 0.009 * s, "corps",
-                           axis=d, nseg=6, n=14),
-                    B.sphere(f"Noeud_{i}", None, (0.019 * s, 0.016 * s, 0.014 * s), "corps", 10, 6,
+                           axis=d, nseg=4, n=10),
+                    B.sphere(f"Noeud_{i}", None, (0.019 * s, 0.016 * s, 0.014 * s), "corps", 8, 5,
                              M=Mk @ core.Matrix.Translation((0, 0, 0.056 * s)))]
             for o in knot:
                 core.weight_all(o, f"String{i + 1}_1")
@@ -88,9 +88,8 @@ class Family:
             L = [0.0]
             for a, b in zip(dense, dense[1:]):
                 L.append(L[-1] + (b - a).length)
-            line = B.tube(f"Ficelle_{i}", ctrl, st.get("r", 0.009), "dent", n=48, nseg=6, ncap=2,
-                          section=core.gores(3, 0.25))
-            bead = B.sphere(f"Ficelle_Perle_{i}", dense[-1], (st.get("r", 0.009) * 2.2,) * 3, "dent", 8, 6)
+            line = B.tube(f"Ficelle_{i}", ctrl, st.get("r", 0.009), "dent", n=22, nseg=4, ncap=1)
+            bead = B.sphere(f"Ficelle_Perle_{i}", dense[-1], (st.get("r", 0.009) * 2.2,) * 3, "dent", 6, 4)
             split = self.STRING_SPLIT
             names = [f"String{i + 1}_{k + 1}" for k in range(3)]
 
@@ -132,14 +131,81 @@ class Family:
                 p.add(f"String{i + 1}_{k + 1}", rot=(a, b, 0) if hang else (a, 0, b))
         return p
     def face(self, B, bvh, overrides):
+        """Visage (expression du type) + os animables des yeux : Eye_L/R (clignement, plissement),
+        Pupil_L/R (regard, dilatation, enfants des yeux), Brow_L/R (sourcils). _L = côté +X."""
         params = dict(self.face_params)
         params.update(overrides)
         ff = core.FaceFrame(bvh, self.face_frame["center"], forward=self.face_frame.get("forward", (0, 1, 0)),
                             dist=self.face_frame.get("dist", 3.0))
+        B.face_info = {}
         objs = core.build_face(B, ff, params)
+        rig = next(o for o in B.coll.objects if o.type == "ARMATURE")
+        bones = []
+        for side, tag in ((-1, "L"), (1, "R")):
+            info = B.face_info.get(side)
+            if info:
+                bones += [(f"Eye_{tag}", tuple(info["eye"]), self.face_bone),
+                          (f"Pupil_{tag}", tuple(info["pupil"]), f"Eye_{tag}"),
+                          (f"Brow_{tag}", tuple(info["brow"]), self.face_bone)]
+        core.add_bones(rig, bones, length=params.get("eye_r", 0.08) * 0.5)
         for o in objs:
-            core.weight_all(o, self.face_bone)
+            n = o.name
+            side = "L" if (n.endswith("_G") or n.endswith("_-1")) else ("R" if (n.endswith("_D") or n.endswith("_1"))
+                                                                         else None)
+            if "_Oeil_" in n and side:
+                bone = f"Eye_{side}"
+            elif ("_Pupille_" in n or "_Reflet_" in n) and side:
+                bone = f"Pupil_{side}"
+            elif "_Sourcil_" in n and side:
+                bone = f"Brow_{side}"
+            else:
+                bone = self.face_bone
+            core.weight_all(o, bone)
         return objs
+
+    def eye_motion(self, p, t, n, suffix):
+        """Regard expressif : clignements, saccades, plissement d'attaque, douleur, étourdissement."""
+        er = self.face_params.get("eye_r", 0.08)
+        w = TAU * t / n
+
+        def blink(t0, dur=6):
+            if t0 <= t <= t0 + dur:
+                x = (t - t0) / dur
+                return 1 - 0.92 * min(1.0, math.sin(math.pi * x) * 1.6)
+            return 1.0
+        lid, look, dil, brow_z, brow_g = 1.0, (0.0, 0.0), 1.0, 0.0, 0.0
+        if suffix == "Idle":
+            lid = blink(0.35 * n) * (blink(0.8 * n) if n >= 80 else 1.0)
+            look = K((0, (0.0, 0.0)), (0.2 * n, (0.0, 0.0)), (0.26 * n, (0.28, 0.06)), (0.5 * n, (0.28, 0.06)),
+                     (0.56 * n, (-0.24, -0.02)), (0.74 * n, (-0.24, -0.02)), (0.8 * n, (0.0, 0.0)), (n, (0.0, 0.0)))(t)
+            brow_z = 0.1 * er * math.sin(w)
+        elif suffix == "Move":
+            lid = blink(0.55 * n, 5)
+            look, brow_z, brow_g = (0.0, -0.12), -0.12 * er, 0.12
+        elif suffix == "Hit":
+            lid = K((0, 1.0), (2, 0.08), (6, 0.08), (9, 1.28), (14, 1.1), (n, 1.0))(t)
+            dil = K((0, 1.0), (6, 1.0), (9, 0.6), (n, 1.0))(t)
+            look = (jitter(t * 4, 0.15) * math.exp(-t / 6), jitter(t * 4 + 2, 0.1) * math.exp(-t / 6))
+            brow_z = K((0, 0.0), (3, -0.15 * er), (9, 0.35 * er), (n, 0.0))(t)
+            brow_g = K((0, 0.0), (3, 0.3), (9, -0.35), (n, 0.0))(t)
+        elif suffix == "Death":
+            lid = K((0, 1.0), (0.08 * n, 1.32), (0.2 * n, 1.15), (0.6 * n, 0.85), (0.72 * n, 0.08), (n, 0.08))(t)
+            dil = K((0, 1.0), (0.08 * n, 0.55), (0.25 * n, 0.8), (n, 0.8))(t)
+            spin = K((0, 0.0), (0.15 * n, 0.0), (0.25 * n, 0.3), (0.65 * n, 0.3), (0.72 * n, 0.0))(t)
+            look = (spin * math.cos(t * 0.6), spin * math.sin(t * 0.6))
+            brow_z = K((0, 0.0), (0.08 * n, 0.4 * er), (0.7 * n, 0.15 * er), (n, -0.1 * er))(t)
+            brow_g = K((0, 0.0), (0.08 * n, -0.4), (n, -0.2))(t)
+        else:  # Attack et attaques spéciales : plisse en préparation, effort à l'impact, yeux grands ouverts
+            lid = K((0, 1.0), (0.25 * n, 0.5), (0.42 * n, 0.55), (0.47 * n, 0.25), (0.58 * n, 1.18), (0.8 * n, 1.0))(t)
+            dil = K((0, 1.0), (0.25 * n, 0.8), (0.58 * n, 0.7), (n, 1.0))(t)
+            look = K((0, (0.0, 0.0)), (0.25 * n, (0.0, -0.12)), (0.7 * n, (0.0, -0.12)), (n, (0.0, 0.0)))(t)
+            brow_z = K((0, 0.0), (0.25 * n, -0.28 * er), (0.5 * n, -0.3 * er), (0.6 * n, 0.15 * er), (n, 0.0))(t)
+            brow_g = K((0, 0.0), (0.25 * n, 0.4), (0.5 * n, 0.45), (0.65 * n, 0.1), (n, 0.0))(t)
+        for tag, sgn in (("L", 1), ("R", -1)):
+            p.add(f"Eye_{tag}", scl=(1.0 + 0.3 * (lid - 1) if lid > 1 else 1.0, 1.0, lid))
+            p.add(f"Pupil_{tag}", loc=(look[0] * er, 0, look[1] * er), scl=dil)
+            p.add(f"Brow_{tag}", loc=(0, 0, brow_z), rot=(0, -brow_g * sgn, 0))
+        return p
 
     def add_element(self, B, elem, bvh):
         E = ELEMENTS[elem]
@@ -175,9 +241,9 @@ class Family:
 def valve(B, loc, n, bone, s=1.0):
     """Valve de gonflage : embase dorée, col, bouchon turquoise (orientée selon la normale)."""
     M = frame_matrix(loc - n * 0.01 * s, n, up=(0, 0, 1))
-    objs = [B.cone("Valve_Base", M, 0.052 * s, 0.05 * s, 0.025 * s, "or", seg=18),
-            B.cone("Valve_Col", M, 0.024 * s, 0.022 * s, 0.07 * s, "or", seg=12),
-            B.sphere("Valve_Bouchon", None, (0.034 * s, 0.034 * s, 0.024 * s), "turquoise", 12, 8,
+    objs = [B.cone("Valve_Base", M, 0.052 * s, 0.05 * s, 0.025 * s, "or", seg=12),
+            B.cone("Valve_Col", M, 0.024 * s, 0.022 * s, 0.07 * s, "or", seg=8),
+            B.sphere("Valve_Bouchon", None, (0.034 * s, 0.034 * s, 0.024 * s), "turquoise", 10, 6,
                      M=M @ core.Matrix.Translation((0, 0, 0.08 * s)))]
     for o in objs:
         core.weight_all(o, bone)
@@ -286,7 +352,7 @@ def assemble(fam, elem, ref_path, extra_parts=None, animate=True):
     acts = []
     for suffix, n, fn, loop in (fam.actions() if animate else []):
         def full(t, fn=fn, n=n, suffix=suffix):
-            return fam.string_motion(fn(t), t, n, suffix)
+            return fam.eye_motion(fam.string_motion(fn(t), t, n, suffix), t, n, suffix)
         acts.append(core.bake_action(rig, key, f"{name}_{suffix}", n, full, loop=loop))
     if acts:
         core.assign_action(rig, key, acts[0])

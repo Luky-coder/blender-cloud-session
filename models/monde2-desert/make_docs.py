@@ -120,7 +120,14 @@ World_2_Desert/
 - **Accessoires d'attaque des boss** (racines, noix de coco, vague, tornades, cactus) : géométrie du
   maillage portée par leurs propres os, mis à l'échelle 0,001 et repliés dans le corps hors de leur action.
 - **Matériaux** : Principled BSDF (rugosité basse + vernis) par rôle ; motifs en vraie géométrie.
-- **Polygones** : mobs 20 à 30 k triangles, mini-boss ~30 k, boss ~75 k.
+- **Budget polygones : 20 000 triangles maximum par ennemi** (boss compris), contrôlé par `verify_fbx.py` :
+  mobs ~10,5 à 14 k triangles, mini-boss ~17 k, boss ~19,5 k (détail du nombre exact dans VERIFICATION.md).
+- **Yeux animés** : os `Eye_L/R` (clignement, plissement, yeux écarquillés ; `_L` = côté +X), `Pupil_L/R`
+  (regard, dilatation) et `Brow_L/R` (sourcils levés / froncés). Idle : saccades du regard et clignements ;
+  Move : regard concentré ; attaques : yeux plissés puis effort à l'impact ; Hit : yeux fermés de douleur puis
+  écarquillés ; Death : regard choqué, pupilles qui tournent (étourdi), yeux qui se ferment.
+- **Ficelles de ballon** : nœud de gonflage + ficelle portée par une chaîne `String<i>_1..3`, animée en
+  mouvement secondaire (ondule, traîne, fouette, retombe).
 - **Export FBX** : sélection armature + maillage, « All Actions » (une prise par action), os déformants
   seulement, sans os feuilles, échelle `FBX_SCALE_UNITS` (1 unité = 1 m dans Unity), axes par défaut de
   Blender (-Z avant / Y haut côté FBX), propriétés personnalisées incluses (`PV`, `Element`, `Famille`).

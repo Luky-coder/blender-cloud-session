@@ -66,7 +66,7 @@ class Airship(Family):
     def build(self, B):
         rig = core.make_rig("REF_" + self.key, self.rig_bones(), B.coll)
         bw = self.body_weight
-        n = 64
+        n = 52
         ts = [0.5 * (i / (n - 1)) + 0.5 * (1 - math.cos(math.pi * i / (n - 1))) / 2 for i in range(n)]
         path = [Vector((0, Y0 + (Y1 - Y0) * t, ZC)) for t in ts]
 
@@ -80,7 +80,7 @@ class Airship(Family):
                             return 3
                     return SLOTS.index(role)
             return 0
-        env = B.sweep("Enveloppe", path, [env_r(t) for t in ts], SLOTS, nseg=64, section=GORE, up=(0, 0, 1),
+        env = B.sweep("Enveloppe", path, [env_r(t) for t in ts], SLOTS, nseg=48, section=GORE, up=(0, 0, 1),
                       mat_fn=mat)
         core.weight_fn(env, bw)
         bvh = core.bvh_of([env])
@@ -88,8 +88,8 @@ class Airship(Family):
         # coutures des fuseaux (arrêtées avant le nez/visage)
         for k in range(8):
             th = TAU * k / 8
-            pts = [env_point(0.03 + 0.77 * i / 31, th, 0.002) for i in range(32)]
-            o = B.tube(f"Couture_{k}", pts, 0.007, "couture", n=32, nseg=6, ncap=2)
+            pts = [env_point(0.03 + 0.77 * i / 17, th, 0.002) for i in range(18)]
+            o = B.tube(f"Couture_{k}", pts, 0.007, "couture", n=18, nseg=4, ncap=1)
             core.weight_fn(o, bw)
 
         # ailerons gonflables (en +)
@@ -108,7 +108,7 @@ class Airship(Family):
         # hélice arrière
         shaft = B.cone("Helice_Axe", frame_matrix((0, -1.26, ZC), (0, -1, 0)), 0.05, 0.035, 0.18, "cuir", seg=12)
         core.weight_all(shaft, "Env_Back")
-        hub = B.sphere("Helice_Moyeu", (0, -1.46, ZC), (0.075, 0.06, 0.075), "or", 14, 8)
+        hub = B.sphere("Helice_Moyeu", (0, -1.46, ZC), (0.075, 0.06, 0.075), "or", 10, 6)
         core.weight_all(hub, "Prop")
         for k in range(3):
             a = TAU * k / 3
@@ -126,14 +126,14 @@ class Airship(Family):
         def gsec(th, t):
             c, s = abs(math.cos(th)), abs(math.sin(th))
             return 1.0 / ((c ** 4 / 0.62 ** 4 + s ** 4) ** 0.25)
-        gp = [Vector((0, -0.38 + 0.76 * i / 19, gz)) for i in range(20)]
-        gr = [0.21 * core.dome(i / 19, 0.18, 0.18, 0.5, 0.5) for i in range(20)]
-        gond = B.sweep("Nacelle", gp, gr, ["cuir", "ocre"], nseg=24, section=gsec, up=(0, 0, 1),
+        gp = [Vector((0, -0.38 + 0.76 * i / 13, gz)) for i in range(14)]
+        gr = [0.21 * core.dome(i / 13, 0.18, 0.18, 0.5, 0.5) for i in range(14)]
+        gond = B.sweep("Nacelle", gp, gr, ["cuir", "ocre"], nseg=16, section=gsec, up=(0, 0, 1),
                        mat_fn=lambda i, j, th, t: 1 if (i + j) % 4 == 0 else 0)
         core.weight_all(gond, "Gondola")
         rim_pts = [Vector((math.sin(a) * 0.19 * (1.1 if abs(math.sin(a)) > 0.9 else 1.0), math.cos(a) * 0.36,
-                           gz + 0.12)) for a in [TAU * k / 32 for k in range(32)]]
-        rim = B.sweep("Nacelle_Boudin", rim_pts, [0.035] * 32, ["sable"], nseg=8, up=(0, 0, 1), closed=True)
+                           gz + 0.12)) for a in [TAU * k / 24 for k in range(24)]]
+        rim = B.sweep("Nacelle_Boudin", rim_pts, [0.035] * 24, ["sable"], nseg=6, up=(0, 0, 1), closed=True)
         core.weight_all(rim, "Gondola")
         rope_w = core.gradient("z", [(0.95, "Gondola"), (1.03, "Envelope")])
         for sx in (-1, 1):
@@ -142,15 +142,15 @@ class Airship(Family):
                 top, _ = surface(bvh, Vector((sx * 0.22, sy * 0.42, ZC)), (0, 0, -1))
                 if top is None:
                     top = Vector((sx * 0.22, sy * 0.42, ZC - 0.45))
-                rope = B.tube(f"Cordage_{sx}_{sy}", [a, top + Vector((0, 0, 0.02))], 0.012, "cuir", n=8, nseg=6)
+                rope = B.tube(f"Cordage_{sx}_{sy}", [a, top + Vector((0, 0, 0.02))], 0.012, "cuir", n=4, nseg=4)
                 core.weight_fn(rope, rope_w)
         for sx in (-1, 1):
-            bag = B.sphere(f"Sac_Sable_{sx}", (sx * 0.24, -0.12, gz - 0.06), (0.075, 0.07, 0.095), "sable", 12, 8)
+            bag = B.sphere(f"Sac_Sable_{sx}", (sx * 0.24, -0.12, gz - 0.06), (0.075, 0.07, 0.095), "sable", 10, 6)
             tie = B.ring(f"Sac_Lien_{sx}", (sx * 0.24, -0.12, gz + 0.02), 0.035, 0.01, "cuir", nseg=6, n=12)
             core.weight_all(bag, "Gondola")
             core.weight_all(tie, "Gondola")
         # longue-vue d'explorateur et fanion
-        scope = B.tube("Longue_Vue", [(0.07, 0.3, gz + 0.12), (0.1, 0.62, gz + 0.22)], 0.035, "or", n=6, nseg=12,
+        scope = B.tube("Longue_Vue", [(0.07, 0.3, gz + 0.12), (0.1, 0.62, gz + 0.22)], 0.035, "or", n=5, nseg=8,
                        rfn=lambda t: 0.8 + 0.4 * t)
         lens = B.ring("Longue_Vue_Bague", (0.1, 0.6, gz + 0.215), 0.045, 0.012, "turquoise", axis=(0.09, 0.95, 0.3),
                       nseg=6, n=14)

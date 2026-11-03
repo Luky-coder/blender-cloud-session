@@ -79,31 +79,31 @@ class Scarab(Family):
     # ------------------------------------------------------------------ géométrie de référence
     def build(self, B):
         rig = core.make_rig("REF_" + self.key, self.rig_bones(), B.coll, length=0.15)
-        n = 44
+        n = 34
         path, ts = core.axis_path((0, SY0, SZ), (0, SY1, SZ), n)
 
         def mat(i, j, th, t):
             return 0 if math.cos(th) > -0.2 else 1
-        shell = B.sweep("Carapace", path, [shell_r(t) for t in ts], ["corps", "corps2"], nseg=56, section=shell_sec,
+        shell = B.sweep("Carapace", path, [shell_r(t) for t in ts], ["corps", "corps2"], nseg=42, section=shell_sec,
                         up=(0, 0, 1), mat_fn=mat)
         core.weight_all(shell, "Shell")
-        pron = B.sphere("Pronotum", (0, 0.72, 0.92), (0.74, 0.44, 0.52), "or", 32, 16)
+        pron = B.sphere("Pronotum", (0, 0.72, 0.92), (0.74, 0.44, 0.52), "or", 22, 12)
         core.weight_all(pron, "Thorax")
-        head = B.sphere("Tete", (0, 1.2, 0.74), (0.56, 0.46, 0.5), "corps", 32, 16)
+        head = B.sphere("Tete", (0, 1.2, 0.74), (0.56, 0.46, 0.5), "corps", 24, 12)
         core.weight_all(head, "Head")
         bvh = core.bvh_of([shell, pron, head])
 
         # bordures dorées et suture des élytres
         for s in (-1, 1):
             th = s * math.radians(101)
-            pts = [shell_point(0.05 + 0.9 * i / 29, th, 0.004) for i in range(30)]
-            core.weight_all(B.tube(f"Bordure_{s}", pts, 0.035, "or", n=30, nseg=8), "Shell")
-        pts = [shell_point(0.04 + 0.94 * i / 29, 0.0, 0.004) for i in range(30)]
-        core.weight_all(B.tube("Suture", pts, 0.022, "or", n=30, nseg=8), "Shell")
+            pts = [shell_point(0.05 + 0.9 * i / 17, th, 0.004) for i in range(18)]
+            core.weight_all(B.tube(f"Bordure_{s}", pts, 0.035, "or", n=18, nseg=5), "Shell")
+        pts = [shell_point(0.04 + 0.94 * i / 17, 0.0, 0.004) for i in range(18)]
+        core.weight_all(B.tube("Suture", pts, 0.022, "or", n=18, nseg=5), "Shell")
         # coutures discrètes
         for s in (-1, 1):
-            pts = [shell_point(0.04 + 0.92 * i / 29, s * 0.85, 0.002) for i in range(30)]
-            core.weight_all(B.tube(f"Couture_{s}", pts, 0.008, "couture", n=30, nseg=6, ncap=2), "Shell")
+            pts = [shell_point(0.04 + 0.92 * i / 15, s * 0.85, 0.002) for i in range(16)]
+            core.weight_all(B.tube(f"Couture_{s}", pts, 0.008, "couture", n=16, nseg=4, ncap=1), "Shell")
 
         # motifs végétaux dorés (rinceaux + lotus) et gemmes turquoise sur les élytres
         vine = [[(-0.5, -0.3), (-0.3, -0.05), (-0.05, -0.12), (0.15, 0.1), (0.4, 0.05), (0.5, 0.25)],
@@ -121,7 +121,7 @@ class Scarab(Family):
                     core.weight_all(o, "Shell")
         for k, t in enumerate((0.25, 0.5, 0.75)):
             loc = shell_point(t, 0.0, 0.02)
-            core.weight_all(B.sphere(f"Gemme_{k}", loc, (0.07, 0.07, 0.05), "turquoise", 12, 8), "Shell")
+            core.weight_all(B.sphere(f"Gemme_{k}", loc, (0.07, 0.07, 0.05), "turquoise", 8, 5), "Shell")
         loc, nrm = surface(bvh, (0, 1.6, 1.5), (0, -1, -0.6))
         core.weight_all(B.sphere("Gemme_Front", None, (0.07, 0.07, 0.04), "turquoise", 12, 8,
                                  M=frame_matrix(loc, nrm, up=(0, 0, 1))), "Head")
@@ -135,27 +135,27 @@ class Scarab(Family):
                 ctrl = [base, base + d * 0.12 + Vector((0, 0, 0.05)), base + d * 0.24 + Vector((0, a * 0.1, 0.02))]
                 pth = core.spline(ctrl, 8)
                 rr = [0.0] + [0.07 * math.sin(math.pi * i / 7) ** 0.8 for i in range(1, 7)] + [0.0]
-                leaf = B.sweep(f"Pousse_{k}_{j}", pth, rr, ["fx2"], nseg=8, section=core.ellipse(0.15, 1.0),
+                leaf = B.sweep(f"Pousse_{k}_{j}", pth, rr, ["fx2"], nseg=6, section=core.ellipse(0.15, 1.0),
                                up=(0, 0, 1))
                 core.weight_all(leaf, "Shell")
 
         # antennes à bourgeons
         for s, bone in ((1, "Ant_L"), (-1, "Ant_R")):
             ctrl = [(s * 0.15, 1.36, 1.0), (s * 0.22, 1.55, 1.3), (s * 0.4, 1.72, 1.52), (s * 0.55, 1.8, 1.6)]
-            core.weight_all(B.tube(f"Antenne_{s}", ctrl, 0.03, "couture", n=14, nseg=8), bone)
-            core.weight_all(B.sphere(f"Antenne_Bourgeon_{s}", (s * 0.58, 1.82, 1.62), (0.09, 0.09, 0.12), "fx2", 12, 8),
+            core.weight_all(B.tube(f"Antenne_{s}", ctrl, 0.03, "couture", n=10, nseg=6), bone)
+            core.weight_all(B.sphere(f"Antenne_Bourgeon_{s}", (s * 0.58, 1.82, 1.62), (0.09, 0.09, 0.12), "fx2", 10, 6),
                             bone)
-            core.weight_all(B.sphere(f"Antenne_Fleur_{s}", (s * 0.6, 1.84, 1.72), (0.05, 0.05, 0.04), "fx", 10, 6), bone)
+            core.weight_all(B.sphere(f"Antenne_Fleur_{s}", (s * 0.6, 1.84, 1.72), (0.05, 0.05, 0.04), "fx", 8, 5), bone)
 
         # ailes-feuilles décoratives (dépassant de sous la carapace)
         for s, bone in ((1, "Wing_L"), (-1, "Wing_R")):
             ctrl = [Vector((s * 0.55, -0.35, 1.12)), Vector((s * 1.05, -0.95, 1.3)), Vector((s * 1.3, -1.6, 1.38))]
             pth = core.spline(ctrl, 14)
             rr = [0.0] + [0.34 * math.sin(math.pi * (i / 13) ** 0.8) for i in range(1, 13)] + [0.0]
-            wing = B.sweep(f"Aile_{s}", pth, rr, ["fx2"], nseg=12, section=core.ellipse(0.08, 1.0), up=(0, 0, 1))
+            wing = B.sweep(f"Aile_{s}", pth, rr, ["fx2"], nseg=8, section=core.ellipse(0.08, 1.0), up=(0, 0, 1))
             core.weight_all(wing, bone)
             core.weight_all(B.tube(f"Aile_Nervure_{s}", [ctrl[0] + Vector((0, 0, 0.03)), ctrl[1] + Vector((0, 0, 0.035)),
-                                                          ctrl[2] + Vector((0, 0, 0.0))], 0.016, "or", n=14, nseg=6),
+                                                          ctrl[2] + Vector((0, 0, 0.0))], 0.016, "or", n=10, nseg=4),
                             bone)
 
         # six pattes gonflables
@@ -165,10 +165,10 @@ class Scarab(Family):
             foot = Vector((s * 1.3, y + sw * 0.55, 0.1))
             leg = B.tube(f"Patte_{name}", [hip, hip.lerp(knee, 0.5) + Vector((0, 0, 0.06)), knee,
                                            knee.lerp(foot, 0.5) + Vector((s * 0.06, 0, 0)), foot], 0.1, "corps",
-                         n=18, nseg=12, rfn=lambda t: 1.0 - 0.3 * t + 0.15 * math.sin(math.pi * t * 2) ** 2)
+                         n=12, nseg=10, rfn=lambda t: 1.0 - 0.3 * t + 0.15 * math.sin(math.pi * t * 2) ** 2)
             core.weight_all(leg, f"Leg_{name}")
-            core.weight_all(B.sphere(f"Genou_{name}", knee, (0.105,) * 3, "or", 14, 8), f"Leg_{name}")
-            core.weight_all(B.sphere(f"Pied_{name}", foot + Vector((0, 0.03, -0.02)), (0.11, 0.14, 0.08), "corps2", 14, 8),
+            core.weight_all(B.sphere(f"Genou_{name}", knee, (0.105,) * 3, "or", 10, 6), f"Leg_{name}")
+            core.weight_all(B.sphere(f"Pied_{name}", foot + Vector((0, 0.03, -0.02)), (0.11, 0.14, 0.08), "corps2", 10, 6),
                             f"Leg_{name}")
 
         # valve (flanc gauche arrière)
@@ -179,17 +179,17 @@ class Scarab(Family):
         for k, (x, y) in enumerate(ROOTS):
             bone = f"Roots_{k + 1}"
             ctrl = [(x, y, -0.1), (x + 0.15, y - 0.05, 0.45), (x - 0.12, y + 0.1, 0.95), (x + 0.1, y + 0.05, 1.45)]
-            root = B.tube(f"Racine_{k}", ctrl, 0.16, "cuir", n=16, nseg=12,
+            root = B.tube(f"Racine_{k}", ctrl, 0.16, "cuir", n=12, nseg=8,
                           rfn=lambda t: (1 - t) ** 0.7 * (1 + 0.12 * math.sin(t * 25)) + 0.05)
             core.weight_all(root, bone)
-            mound = B.ring(f"Racine_Butte_{k}", (x, y, 0.03), 0.24, 0.07, "sable", nseg=8, n=20)
+            mound = B.ring(f"Racine_Butte_{k}", (x, y, 0.03), 0.24, 0.07, "sable", nseg=6, n=16)
             core.weight_all(mound, bone)
             for j, (h, a) in enumerate(((0.55, 0.0), (1.0, 2.2))):
                 c = Vector((x, y, h))
                 d = Vector((math.cos(a), math.sin(a), 0.4)).normalized()
                 pth = core.spline([c, c + d * 0.18, c + d * 0.34 + Vector((0, 0, 0.05))], 8)
                 rr = [0.0] + [0.09 * math.sin(math.pi * i / 7) ** 0.8 for i in range(1, 7)] + [0.0]
-                core.weight_all(B.sweep(f"Racine_Feuille_{k}_{j}", pth, rr, ["fx2"], nseg=8,
+                core.weight_all(B.sweep(f"Racine_Feuille_{k}_{j}", pth, rr, ["fx2"], nseg=6,
                                         section=core.ellipse(0.15, 1.0), up=(0, 0, 1)), bone)
         return rig
 

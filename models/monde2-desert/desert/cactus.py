@@ -58,8 +58,8 @@ class Cactus(Family):
         bw = self.body_weight
 
         # Corps : 8 fuseaux gonflés
-        path, ts = core.axis_path((0, 0, Z0), (0, 0, Z1), 36)
-        body = B.sweep("Corps", path, [body_R(t) for t in ts], ["corps"], nseg=NG * 6, section=GORE,
+        path, ts = core.axis_path((0, 0, Z0), (0, 0, Z1), 28)
+        body = B.sweep("Corps", path, [body_R(t) for t in ts], ["corps"], nseg=NG * 5, section=GORE,
                        up=(0, 1, 0))
         core.weight_fn(body, bw)
         bvh = core.bvh_of([body])
@@ -69,15 +69,15 @@ class Cactus(Family):
             th = TAU * k / NG
             spans = [(0.1, 0.985)] if k else [(0.1, 0.45), (0.8, 0.985)]
             for a, b in spans:
-                pts = [body_point(a + (b - a) * i / 23, th, 0.002) for i in range(24)]
-                o = B.tube(f"Couture_{k}_{a}", pts, 0.0065, "couture", n=24, nseg=6, ncap=2)
+                pts = [body_point(a + (b - a) * i / 13, th, 0.002) for i in range(14)]
+                o = B.tube(f"Couture_{k}_{a}", pts, 0.0065, "couture", n=14, nseg=4, ncap=1)
                 core.weight_fn(o, bw)
 
         # Touffes d'épines arrondies sur les crêtes
         for k in range(NG):
             thc = TAU * (k + 0.5) / NG
             front = k in (0, NG - 1)
-            for zi, z in enumerate((0.5, 0.8, 1.1, 1.38) if k % 2 == 0 else (0.62, 0.95, 1.25)):
+            for zi, z in enumerate((0.55, 0.95, 1.35) if k % 2 == 0 else (0.75, 1.15)):
                 if front and 0.8 < z < 1.45:
                     continue
                 t = (z - Z0) / (Z1 - Z0)
@@ -93,13 +93,12 @@ class Cactus(Family):
                  0.115),
                 (-1, "Arm_R", [(-0.2, 0, 0.56), (-0.4, 0, 0.56), (-0.52, 0, 0.61), (-0.58, 0, 0.73),
                                (-0.59, 0, 0.88)], 0.105)):
-            arm = B.tube(f"Bras_{bone}", ctrl, r, "corps", n=16, nseg=24, section=gores(6, 0.1, phase=0.0),
-                         up=(0, 1, 0), ncap=5)
+            arm = B.tube(f"Bras_{bone}", ctrl, r, "corps", n=12, nseg=18, section=gores(6, 0.1, phase=0.0),
+                         up=(0, 1, 0), ncap=4)
             core.weight_all(arm, bone)
             abvh = core.bvh_of([arm])
             top = Vector(ctrl[-1])
-            for i, (dz, dx, dy) in enumerate(((0.05, side * 0.3, 0.2), (-0.12, side * 0.4, -0.15),
-                                              (-0.25, side * 0.3, 0.25))):
+            for i, (dz, dx, dy) in enumerate(((0.05, side * 0.3, 0.2), (-0.2, side * 0.4, -0.1))):
                 target = top + Vector((0, 0, dz))
                 o0 = target + Vector((dx, dy, 0)).normalized() * 0.5
                 loc, n = surface(abvh, o0, target - o0)
@@ -108,12 +107,12 @@ class Cactus(Family):
                         core.weight_all(o, bone)
 
         # Pot gonflable en terre cuite, frise de dunes
-        path = [Vector((0, 0, POT_H * i / 25)) for i in range(26)]
-        prof = [(0.31 + 0.09 * i / 25) * dome(i / 25, t0=0.16, t1=0.03, e0=0.5, e1=0.3) for i in range(26)]
+        path = [Vector((0, 0, POT_H * i / 19)) for i in range(20)]
+        prof = [(0.31 + 0.09 * i / 19) * dome(i / 19, t0=0.16, t1=0.03, e0=0.5, e1=0.3) for i in range(20)]
         prof[0] = prof[-1] = 0.0
 
         def pot_mat(i, j, th, t):
-            z = POT_H * (i + 0.5) / 25
+            z = POT_H * (i + 0.5) / 19
             tri = 2 * abs(((th * 5 / TAU) % 1.0) - 0.5) * 2 - 1
             zc = 0.17 + 0.035 * tri
             if abs(z - zc) < 0.022:
@@ -121,37 +120,37 @@ class Cactus(Family):
             if abs(z - 0.075) < 0.012 or abs(z - 0.28) < 0.012:
                 return 2
             return 0
-        pot = B.sweep("Pot", path, prof, ["terre", "sable", "turquoise"], nseg=40, section=gores(10, 0.04),
+        pot = B.sweep("Pot", path, prof, ["terre", "sable", "turquoise"], nseg=30, section=gores(10, 0.04),
                       up=(0, 1, 0), mat_fn=pot_mat)
         core.weight_all(pot, "Body")
-        rim = B.ring("Pot_Bord", (0, 0, POT_H), 0.405, 0.062, "ocre", nseg=10, n=40)
+        rim = B.ring("Pot_Bord", (0, 0, POT_H), 0.405, 0.062, "ocre", nseg=8, n=30)
         core.weight_all(rim, "Body")
 
         # Bandana d'explorateur (rayé désert) qui serre le ballon
         zb = 0.84
         tb = (zb - Z0) / (Z1 - Z0)
         ring = []
-        for k in range(64):
-            th = TAU * k / 64
+        for k in range(40):
+            th = TAU * k / 40
             r = body_R(tb) * (0.5 + 0.5 * GORE(th, tb)) + 0.012
             ring.append(Vector((-math.sin(th) * r, math.cos(th) * r, zb)))
 
         def band_mat(i, j, th, t):
             return 1 if (i // 2) % 3 == 0 else (2 if j in (0,) else 0)
-        band = B.sweep("Bandana", ring, [0.045] * 64, ["ocre", "sable", "turquoise"], nseg=8,
+        band = B.sweep("Bandana", ring, [0.045] * 40, ["ocre", "sable", "turquoise"], nseg=6,
                        section=core.ellipse(1.0, 0.35), up=(0, 0, 1), closed=True, mat_fn=band_mat)
         core.weight_all(band, "Body_Mid")
         flap_path = core.spline([(0, 0.395, 0.835), (0, 0.39, 0.76), (0, 0.375, 0.66)], 8)
         flap_r = [0.0] + [0.125 * (1 - i / 7) ** 0.9 for i in range(1, 7)] + [0.0]
-        flap = B.sweep("Bandana_Pointe", flap_path, flap_r, ["ocre", "sable"], nseg=10,
+        flap = B.sweep("Bandana_Pointe", flap_path, flap_r, ["ocre", "sable"], nseg=8,
                        section=core.ellipse(1.0, 0.13), up=(1, 0, 0),
                        mat_fn=lambda i, j, th, t: 1 if i in (2, 3) else 0)
         core.weight_all(flap, "Body_Mid")
-        knot = B.sphere("Bandana_Noeud", (0, -0.405, 0.84), (0.05, 0.035, 0.045), "ocre", 10, 8)
+        knot = B.sphere("Bandana_Noeud", (0, -0.405, 0.84), (0.05, 0.035, 0.045), "ocre", 8, 6)
         core.weight_all(knot, "Body_Mid")
         for s in (-1, 1):
             tail = B.tube(f"Bandana_Pan_{s}", [(s * 0.02, -0.41, 0.83), (s * 0.07, -0.43, 0.76),
-                                               (s * 0.09, -0.42, 0.7)], 0.03, "sable", n=8, nseg=8,
+                                               (s * 0.09, -0.42, 0.7)], 0.03, "sable", n=6, nseg=6,
                           section=core.ellipse(0.3, 1.0), up=(0, 1, 0))
             core.weight_all(tail, "Body_Mid")
 
@@ -170,7 +169,7 @@ class Cactus(Family):
         for i, a in enumerate((0.45, -0.45)):
             d = (n * math.cos(a) + Vector((0, 0, 1)) * math.sin(a) * 0.9 + side * 0.15 * (1 if i else -1)).normalized()
             M = frame_matrix(loc + d * L * 0.55, d, up=(0, 0, 1))
-            o = B.sphere(f"{name}_{i}", None, (0.014, 0.014, L), "epine", 8, 5, M=M)
+            o = B.sphere(f"{name}_{i}", None, (0.014, 0.014, L), "epine", 6, 4, M=M)
             if bw:
                 core.weight_fn(o, bw)
             objs.append(o)

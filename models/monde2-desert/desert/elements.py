@@ -49,7 +49,7 @@ def _upright(depth):
     return Matrix.Rotation(math.pi / 2, 4, "X") @ Matrix.Translation((0, 0, -depth / 2))
 
 
-def _flame(B, name, M, w, h, bend, role, n=12, nseg=12):
+def _flame(B, name, M, w, h, bend, role, n=10, nseg=10):
     ctrl = [Vector((0, 0, 0)), Vector((bend * 0.3, 0, h * 0.35)), Vector((-bend * 0.2, 0, h * 0.7)),
             Vector((bend, 0, h))]
     path = spline(ctrl, n)
@@ -59,7 +59,7 @@ def _flame(B, name, M, w, h, bend, role, n=12, nseg=12):
     return bake(ob, M)
 
 
-def _leaf(B, name, M, length, width, role, curl=0.25, n=10):
+def _leaf(B, name, M, length, width, role, curl=0.25, n=8):
     ctrl = [Vector((0, 0, 0)), Vector((0, length * 0.5, length * curl * 0.6)), Vector((0, length, length * curl * 0.2))]
     path = spline(ctrl, n)
     radii = [width * math.sin(math.pi * (i / (n - 1))) ** 0.8 for i in range(n)]
@@ -67,29 +67,29 @@ def _leaf(B, name, M, length, width, role, curl=0.25, n=10):
 
     def sec(th, t):
         return 1.0 / math.sqrt(math.cos(th) ** 2 / 0.12 ** 2 + math.sin(th) ** 2)
-    ob = B.sweep(name, path, radii, [role], nseg=10, section=sec, up=(0, 0, 1))
+    ob = B.sweep(name, path, radii, [role], nseg=8, section=sec, up=(0, 0, 1))
     return bake(ob, M)
 
 
-def _drop(B, name, M, w, h, role, n=12):
+def _drop(B, name, M, w, h, role, n=10):
     path = [Vector((0, 0, h * i / (n - 1))) for i in range(n)]
     radii = [w * math.sin(math.pi * (i / (n - 1)) ** 0.6) ** 0.8 for i in range(n)]
     radii[0] = radii[-1] = 0.0
-    return bake(B.sweep(name, path, radii, [role], nseg=14), M)
+    return bake(B.sweep(name, path, radii, [role], nseg=10), M)
 
 
 # ---------------------------------------------------------------------------------------------
 # LUMIÈRE
 # ---------------------------------------------------------------------------------------------
 def crown_lumiere(B, M, s):
-    out = [bake(B.ring("FX_Halo", (0, 0, s * 0.55), s * 0.62, s * 0.075, "fx", nseg=8, n=28), M)]
+    out = [bake(B.ring("FX_Halo", (0, 0, s * 0.55), s * 0.62, s * 0.075, "fx", nseg=6, n=24), M)]
     d = s * 0.08
     out.append(B.prism("FX_Etoile", _star(4, s * 0.32, s * 0.1), d, "fx2",
                        M=M @ Matrix.Translation((0, 0, s * 0.55)) @ _upright(d), smooth=False))
     for k in range(6):
         a = TAU * k / 6
         loc = Vector((math.cos(a) * s * 0.62, math.sin(a) * s * 0.62, s * 0.55))
-        out.append(B.sphere(f"FX_Perle_{k}", None, (s * 0.07,) * 3, "fx2", 8, 6, M=M @ Matrix.Translation(loc)))
+        out.append(B.sphere(f"FX_Perle_{k}", None, (s * 0.07,) * 3, "fx2", 6, 4, M=M @ Matrix.Translation(loc)))
     return out
 
 
@@ -127,7 +127,7 @@ def crown_tenebres(B, M, s):
         a = k * 1.9
         r = s * (0.34 - 0.04 * k)
         loc = Vector((math.cos(a) * s * 0.18 * (1 - k / 7), math.sin(a) * s * 0.18 * (1 - k / 7), s * (0.12 + 0.2 * k)))
-        out.append(B.sphere(f"FX_Fumee_{k}", None, (r, r, r * 0.85), "fx", 12, 8, M=M @ Matrix.Translation(loc)))
+        out.append(B.sphere(f"FX_Fumee_{k}", None, (r, r, r * 0.85), "fx", 10, 6, M=M @ Matrix.Translation(loc)))
     d = s * 0.08
     pts = _crescent(s * 0.3)
     pts = pts[::-1]
@@ -179,7 +179,7 @@ def _snowflake_strokes():
         st.append([(0, 0), (c * 0.45, sn * 0.45)])
         for f in (0.28,):
             px, py = c * f, sn * f
-            for da in (0.6, -0.6):
+            for da in ((0.6,) if k % 2 else (-0.6,)):
                 st.append([(px, py), (px + math.cos(a + da) * 0.14, py + math.sin(a + da) * 0.14)])
     return st
 
@@ -231,13 +231,13 @@ def crown_eau(B, M, s):
     out.append(B.sphere("FX_Goutte_Reflet", None, (s * 0.07, s * 0.05, s * 0.1), "reflet", 8, 6,
                         M=M @ Matrix.Translation((-s * 0.12, s * 0.26, s * 0.32))))
     for k, (x, y, z, r) in enumerate(((0.42, 0.1, 0.25, 0.12), (-0.38, -0.15, 0.45, 0.09), (0.28, -0.3, 0.75, 0.07))):
-        out.append(B.sphere(f"FX_Bulle_{k}", None, (r * s,) * 3, "fx2", 10, 8,
+        out.append(B.sphere(f"FX_Bulle_{k}", None, (r * s,) * 3, "fx2", 8, 6,
                             M=M @ Matrix.Translation((x * s, y * s, z * s))))
     return out
 
 
 def particle_eau(B, M, s, i):
-    return [B.sphere(f"Aura_Bulle_{i}", None, (s * 0.5,) * 3, "fx2", 12, 8, M=M),
+    return [B.sphere(f"Aura_Bulle_{i}", None, (s * 0.5,) * 3, "fx2", 10, 6, M=M),
             B.sphere(f"Aura_Bulle_Reflet_{i}", None, (s * 0.12, s * 0.12, s * 0.06), "reflet", 6, 4,
                      M=M @ Matrix.Translation((-s * 0.2, s * 0.22, s * 0.42)))]
 

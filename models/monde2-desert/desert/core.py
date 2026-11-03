@@ -453,7 +453,9 @@ def eye_surface_z(x, y, rx, ry, rz):
 
 def build_face(B, ff, p, prefix="Visage"):
     """Construit yeux, pupilles, reflets, sourcils, bouche, langue, crocs et joues.
-    p : dict de paramètres (voir valeurs par défaut ci-dessous). Renvoie la liste des objets."""
+    p : dict de paramètres (voir valeurs par défaut ci-dessous). Renvoie la liste des objets.
+    Renseigne B.face_info[côté] (côté -1 = +X monde = gauche du personnage) : centres de l'œil, de la
+    pupille et du sourcil, qui servent de têtes aux os Eye_*, Pupil_*, Brow_*."""
     d = dict(eye_r=0.08, eye_dx=0.11, eye_v=0.1, eye_tall=1.25, look=(0.0, -0.1), brow=0.35, brow_arch=0.12,
              brow_w=0.17, mouth_v=-0.1, mouth_w=0.2, mouth_h=0.08, smile=0.6, fangs=True, tongue=True,
              cheeks=True, lift=0.004, grumpy=0.0, pupil_scale=1.0)
@@ -468,7 +470,13 @@ def build_face(B, ff, p, prefix="Visage"):
         n_eye = (nrm + ff.f * 1.5).normalized()
         rx, ry, rz = er, er * d["eye_tall"], er * 0.6
         M = frame_matrix(loc - n_eye * rz * 0.25, n_eye, up=ff.U)
-        objs.append(B.sphere(f"{prefix}_Oeil_{'G' if side < 0 else 'D'}", None, (rx, ry, rz), "oeil", 16, 10, M=M))
+        info = dict(eye=M.translation.copy(), pupil=M @ Vector((0, 0, rz)))
+        bl, bn = ff.at(u0, d["eye_v"] + ry + er * 0.45 + d["brow_arch"] * er)
+        info["brow"] = (bl + bn * er * 0.12) if bl is not None else M @ Vector((0, ry * 1.6, 0))
+        if not hasattr(B, "face_info"):
+            B.face_info = {}
+        B.face_info[side] = info
+        objs.append(B.sphere(f"{prefix}_Oeil_{'G' if side < 0 else 'D'}", None, (rx, ry, rz), "oeil", 12, 8, M=M))
         # pupille : posée sur la surface de l'œil, regard légèrement vers l'intérieur (air espiègle)
         px = d["look"][0] * er - side * 0.12 * er
         py = d["look"][1] * er
@@ -476,11 +484,11 @@ def build_face(B, ff, p, prefix="Visage"):
         pz = eye_surface_z(px, py, rx, ry, rz)
         Mp = M @ Matrix.Translation((px, py, pz - er * 0.12))
         objs.append(B.sphere(f"{prefix}_Pupille_{side}", None, (er * 0.5 * ps, er * 0.62 * ps, er * 0.22), "pupille",
-                             12, 8, M=Mp))
+                             10, 6, M=Mp))
         hx, hy = px + er * 0.18, py + er * 0.24
         hz = eye_surface_z(hx, hy, rx, ry, rz) + er * 0.08
         Mh = M @ Matrix.Translation((hx, hy, hz))
-        objs.append(B.sphere(f"{prefix}_Reflet_{side}", None, (er * 0.13, er * 0.13, er * 0.06), "reflet", 8, 6,
+        objs.append(B.sphere(f"{prefix}_Reflet_{side}", None, (er * 0.13, er * 0.13, er * 0.06), "reflet", 6, 4,
                              M=Mh))
         # sourcil : arc, extrémité intérieure plus basse = air déterminé / taquin
         bw = d["brow_w"]
@@ -493,13 +501,13 @@ def build_face(B, ff, p, prefix="Visage"):
             if pl is not None:
                 ctrl.append(pl + pn * er * 0.12)
         if len(ctrl) >= 3:
-            objs.append(B.tube(f"{prefix}_Sourcil_{side}", ctrl, er * 0.17, "couture", n=10, nseg=8,
+            objs.append(B.tube(f"{prefix}_Sourcil_{side}", ctrl, er * 0.17, "couture", n=7, nseg=5,
                                rfn=lambda t: 0.75 + 0.35 * math.sin(math.pi * t)))
         if d["cheeks"]:
             cl, cn = ff.at(side * (d["eye_dx"] + er * 0.9), d["eye_v"] - ry * 1.15)
             if cl is not None:
                 Mc = frame_matrix(cl, cn, up=ff.U)
-                objs.append(B.sphere(f"{prefix}_Joue_{side}", None, (er * 0.55, er * 0.35, er * 0.12), "joue", 10, 6,
+                objs.append(B.sphere(f"{prefix}_Joue_{side}", None, (er * 0.55, er * 0.35, er * 0.12), "joue", 8, 5,
                                      M=Mc))
     # bouche en « D » souriant (ou grognon si smile < 0)
     w, h, k = d["mouth_w"], d["mouth_h"], d["smile"]
@@ -508,7 +516,7 @@ def build_face(B, ff, p, prefix="Visage"):
         mn = (mn + ff.f).normalized()
         M = frame_matrix(mloc, mn, up=ff.U)
         top, bot = [], []
-        N = 12
+        N = 8
         for i in range(N + 1):
             x = -w / 2 + w * i / N
             curve = k * h * (2 * x / w) ** 2 - d["grumpy"] * h * (1 - (2 * x / w) ** 2)
@@ -523,7 +531,7 @@ def build_face(B, ff, p, prefix="Visage"):
             tw, th = w * 0.42, h * 0.45
             yb = -h * (1 - 0.3 * k) + th * 0.55
             pts = [(tw / 2 * math.cos(a), yb + th / 2 * math.sin(a)) for a in
-                   [TAU * i / 14 for i in range(14)]]
+                   [TAU * i / 10 for i in range(10)]]
             to = B.prism(f"{prefix}_Langue", pts, 0.014, "langue")
             conform(to, M, ff.bvh, lift=d["lift"] - 0.003)
             objs.append(to)
@@ -589,8 +597,8 @@ def glyph(B, name, strokes, size, M, bvh, role="glyphe", width=0.045, lift=0.0):
         ctrl = [Vector((x * size, y * size, 0.0)) for x, y in st]
         if len(ctrl) < 2:
             continue
-        n = max(4, min(18, len(ctrl) * 3))
-        ob = B.tube(f"{name}_{i}", ctrl, width * size, role, n=n, nseg=6, ncap=2)
+        n = max(3, min(9, len(ctrl) * 2))
+        ob = B.tube(f"{name}_{i}", ctrl, width * size, role, n=n, nseg=4, ncap=1)
         # rayon ~ demi-épaisseur : relief = moitié haute du boudin
         conform(ob, M, bvh, lift=lift)
         objs.append(ob)
@@ -675,6 +683,27 @@ def make_rig(name, bones, coll, length=0.08):
     for pb in rig.pose.bones:
         pb.rotation_mode = "XYZ"
     return rig
+
+
+def add_bones(rig, bones, length=0.05):
+    """Ajoute des os (orientés comme le monde) à un rig existant : [(nom, tête, parent)]."""
+    new = [b for b in bones if b[0] not in rig.data.bones]
+    if not new:
+        return
+    view = bpy.context.view_layer
+    prev = view.objects.active
+    view.objects.active = rig
+    bpy.ops.object.mode_set(mode="EDIT")
+    for bname, head, parent in new:
+        eb = rig.data.edit_bones.new(bname)
+        eb.head = head
+        eb.tail = Vector(head) + Vector((0, length, 0))
+        eb.roll = 0.0
+        eb.parent = rig.data.edit_bones[parent]
+    bpy.ops.object.mode_set(mode="OBJECT")
+    for bname, _, _ in new:
+        rig.pose.bones[bname].rotation_mode = "XYZ"
+    view.objects.active = prev
 
 
 def join(objs, name):
@@ -806,7 +835,7 @@ def assign_action(rig, key, act):
         rig.animation_data.action_slot = s
 
 
-def bake_action(rig, key, name, nframes, fn, loop=False, step=2):
+def bake_action(rig, key, name, nframes, fn, loop=False, step=1):
     """Échantillonne fn(t) (t = 0 .. nframes) et pose des keyframes sur TOUS les os (y compris CTRL_*
     qui portent les valeurs des shape keys). Image 1 = t 0. Boucles : la clé t = nframes (image N+1)
     égale la première, plage d'action 1..N : le moteur enchaîne N -> 1 sans à-coup."""

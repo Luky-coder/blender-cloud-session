@@ -19,6 +19,7 @@ from mathutils import Vector
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "World_2_Desert")
+MAX_TRIS = 20000  # budget de triangles par ennemi
 
 
 def fcurves(act):
@@ -68,6 +69,19 @@ def check_blend(path):
             loops.append(f"{a.name} : boucle {int(f0)}-{int(f1)}, écart N+1/1 = {gap:.4f}")
             if gap > 1e-3:
                 errors.append(f"{a.name} : la boucle ne se referme pas ({gap:.4f})")
+    tris = sum(len(p.vertices) - 2 for p in mesh.data.polygons)
+    if tris > MAX_TRIS:
+        errors.append(f"{tris} triangles (> {MAX_TRIS})")
+    for b in ("Eye_L", "Eye_R", "Pupil_L", "Pupil_R", "Brow_L", "Brow_R"):
+        if b not in rig.pose.bones:
+            errors.append(f"os {b} absent")
+    for a in bpy.data.actions:  # les yeux doivent cligner dans l'Idle
+        if a.name.endswith("_Idle"):
+            fcs = [fc for _, fc in fcurves(a) if fc.data_path == 'pose.bones["Eye_L"].scale' and fc.array_index == 2]
+            lo = min(fcs[0].evaluate(f) for f in range(int(a.frame_start), int(a.frame_end) + 1)) if fcs else 1.0
+            loops.append(f"{a.name} : clignement des yeux (paupière min {lo:.2f})")
+            if lo > 0.3:
+                errors.append(f"{a.name} : pas de clignement")
     drivers = mesh.data.shape_keys.animation_data.drivers if mesh.data.shape_keys and \
         mesh.data.shape_keys.animation_data else []
     if len(drivers) < 2:

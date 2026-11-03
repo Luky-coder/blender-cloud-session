@@ -77,7 +77,7 @@ class Pyramid(Family):
     def build(self, B):
         rig = core.make_rig("REF_" + self.key, self.rig_bones(), B.coll)
         bw = self.body_weight
-        n = 40
+        n = 30
         path, ts = core.axis_path((0, 0, Z0), (0, 0, H), n)
 
         def mat(i, j, th, t):
@@ -86,27 +86,27 @@ class Pyramid(Family):
                 tri = 2 * abs(((th * 8 / TAU) % 1.0) - 0.5) * 2 - 1
                 return 2 if abs(z - (0.19 + 0.035 * tri)) < 0.03 else 1
             return 0
-        body = B.sweep("Corps", path, [body_r(t) for t in ts], ["corps", "corps2", "ocre"], nseg=72,
+        body = B.sweep("Corps", path, [body_r(t) for t in ts], ["corps", "corps2", "ocre"], nseg=48,
                        section=section, up=(0, 1, 0), mat_fn=mat)
         core.weight_fn(body, bw)
         bvh = core.bvh_of([body])
 
         def seam(name, pts):
             if len(pts) >= 2:
-                o = B.tube(name, pts, 0.0075, "couture", n=max(4, len(pts)), nseg=6, ncap=2)
+                o = B.tube(name, pts, 0.0075, "couture", n=max(4, len(pts)), nseg=4, ncap=1)
                 core.weight_fn(o, bw)
 
         # coutures horizontales (interrompues devant le visage)
         for ci, z in enumerate(COURSES):
             pts = []
-            for k in range(73):
-                th = math.radians(40) + (TAU - math.radians(80)) * k / 72 if 0.5 < z < 1.0 else TAU * k / 72
+            for k in range(37):
+                th = math.radians(40) + (TAU - math.radians(80)) * k / 36 if 0.5 < z < 1.0 else TAU * k / 36
                 pts.append(point(z, th, 0.002))
             seam(f"Couture_Assise_{ci}", pts)
         # arêtes
         for k in range(4):
             th = math.pi / 4 + k * math.pi / 2
-            seam(f"Couture_Arete_{k}", [point(Z0 + 0.05 + (H - 0.1 - Z0) * i / 29, th, 0.002) for i in range(30)])
+            seam(f"Couture_Arete_{k}", [point(Z0 + 0.05 + (H - 0.1 - Z0) * i / 15, th, 0.002) for i in range(16)])
         # joints verticaux décalés (pierres)
         bounds = (Z0 + 0.03,) + COURSES + (H - 0.05,)
         for c in range(len(bounds) - 1):
@@ -142,20 +142,20 @@ class Pyramid(Family):
                         core.weight_fn(g, bw)
 
         # pyramidion doré
-        cp = [Vector((0, 0, 1.33 + 0.3 * i / 13)) for i in range(14)]
-        cr = [0.19 * (1 - i / 13) ** 0.9 * dome(i / 13, t0=0.12, t1=0.0) for i in range(14)]
+        cp = [Vector((0, 0, 1.33 + 0.3 * i / 9)) for i in range(10)]
+        cr = [0.19 * (1 - i / 9) ** 0.9 * dome(i / 9, t0=0.12, t1=0.0) for i in range(10)]
         cr[0] = cr[-1] = 0.0
-        cap = B.sweep("Pyramidion", cp, cr, ["or"], nseg=32, section=section, up=(0, 1, 0))
+        cap = B.sweep("Pyramidion", cp, cr, ["or"], nseg=24, section=section, up=(0, 1, 0))
         core.weight_all(cap, "Cap")
         rp = [Vector((-math.sin(a) * 0.18 * section(a), math.cos(a) * 0.18 * section(a), 1.365))
-              for a in [TAU * k / 40 for k in range(40)]]
-        ring = B.sweep("Pyramidion_Bague", rp, [0.024] * 40, ["turquoise"], nseg=6, up=(0, 0, 1), closed=True)
+              for a in [TAU * k / 28 for k in range(28)]]
+        ring = B.sweep("Pyramidion_Bague", rp, [0.024] * 28, ["turquoise"], nseg=4, up=(0, 0, 1), closed=True)
         core.weight_all(ring, "Cap")
 
         # pieds-coussins
         for bone in self.FEET:
             hx, hy, _ = dict((b[0], b[1]) for b in self.BONES)[bone]
-            foot = B.sphere(f"Pied_{bone}", (hx, hy, 0.075), (0.15, 0.15, 0.08), "sable", 16, 8)
+            foot = B.sphere(f"Pied_{bone}", (hx, hy, 0.075), (0.15, 0.15, 0.08), "sable", 12, 6)
             core.weight_all(foot, bone)
 
         # valve (face -X, en bas)

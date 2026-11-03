@@ -109,8 +109,11 @@ class Oasis(Family):
     def build(self, B):
         rig = core.make_rig("REF_" + self.key, self.rig_bones(), B.coll, length=0.4)
         bw = self.body_weight
-        n = 72
-        ts = [0.5 * (i / (n - 1)) + 0.5 * (1 - math.cos(math.pi * i / (n - 1))) / 2 for i in range(n)]
+        # anneaux de base + anneaux posés exactement sur les bords des bandes (bandes nettes, peu de triangles)
+        base = [0.5 * (i / 21) + 0.5 * (1 - math.cos(math.pi * i / 21)) / 2 for i in range(22)]
+        ts = sorted(set([round(t, 4) for t in base] + [v for a, b, _ in BANDS for v in (a, b)]))
+        ts = [t for k, t in enumerate(ts) if k == 0 or t - ts[k - 1] > 0.004]
+        n = len(ts)
         path = [Vector((0, Y0 + (Y1 - Y0) * t, ZC)) for t in ts]
 
         def mat(i, j, th, t):
@@ -123,20 +126,20 @@ class Oasis(Family):
                             return SLOTS.index("ocre")
                     return SLOTS.index(role)
             return 1 if math.cos(th) < -0.55 and tm < 0.74 else 0
-        env = B.sweep("Enveloppe", path, [env_r(t) for t in ts], SLOTS, nseg=96, section=GORE, up=(0, 0, 1),
+        env = B.sweep("Enveloppe", path, [env_r(t) for t in ts], SLOTS, nseg=36, section=GORE, up=(0, 0, 1),
                       mat_fn=mat)
         core.weight_fn(env, bw)
         bvh = core.bvh_of([env])
-        for k in range(12):
+        for k in range(0, 12, 2):  # une couture sur deux suffit à cette échelle
             th = TAU * k / 12
-            pts = [env_point(0.03 + 0.76 * i / 39, th, 0.01) for i in range(40)]
-            core.weight_fn(B.tube(f"Couture_{k}", pts, 0.03, "couture", n=40, nseg=6, ncap=2), bw)
+            pts = [env_point(0.03 + 0.76 * i / 13, th, 0.01) for i in range(14)]
+            core.weight_fn(B.tube(f"Couture_{k}", pts, 0.03, "couture", n=14, nseg=3, ncap=1), bw)
 
         # frise de hiéroglyphes dorés (flancs)
         names = ["soleil", "ankh", "oeil", "eau", "lotus", "oiseau", "plume", "scarabee"]
         gi = 0
         for s in (-1, 1):
-            for y in (-3.4, -1.9, -0.4, 1.1, 2.6):
+            for y in (-2.0, 1.2):
                 o = Vector((s * 9, y, ZC - 0.6))
                 loc, nrm = surface(bvh, o, (-s, 0, 0))
                 if loc is None:
@@ -155,59 +158,59 @@ class Oasis(Family):
             pathf = core.spline([base, base.lerp(tip, 0.5) + Vector((0, -0.2, 0)), tip], 12)
             radii = [0.0] + [1.4 * (1 - 0.6 * i / 11) * math.sin(math.pi * min(1.0, (11 - i) / 3.0) / 2) ** 0.5
                              for i in range(1, 11)] + [0.0]
-            fin = B.sweep(f"Aileron_{k}", pathf, radii, ["corps2", "or"], nseg=12, section=core.ellipse(1.0, 0.15),
+            fin = B.sweep(f"Aileron_{k}", pathf, radii, ["corps2", "or"], nseg=8, section=core.ellipse(1.0, 0.15),
                           up=(0, 1, 0), mat_fn=lambda i, j, th_, t: 1 if i >= 8 else 0)
             core.weight_all(fin, "Env_Back")
 
         # hélices : grande hélice arrière + 2 nacelles-moteurs latérales
         def propeller(name, center, radius, nblades, bone, role="sable"):
             c = Vector(center)
-            core.weight_all(B.sphere(name + "_Moyeu", c, (radius * 0.22, radius * 0.18, radius * 0.22), "or", 16, 8), bone)
+            core.weight_all(B.sphere(name + "_Moyeu", c, (radius * 0.22, radius * 0.18, radius * 0.22), "or", 10, 6), bone)
             for k in range(nblades):
                 a = TAU * k / nblades
                 d = Vector((math.sin(a), 0, math.cos(a)))
-                pth = core.spline([c + d * radius * 0.12, c + d * radius], 9)
-                rr = [0.0] + [radius * 0.24 * math.sin(math.pi * (i / 8) ** 0.8) for i in range(1, 8)] + [0.0]
-                core.weight_all(B.sweep(f"{name}_Pale_{k}", pth, rr, [role], nseg=8, section=core.ellipse(1.0, 0.18),
+                pth = core.spline([c + d * radius * 0.12, c + d * radius], 7)
+                rr = [0.0] + [radius * 0.24 * math.sin(math.pi * (i / 6) ** 0.8) for i in range(1, 6)] + [0.0]
+                core.weight_all(B.sweep(f"{name}_Pale_{k}", pth, rr, [role], nseg=4, section=core.ellipse(1.0, 0.18),
                                         up=(math.cos(a) * 0.6, 0.8, -math.sin(a) * 0.6), twist=0.5), bone)
         core.weight_all(B.cone("Helice_Axe", frame_matrix((0, Y0 + 0.1, ZC), (0, -1, 0)), 0.25, 0.16, 0.6, "cuir",
                                seg=12), "Env_Back")
         propeller("Helice_Arriere", (0, Y0 - 0.45, ZC), 1.55, 4, "Prop_T")
         for s, bone in PODS:
             px, py, pz = s * 3.05, -1.0, ZC - 0.7
-            pod = B.tube(f"Nacelle_Moteur_{s}", [(px, py + 0.9, pz), (px, py - 0.85, pz)], 0.45, "corps2", n=10,
-                         nseg=16, rfn=lambda t: 1.0 - 0.25 * t,
-                         roles=["corps2", "or"], mat_fn=lambda i, j, th, t: 1 if 3 <= i <= 4 else 0)
+            pod = B.tube(f"Nacelle_Moteur_{s}", [(px, py + 0.9, pz), (px, py - 0.85, pz)], 0.45, "corps2", n=6,
+                         nseg=8, ncap=3, rfn=lambda t: 1.0 - 0.25 * t,
+                         roles=["corps2", "or"], mat_fn=lambda i, j, th, t: 1 if 2 <= i <= 3 else 0)
             core.weight_all(pod, "Envelope")
-            strut = B.tube(f"Mat_Moteur_{s}", [(px - s * 0.3, py, pz + 0.1), (s * 1.9, py, ZC - 0.2)], 0.12, "or", n=6,
-                           nseg=8)
+            strut = B.tube(f"Mat_Moteur_{s}", [(px - s * 0.3, py, pz + 0.1), (s * 1.9, py, ZC - 0.2)], 0.12, "or", n=4,
+                           nseg=6)
             core.weight_all(strut, "Envelope")
             propeller(f"Helice_{s}", (px, -2.05, pz), 0.95, 3, bone)
 
         # île de sable sur le dos
-        isl = B.sphere("Ile", ISLAND_C, (2.05, 3.7, 0.62), "sable", 48, 16)
+        isl = B.sphere("Ile", ISLAND_C, (2.05, 3.7, 0.62), "sable", 24, 8)
         core.weight_all(isl, "Island")
         ibvh = core.bvh_of([isl])
 
         def on_island(x, y):
             loc, nrm = surface(ibvh, (x, y, ZC + 8), (0, 0, -1))
             return loc, nrm
-        for k, y in enumerate((-2.6, -1.6, -0.4, 2.2)):
+        for k, y in enumerate((-2.6, -1.0, 2.2)):
             pts = []
-            for i in range(14):
-                x = -1.6 + 3.2 * i / 13
+            for i in range(9):
+                x = -1.6 + 3.2 * i / 8
                 loc, _ = on_island(x, y + 0.18 * math.sin(i * 1.3 + k))
                 if loc is not None:
                     pts.append(loc + Vector((0, 0, 0.01)))
             if len(pts) > 3:
-                core.weight_all(B.tube(f"Dune_{k}", pts, 0.045, "ocre", n=20, nseg=6), "Island")
+                core.weight_all(B.tube(f"Dune_{k}", pts, 0.045, "ocre", n=10, nseg=4), "Island")
         # bassin gonflable
         loc, _ = on_island(*POND)
         pc = loc + Vector((0, 0, 0.12))
-        core.weight_all(B.ring("Bassin_Boudin", pc, 0.85, 0.16, "or", nseg=10, n=36), "Island")
-        core.weight_all(B.sphere("Bassin_Eau", pc + Vector((0, 0, -0.02)), (0.82, 0.82, 0.1), "turquoise", 32, 8),
+        core.weight_all(B.ring("Bassin_Boudin", pc, 0.85, 0.16, "or", nseg=5, n=20), "Island")
+        core.weight_all(B.sphere("Bassin_Eau", pc + Vector((0, 0, -0.02)), (0.82, 0.82, 0.1), "turquoise", 16, 4),
                         "Island")
-        core.weight_all(B.ring("Bassin_Liseré", pc + Vector((0, 0, 0.1)), 0.85, 0.05, "turquoise", nseg=6, n=36),
+        core.weight_all(B.ring("Bassin_Liseré", pc + Vector((0, 0, 0.1)), 0.85, 0.05, "turquoise", nseg=4, n=24),
                         "Island")
         # palmiers gonflables
         for k, (x, y) in enumerate(PALMS):
@@ -215,35 +218,33 @@ class Oasis(Family):
             top = palm_top(k)
             ctrl = [base - Vector((0, 0, 0.2)), base.lerp(top, 0.45) + Vector((0.25 if k != 1 else -0.25, 0, 0)), top]
             pb, pt = f"Palm_{k + 1}", f"Palm_{k + 1}_Top"
-            trunk = B.tube(f"Palmier_Tronc_{k}", ctrl, 0.24, "ocre", n=28, nseg=12,
+            trunk = B.tube(f"Palmier_Tronc_{k}", ctrl, 0.24, "ocre", n=15, nseg=7,
                            rfn=lambda t: (1 - 0.35 * t) * (1 + 0.12 * abs(math.sin(t * math.pi * 7))),
                            roles=["ocre", "cuir"], mat_fn=lambda i, j, th, t: 1 if i % 4 == 0 else 0)
             core.weight_fn(trunk, core.gradient("z", [(base.z + 0.3, pb), (top.z - 0.4, pt)]))
-            for f in range(7):
-                a = TAU * f / 7 + k
+            for f in range(5):
+                a = TAU * f / 5 + k
                 d = Vector((math.cos(a), math.sin(a), 0))
                 fctrl = [top, top + d * 0.8 + Vector((0, 0, 0.45)), top + d * 1.6 + Vector((0, 0, 0.2)),
                          top + d * 2.15 + Vector((0, 0, -0.45))]
-                pth = core.spline(fctrl, 14)
-                rr = [0.0] + [0.38 * math.sin(math.pi * (i / 13) ** 0.7) for i in range(1, 13)] + [0.0]
-                frond = B.sweep(f"Palme_{k}_{f}", pth, rr, ["fx2"], nseg=10, section=core.ellipse(0.12, 1.0),
+                pth = core.spline(fctrl, 9)
+                rr = [0.0] + [0.38 * math.sin(math.pi * (i / 8) ** 0.7) for i in range(1, 8)] + [0.0]
+                frond = B.sweep(f"Palme_{k}_{f}", pth, rr, ["fx2"], nseg=5, section=core.ellipse(0.12, 1.0),
                                 up=(0, 0, 1))
                 core.weight_all(frond, pt)
-                core.weight_all(B.tube(f"Palme_Nervure_{k}_{f}", [p + Vector((0, 0, 0.04)) for p in pth[1:-1]], 0.03,
-                                       "couture", n=12, nseg=5, ncap=2), pt)
             for c in range(3):
                 a = TAU * c / 3 + 0.5
                 core.weight_all(B.sphere(f"Noix_Deco_{k}_{c}", top + Vector((math.cos(a) * 0.28, math.sin(a) * 0.28, -0.3)),
-                                         (0.2, 0.2, 0.22), "cuir", 12, 8), pt)
+                                         (0.2, 0.2, 0.22), "cuir", 8, 5), pt)
         # buissons
-        for k, (x, y) in enumerate(((1.3, -2.6), (-1.4, -0.5), (1.4, 0.2), (-0.5, -3.0), (-1.2, 2.3))):
+        for k, (x, y) in enumerate(((1.3, -2.6), (-1.4, -0.5), (-1.2, 2.3))):
             loc, _ = on_island(x, y)
             if loc is None:
                 continue
-            for j in range(3):
-                a = TAU * j / 3 + k
+            for j in range(2):
+                a = TAU * j / 2 + k
                 core.weight_all(B.sphere(f"Buisson_{k}_{j}", loc + Vector((math.cos(a) * 0.25, math.sin(a) * 0.25, 0.15)),
-                                         (0.32, 0.32, 0.26), "fx2", 12, 8), "Island")
+                                         (0.32, 0.32, 0.26), "fx2", 8, 5), "Island")
 
         # lianes feuillues pendantes
         for k, (s, y) in enumerate(VINES):
@@ -255,27 +256,27 @@ class Oasis(Family):
                     top + Vector((s * 0.1, -0.15, -L * 0.7)), top + Vector((s * 0.2, 0.1, -L))]
             vb = f"Vine_{k + 1}"
             vw = core.gradient("z", [(top.z - 0.6, vb), (top.z - 0.1, "Envelope")])
-            vine = B.tube(f"Liane_{k}", ctrl, 0.07, "fx2", n=16, nseg=8)
+            vine = B.tube(f"Liane_{k}", ctrl, 0.07, "fx2", n=8, nseg=4, ncap=1)
             core.weight_fn(vine, vw)
-            pts = core.spline(ctrl, 6)
+            pts = core.spline(ctrl, 3)
             for j, p in enumerate(pts[1:]):
                 a = j * 2.1 + k
                 d = Vector((math.cos(a), math.sin(a), -0.3)).normalized()
-                pth = core.spline([p, p + d * 0.25 + Vector((0, 0, 0.08)), p + d * 0.48], 8)
-                rr = [0.0] + [0.13 * math.sin(math.pi * i / 7) ** 0.8 for i in range(1, 7)] + [0.0]
-                leaf = B.sweep(f"Liane_Feuille_{k}_{j}", pth, rr, ["corps2"], nseg=8, section=core.ellipse(0.15, 1.0),
+                pth = core.spline([p, p + d * 0.25 + Vector((0, 0, 0.08)), p + d * 0.48], 6)
+                rr = [0.0] + [0.13 * math.sin(math.pi * i / 5) ** 0.8 for i in range(1, 5)] + [0.0]
+                leaf = B.sweep(f"Liane_Feuille_{k}_{j}", pth, rr, ["corps2"], nseg=5, section=core.ellipse(0.15, 1.0),
                                up=(0, 0, 1))
                 core.weight_fn(leaf, vw)
 
         # réserve d'eau suspendue
         tc = Vector((0, 0.4, ZC - 4.1))
-        tank = B.sphere("Reserve_Eau", tc, (1.55, 1.15, 0.95), "turquoise", 32, 16)
+        tank = B.sphere("Reserve_Eau", tc, (1.55, 1.15, 0.95), "turquoise", 18, 10)
         core.weight_all(tank, "Tank")
-        for x in (-0.75, 0.0, 0.75):
+        for x in (-0.6, 0.6):
             rx = 1.15 * math.sqrt(1 - (x / 1.55) ** 2) + 0.03
             rz = 0.95 * math.sqrt(1 - (x / 1.55) ** 2) + 0.03
-            pts = [Vector((x, tc.y + math.cos(a) * rx, tc.z + math.sin(a) * rz)) for a in [TAU * i / 32 for i in range(32)]]
-            core.weight_all(B.sweep(f"Reserve_Cerclage_{x}", pts, [0.07] * 32, ["or"], nseg=6, up=(1, 0, 0), closed=True),
+            pts = [Vector((x, tc.y + math.cos(a) * rx, tc.z + math.sin(a) * rz)) for a in [TAU * i / 24 for i in range(24)]]
+            core.weight_all(B.sweep(f"Reserve_Cerclage_{x}", pts, [0.07] * 24, ["or"], nseg=4, up=(1, 0, 0), closed=True),
                             "Tank")
         spout = B.cone("Reserve_Robinet", frame_matrix(tc + Vector((0, 0.9, -0.55)), (0, 0.7, -0.7)), 0.16, 0.12, 0.35,
                        "or", seg=12)
@@ -287,7 +288,7 @@ class Oasis(Family):
             for sy in (-1, 1):
                 a = tc + Vector((sx * 0.9, sy * 0.6, 0.65))
                 top, _ = surface(bvh, (sx * 1.3, tc.y + sy * 1.2, ZC), (0, 0, -1))
-                rope = B.tube(f"Reserve_Cordage_{sx}_{sy}", [a, top + Vector((0, 0, 0.05))], 0.05, "cuir", n=8, nseg=6)
+                rope = B.tube(f"Reserve_Cordage_{sx}_{sy}", [a, top + Vector((0, 0, 0.05))], 0.05, "cuir", n=4, nseg=4)
                 core.weight_fn(rope, rope_w)
         loc, nrm = surface(bvh, (-9, 0.8, ZC - 1.6), (1, 0, 0))
         valve(B, loc, nrm, "Envelope", 5.0)
@@ -300,53 +301,53 @@ class Oasis(Family):
         for k in range(3):
             c = self.HEAD[f"Coco_{k + 1}"]
             bone = f"Coco_{k + 1}"
-            core.weight_all(B.sphere(f"Coco_{k}", c, (0.42, 0.42, 0.46), "cuir", 20, 12), bone)
+            core.weight_all(B.sphere(f"Coco_{k}", c, (0.42, 0.42, 0.46), "cuir", 10, 7), bone)
             for j in range(3):
                 a = TAU * j / 3
                 core.weight_all(B.sphere(f"Coco_Oeil_{k}_{j}", c + Vector((math.cos(a) * 0.12, 0.38, 0.12 + math.sin(a) * 0.1)),
-                                         (0.06, 0.04, 0.06), "bouche", 8, 6), bone)
+                                         (0.06, 0.04, 0.06), "bouche", 6, 4), bone)
             core.weight_all(B.cone(f"Coco_Valve_{k}", frame_matrix(c + Vector((0, 0, 0.44)), (0, 0, 1)), 0.08, 0.06, 0.1,
                                    "turquoise", seg=10), bone)
         # vague de sable : rouleau élancé, lèvre de crête enroulée vers l'avant, écume de sable
-        xs = [-4.8 + 9.6 * i / 23 for i in range(24)]
+        xs = [-4.8 + 9.6 * i / 15 for i in range(16)]
         pts = [Vector((x, 4.0 + 0.09 * x * x, 0.0)) for x in xs]
-        rr = [1.5 * math.sin(math.pi * i / 23) ** 0.5 for i in range(24)]
+        rr = [1.5 * math.sin(math.pi * i / 15) ** 0.5 for i in range(16)]
         rr[0] = rr[-1] = 0.0
-        wave = B.sweep("Vague_Sable", pts, rr, ["sable", "ocre"], nseg=16,
+        wave = B.sweep("Vague_Sable", pts, rr, ["sable", "ocre"], nseg=12,
                        section=lambda th, t: 1.0 / math.sqrt((math.cos(th) / 1.0) ** 2 + (math.sin(th) / 0.28) ** 2),
                        up=(0, -0.35, 1), mat_fn=lambda i, j, th, t: 1 if math.cos(th) > 0.6 else 0)
         core.weight_all(wave, "SandWave")
-        lip = [Vector((x, 4.35 + 0.09 * x * x, 1.3 * math.sin(math.pi * i / 23) ** 0.5))
+        lip = [Vector((x, 4.35 + 0.09 * x * x, 1.3 * math.sin(math.pi * i / 15) ** 0.5))
                for i, x in enumerate(xs)][2:-2]
-        core.weight_all(B.tube("Vague_Levre", lip, 0.32, "ocre", n=20, nseg=10,
+        core.weight_all(B.tube("Vague_Levre", lip, 0.32, "ocre", n=12, nseg=6,
                                rfn=lambda t: math.sin(math.pi * t) ** 0.4 + 0.1), "SandWave")
-        for i in range(2, 22, 2):
+        for i in range(2, 12, 2):
             c = lip[i - 2] + Vector((0, 0.3, 0.12))
-            core.weight_all(B.sphere(f"Vague_Ecume_{i}", c, (0.26, 0.26, 0.22), "sable", 10, 6), "SandWave")
+            core.weight_all(B.sphere(f"Vague_Ecume_{i}", c, (0.26, 0.26, 0.22), "sable", 8, 5), "SandWave")
         # tornades
         for k, (x, y) in enumerate(TORNADOES):
-            pth = [Vector((x + 0.3 * math.sin(i * 0.5), y, 5.8 * i / 25)) for i in range(26)]
+            pth = [Vector((x + 0.3 * math.sin(i * 0.9), y, 5.8 * i / 13)) for i in range(14)]
             pth[-1] = Vector((pth[-2].x, y, 5.0))           # sommet en entonnoir (creux)
-            rr = [0.0] + [0.15 + 1.35 * (i / 24) ** 1.4 for i in range(1, 25)] + [0.0]
-            tor = B.sweep(f"Tornade_{k}", pth, rr, ["sable", "ocre"], nseg=18, section=gores(6, 0.3), up=(0, 1, 0),
+            rr = [0.0] + [0.15 + 1.35 * (i / 12) ** 1.4 for i in range(1, 13)] + [0.0]
+            tor = B.sweep(f"Tornade_{k}", pth, rr, ["sable", "ocre"], nseg=10, section=gores(5, 0.3), up=(0, 1, 0),
                           twist=9.0, mat_fn=lambda i, j, th, t: 1 if (j + i) % 6 < 2 else 0)
             core.weight_all(tor, f"Tornado_{k + 1}")
         # cactus gonflables qui surgissent du sol
         for k, (x, y) in enumerate(CACTI):
             bone = f"Cactus_{k + 1}"
-            path = [Vector((x, y, 1.6 * i / 17)) for i in range(18)]
-            rr = [0.33 * core.dome(i / 17, 0.05, 0.3) for i in range(18)]
-            core.weight_all(B.sweep(f"Mini_Cactus_{k}", path, rr, ["corps"], nseg=32, section=gores(8, 0.12),
+            path = [Vector((x, y, 1.6 * i / 9)) for i in range(10)]
+            rr = [0.33 * core.dome(i / 9, 0.08, 0.35) for i in range(10)]
+            core.weight_all(B.sweep(f"Mini_Cactus_{k}", path, rr, ["corps"], nseg=12, section=gores(6, 0.12),
                                     up=(0, 1, 0)), bone)
             for s in (-1, 1):
                 core.weight_all(B.tube(f"Mini_Cactus_Bras_{k}_{s}", [(x, y, 0.75 + 0.1 * s), (x + s * 0.5, y, 0.75 + 0.1 * s),
                                                                     (x + s * 0.55, y, 1.15 + 0.1 * s)], 0.1, "corps",
-                                       n=10, nseg=12), bone)
+                                       n=5, nseg=6, ncap=2), bone)
                 core.weight_all(B.sphere(f"Mini_Cactus_Oeil_{k}_{s}", (x + s * 0.13, y + 0.3, 1.15), (0.08, 0.05, 0.1),
-                                         "oeil", 10, 6), bone)
+                                         "oeil", 8, 5), bone)
                 core.weight_all(B.sphere(f"Mini_Cactus_Pupille_{k}_{s}", (x + s * 0.12, y + 0.345, 1.13),
-                                         (0.04, 0.03, 0.05), "pupille", 8, 6), bone)
-            core.weight_all(B.ring(f"Mini_Cactus_Sable_{k}", (x, y, 0.04), 0.42, 0.1, "sable", nseg=8, n=20), bone)
+                                         (0.04, 0.03, 0.05), "pupille", 6, 4), bone)
+            core.weight_all(B.ring(f"Mini_Cactus_Sable_{k}", (x, y, 0.04), 0.42, 0.1, "sable", nseg=4, n=12), bone)
 
     # ------------------------------------------------------------------ shape keys
     def deflate(self, co):
