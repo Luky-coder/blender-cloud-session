@@ -5,7 +5,6 @@ sur la VM. Claude écrit un script Python par modèle, le génère avec Blender,
 puis pousse sur une branche au nom de l'objet (`model/<nom>`) :
 
 - le `.blend` ;
-- un `.glb` ;
 - des screenshots (4 vues et une grille d'aperçu) ;
 - un README par modèle qui affiche l'aperçu directement sur GitHub.
 
@@ -50,7 +49,7 @@ CLAUDE.md                     instructions pour Claude (workflow, conventions)
 .claude/hooks/session-start.sh  installe Blender si absent (sessions cloud uniquement)
 scripts/setup_blender.sh      installation de Blender 5.2 (setup script / hook)
 tools/build.sh                bash tools/build.sh models/<nom> : génère tout le modèle
-tools/build.py                scène vide → build.py → .blend → .glb → screenshots → README
+tools/build.py                scène vide → build.py → .blend → screenshots → README
 tools/preview.py              rendus Cycles CPU multi-vues + grille (utilisable sur tout .blend)
 tools/helpers.py              matériaux, bevel, lissage
 models/<nom>/build.py         le script source d'un modèle (le reste est généré)

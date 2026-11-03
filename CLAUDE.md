@@ -30,7 +30,6 @@ Réponds à l'utilisateur en français.
    ```
    Donner un timeout Bash de 600000 ms, car le rendu CPU peut être long. Cela produit :
    - `models/<nom>/<nom>.blend` : le fichier Blender
-   - `models/<nom>/<nom>.glb` : l'export glTF
    - `models/<nom>/screenshots/{iso,front,right,top}.jpg` et `preview.jpg` (grille 2×2 : iso | front / right | top)
    - `models/<nom>/README.md` : aperçu, dimensions, stats (généré, ne pas l'éditer à la main)
 3. **Regarder** `models/<nom>/screenshots/preview.jpg` avec l'outil Read, et les vues individuelles pour
@@ -43,7 +42,9 @@ Options de `tools/build.sh` :
 - `--samples N` : 32 par défaut.
 - `--width W --height H` : 800×600 par vue par défaut.
 - `--views` : parmi `iso,iso_back,front,back,right,left,top`.
-- `--no-render` et `--no-glb`.
+- `--no-render` : pas de screenshots.
+
+Pas d'export `.glb`, `.fbx` ou autre : l'utilisateur ne veut que le `.blend`.
 
 Pour itérer vite : `--samples 8 --width 480 --height 360`. Garder les valeurs par défaut pour la version
 poussée.
