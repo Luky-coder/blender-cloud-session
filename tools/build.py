@@ -4,7 +4,7 @@
     (ou plus simplement : bash tools/build.sh models/<nom> [options])
 
 Étapes : scène vide -> exécution de build.py -> <nom>.blend -> <nom>.glb
-         -> screenshots/*.png + screenshots/preview.png -> README.md du modèle.
+         -> screenshots/*.jpg + screenshots/preview.jpg -> README.md du modèle.
 """
 import argparse
 import ast
@@ -58,10 +58,10 @@ def write_readme(model_dir, name, script, stats, has_glb, views):
     lines = [f"# {name}", ""]
     if doc:
         lines += [doc.strip(), ""]
-    if os.path.isfile(os.path.join(model_dir, "screenshots", "preview.png")):
-        lines += ["![Aperçu](screenshots/preview.png)", ""]
+    if os.path.isfile(os.path.join(model_dir, "screenshots", "preview.jpg")):
+        lines += ["![Aperçu](screenshots/preview.jpg)", ""]
         if views:
-            lines += ["Vues : " + " · ".join(f"[{v}](screenshots/{v}.png)" for v in views), ""]
+            lines += ["Vues : " + " · ".join(f"[{v}](screenshots/{v}.jpg)" for v in views), ""]
     lines += ["| Fichier | Contenu |", "|---|---|",
               f"| [`{name}.blend`]({name}.blend) | Fichier Blender {bpy.app.version_string} |"]
     if has_glb:

@@ -2,9 +2,9 @@
 
 Table basse en bois avec une tasse : modèle d'exemple, qui sert aussi de test du pipeline.
 
-![Aperçu](screenshots/preview.png)
+![Aperçu](screenshots/preview.jpg)
 
-Vues : [iso](screenshots/iso.png) · [front](screenshots/front.png) · [right](screenshots/right.png) · [top](screenshots/top.png)
+Vues : [iso](screenshots/iso.jpg) · [front](screenshots/front.jpg) · [right](screenshots/right.jpg) · [top](screenshots/top.jpg)
 
 | Fichier | Contenu |
 |---|---|

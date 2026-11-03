@@ -2,7 +2,8 @@
 
 Ce repo sert à créer des modèles 3D avec Blender **sans écran ni GPU**, dans une session Claude Code cloud.
 L'utilisateur décrit un objet ; tu écris un script Python `bpy` qui le construit, tu le génères, tu regardes
-les rendus, tu corriges, puis tu pousses le résultat (fichiers + screenshots) sur la branche de la session.
+les rendus, tu corriges, puis tu pousses le résultat (fichiers + screenshots) sur une branche
+`model/<nom>` dédiée à l'objet (voir la section Git).
 Réponds à l'utilisateur en français.
 
 ## Environnement
@@ -17,7 +18,9 @@ Réponds à l'utilisateur en français.
 
 ## Workflow pour chaque modèle
 
-1. Créer `models/<nom>/build.py` (`<nom>` en kebab-case, ex. `lampe-bureau`). Ce script construit tout le
+0. Choisir `<nom>` (kebab-case, court, ex. `lampe-bureau`) et se placer sur la branche
+   `model/<nom>` **avant d'écrire le moindre fichier** (voir la section Git).
+1. Créer `models/<nom>/build.py`. Ce script construit tout le
    modèle à partir d'une scène vide, sans la nettoyer au préalable. Sa docstring décrit le modèle en 1-3
    phrases et se retrouve dans le README du modèle.
    Conventions : unités en mètres, Z vers le haut, l'avant du modèle tourné vers -Y, posé sur Z = 0.
@@ -28,9 +31,9 @@ Réponds à l'utilisateur en français.
    Donner un timeout Bash de 600000 ms, car le rendu CPU peut être long. Cela produit :
    - `models/<nom>/<nom>.blend` : le fichier Blender
    - `models/<nom>/<nom>.glb` : l'export glTF
-   - `models/<nom>/screenshots/{iso,front,right,top}.png` et `preview.png` (grille 2×2 : iso | front / right | top)
+   - `models/<nom>/screenshots/{iso,front,right,top}.jpg` et `preview.jpg` (grille 2×2 : iso | front / right | top)
    - `models/<nom>/README.md` : aperçu, dimensions, stats (généré, ne pas l'éditer à la main)
-3. **Regarder** `models/<nom>/screenshots/preview.png` avec l'outil Read, et les vues individuelles pour
+3. **Regarder** `models/<nom>/screenshots/preview.jpg` avec l'outil Read, et les vues individuelles pour
    les détails. Vérifier proportions, matériaux, pièces manquantes ou qui se chevauchent. Corriger
    `build.py` et régénérer tant que le résultat ne correspond pas à la demande.
 4. Commit + push (voir plus bas), **à chaque itération montrable**, pas seulement à la fin.
@@ -71,23 +74,39 @@ poussée.
 2. Faire les screenshots :
    `blender -b --factory-startup chemin/fichier.blend -P tools/preview.py -- --out chemin/screenshots`
 
-## Git : livrer à chaque itération
+## Git : une branche par objet
 
-- Travailler sur la branche courante de la session ; ne jamais pousser sur `main`.
-- Après chaque génération réussie et vérifiée visuellement :
+**Demande explicite de l'utilisateur** : chaque objet vit sur une branche au nom lisible `model/<nom>`
+(même `<nom>` que le dossier `models/<nom>`). Ne pas pousser sur la branche automatique de la session
+(`claude/<nom-aléatoire>`), ni sur `main`. Le proxy GitHub de la session autorise le push vers une autre
+branche.
+
+- **Nouvel objet** : avant d'écrire des fichiers, partir de `main` :
+  ```bash
+  git ls-remote --heads origin model/<nom>   # doit être vide, sinon choisir un autre <nom>
+  git fetch origin main
+  git checkout -b model/<nom> FETCH_HEAD
+  ```
+- **Retouche d'un objet existant** (la branche `model/<nom>` existe déjà sur origin) : continuer dessus.
+  ```bash
+  git fetch origin model/<nom>
+  git checkout -B model/<nom> FETCH_HEAD
+  ```
+- **Plusieurs objets dans la même session** : une branche par objet, chacune partant de `main`.
+- **Après chaque génération réussie** et vérifiée visuellement :
   ```bash
   git add models/<nom>
   git commit -m "<nom> : <ce qui a changé>"
-  git push -u origin HEAD
+  git push -u origin model/<nom>
   ```
 - Aucun fichier de plus de 50 Mo (GitHub refuse au-delà de 100 Mo). Si un fichier est trop gros, réduire
   la géométrie : moins de segments, moins de subdivisions.
 - Dans le message final à l'utilisateur :
   - ce qui a été fait ;
   - les dimensions ;
+  - le nom de la branche (`model/<nom>`) ;
   - le lien GitHub vers le README du modèle, qui affiche les screenshots :
-    `https://github.com/Gregoire-W/blender-cloud-session/blob/<branche>/models/<nom>/README.md`
-    (`<branche>` = `git branch --show-current`).
+    `https://github.com/Gregoire-W/blender-cloud-session/blob/model/<nom>/models/<nom>/README.md`
 
 ## Outils du repo
 

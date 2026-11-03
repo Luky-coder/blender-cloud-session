@@ -2,14 +2,14 @@
 
 Faire créer des modèles 3D par Claude Code **en session cloud** (claude.ai/code), avec Blender en headless
 sur la VM. Claude écrit un script Python par modèle, le génère avec Blender, regarde les rendus, corrige,
-puis pousse sur sa branche :
+puis pousse sur une branche au nom de l'objet (`model/<nom>`) :
 
 - le `.blend` ;
 - un `.glb` ;
 - des screenshots (4 vues et une grille d'aperçu) ;
 - un README par modèle qui affiche l'aperçu directement sur GitHub.
 
-![Exemple](models/exemple-table/screenshots/preview.png)
+![Exemple](models/exemple-table/screenshots/preview.jpg)
 
 ## Configuration (une seule fois)
 
@@ -30,14 +30,17 @@ Lance une session sur ce repo avec cet environnement, puis demande par exemple :
 
 > Crée une lampe de bureau articulée, style scandinave, en bois clair et métal blanc.
 
-Claude crée `models/lampe-bureau/build.py`, génère le modèle, vérifie les rendus et pousse sur la branche
-de la session. Pour récupérer le résultat :
+Claude crée la branche `model/lampe-bureau` et le script `models/lampe-bureau/build.py`, génère le modèle,
+vérifie les rendus et pousse sur cette branche. Pour récupérer le résultat :
 
-- **Sur GitHub** : ouvre la branche, puis `models/<nom>/README.md`. L'aperçu et les vues s'affichent.
-- **En local** : `git fetch && git checkout <branche>`, puis ouvre `models/<nom>/<nom>.blend` dans Blender.
+- **Sur GitHub** : ouvre la branche `model/<nom>`, puis `models/<nom>/README.md`. L'aperçu et les vues s'affichent.
+- **En local** : `git fetch && git checkout model/<nom>`, puis ouvre `models/<nom>/<nom>.blend` dans Blender.
 
 Pour une retouche, il suffit de continuer la conversation, par exemple « pieds plus fins » ou « ajoute un
-tiroir ». Chaque itération est commitée.
+tiroir ». Chaque itération est commitée sur la même branche. Dans une nouvelle session, demande par exemple
+« retouche lampe-bureau : … » : Claude repart de la branche `model/lampe-bureau`.
+
+Pour regrouper un modèle terminé dans `main`, fusionne sa branche (pull request sur GitHub).
 
 ## Structure
 

@@ -31,6 +31,7 @@ VIEWS = {
 DEFAULT_VIEWS = ["iso", "front", "right", "top"]
 
 RENDERABLE = {"MESH", "CURVE", "SURFACE", "META", "FONT", "CURVES", "POINTCLOUD", "VOLUME", "GREASEPENCIL"}
+JPEG_QUALITY = 90  # JPEG plutôt que PNG : 5 à 10 fois plus léger dans le repo
 MARGIN = 1.12
 PREFIX = "_preview_"
 
@@ -69,8 +70,9 @@ def _setup_render(scene, width, height, samples):
     scene.render.resolution_percentage = 100
     scene.render.film_transparent = False
     scene.render.use_persistent_data = True  # garde le BVH entre les vues
-    scene.render.image_settings.file_format = "PNG"
+    scene.render.image_settings.file_format = "JPEG"
     scene.render.image_settings.color_mode = "RGB"
+    scene.render.image_settings.quality = JPEG_QUALITY
 
 
 def _ensure_lighting(scene):
@@ -137,7 +139,7 @@ def _setup_camera(scene, name, azimuth, elevation, ortho, lo, hi):
 
 
 def make_grid(paths, out_path, cols=2):
-    """Assemble plusieurs PNG de même taille en une grille (ordre de lecture : gauche->droite, haut->bas)."""
+    """Assemble plusieurs images de même taille en une grille JPEG (ordre de lecture : gauche->droite, haut->bas)."""
     import numpy as np
 
     images = [bpy.data.images.load(p, check_existing=False) for p in paths]
@@ -152,15 +154,14 @@ def make_grid(paths, out_path, cols=2):
         canvas[y0:y0 + h, c * w:(c + 1) * w] = px.reshape(h, w, 4)
     grid = bpy.data.images.new(PREFIX + "grid", cols * w, rows * h, alpha=False)
     grid.pixels.foreach_set(canvas.ravel())
-    grid.filepath_raw = out_path
-    grid.file_format = "PNG"
-    grid.save()
+    grid.file_format = "JPEG"
+    grid.save(filepath=out_path, quality=JPEG_QUALITY)
     for img in images + [grid]:
         bpy.data.images.remove(img)
 
 
 def render_previews(out_dir, views=None, width=800, height=600, samples=32):
-    """Rend chaque vue dans out_dir/<vue>.png, plus out_dir/preview.png (grille de toutes les vues)."""
+    """Rend chaque vue dans out_dir/<vue>.jpg, plus out_dir/preview.jpg (grille de toutes les vues)."""
     views = views or DEFAULT_VIEWS
     unknown = [v for v in views if v not in VIEWS]
     if unknown:
@@ -174,7 +175,7 @@ def render_previews(out_dir, views=None, width=800, height=600, samples=32):
 
     os.makedirs(out_dir, exist_ok=True)
     for f in os.listdir(out_dir):  # supprime les anciennes captures
-        if f.endswith(".png"):
+        if f.endswith((".png", ".jpg")):
             os.remove(os.path.join(out_dir, f))
 
     _setup_render(scene, width, height, samples)
@@ -185,13 +186,13 @@ def render_previews(out_dir, views=None, width=800, height=600, samples=32):
         t0 = time.time()
         az, el, ortho = VIEWS[name]
         scene.camera = _setup_camera(scene, name, az, el, ortho, lo, hi)
-        path = os.path.join(out_dir, f"{name}.png")
+        path = os.path.join(out_dir, f"{name}.jpg")
         scene.render.filepath = path
         bpy.ops.render.render(write_still=True)
         paths.append(path)
         print(f"[preview] {name}: {path} ({time.time() - t0:.1f}s)")
 
-    grid_path = os.path.join(out_dir, "preview.png")
+    grid_path = os.path.join(out_dir, "preview.jpg")
     make_grid(paths, grid_path, cols=2 if len(paths) > 1 else 1)
     print(f"[preview] grille : {grid_path}")
     return paths, grid_path
@@ -200,7 +201,7 @@ def render_previews(out_dir, views=None, width=800, height=600, samples=32):
 def _main():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     p = argparse.ArgumentParser(prog="tools/preview.py", description="Rend des aperçus du .blend ouvert.")
-    p.add_argument("--out", required=True, help="dossier de sortie des PNG")
+    p.add_argument("--out", required=True, help="dossier de sortie des images")
     p.add_argument("--views", default=",".join(DEFAULT_VIEWS), help=f"vues parmi {','.join(VIEWS)}")
     p.add_argument("--width", type=int, default=800)
     p.add_argument("--height", type=int, default=600)
