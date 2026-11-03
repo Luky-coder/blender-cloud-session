@@ -1,8 +1,9 @@
 """Javelot de Valkyrie « Ailes d'argent » : lance courte à une main (1,70 m). Fer en feuille d'argent bien
 en volume (arête centrale, 7 cm d'épaisseur), biseau d'or, panneau violet orné d'une rune ᛉ, d'une plume
 gravée, d'un double filet et de perles d'or ; ailes de valkyrie en plumes barbées d'or sur la douille,
-poignée gainée de cuir blanc, pommeau doré serti de gemmes violettes. Targe ronde (54 cm) argent et or :
-gemme violette, ailes en relief, rune ᛉ, éclair, volutes en filigrane et cercle perlé.
+poignée gainée de cuir blanc, bandeau de tissu violet noué au bas de la hampe, pommeau doré serti de
+gemmes violettes. Targe ronde (54 cm) argent et or :
+gemme violette, ailes en relief, cimier de plumes, éclair, volutes en filigrane et cercle perlé.
 Style Roblox : facettes plates, pièces en blocs, motifs en relief.
 """
 import math
@@ -28,6 +29,7 @@ ARGENT = material("Argent", lin(226, 231, 240), roughness=0.35, metallic=0.25)
 OR = material("Or", lin(240, 186, 58), roughness=0.38, metallic=0.35)
 VIOLET = material("Violet", lin(104, 58, 180), roughness=0.45, metallic=0.1)
 NUIT = material("Violet_nuit", lin(44, 34, 84), roughness=0.45, metallic=0.15)
+TISSU = material("Tissu_violet", lin(126, 72, 206), roughness=0.85)
 CUIR_BLANC = material("Cuir_blanc", lin(236, 226, 208), roughness=0.7)
 GEMME = material("Gemme", lin(170, 100, 255), roughness=0.2, emission=lin(150, 70, 255), emission_strength=1.2)
 
@@ -274,6 +276,32 @@ def lifted(bm, lines, h, t, M=None, ext=0.9, sub=1):
                 beam(bm, M @ Vector((p[0], sign * h(*p), p[1])), M @ Vector((q[0], sign * h(*q), q[1])), t, ext)
 
 
+def cloth(bm, t0, t1, rows, length, width, thick, sway, twist, notch=0.0, crease=0.004, M=None):
+    """Pan de tissu qui pend le long de -Z (largeur selon X), de la fraction t0 à t1 de sa longueur :
+    ondule vers l'avant (sway), vrille (twist, radians), plis à facettes (crease), bout fendu (notch)."""
+    rows_v = []
+    for i in range(rows + 1):
+        t = t0 + (t1 - t0) * i / rows
+        tw = twist * t
+        xd, nd = Vector((math.cos(tw), math.sin(tw), 0)), Vector((-math.sin(tw), math.cos(tw), 0))
+        c = Vector((0, 0, -length * t)) - nd * sway * math.sin(math.pi * 1.1 * t)
+        w = width * (1 - 0.12 * t)
+        mid = c - nd * crease * (1 if i % 2 else -1) + Vector((0, 0, notch if (i == rows and t1 >= 1) else 0))
+        row = [c - xd * w / 2, mid, c + xd * w / 2]
+        rows_v.append(([bm.verts.new(p - nd * thick / 2) for p in row], [bm.verts.new(p + nd * thick / 2) for p in row]))
+    for (f0, b0), (f1, b1) in zip(rows_v, rows_v[1:]):
+        for j in range(2):
+            bm.faces.new((f0[j], f0[j + 1], f1[j + 1], f1[j]))
+            bm.faces.new((b0[j], b1[j], b1[j + 1], b0[j + 1]))
+        bm.faces.new((f0[0], f1[0], b1[0], b0[0]))
+        bm.faces.new((f0[2], b0[2], b1[2], f1[2]))
+    (ft, bt), (fb, bb) = rows_v[0], rows_v[-1]
+    bm.faces.new(ft + bt[::-1])
+    for j in range(2):
+        bm.faces.new((fb[j], bb[j], bb[j + 1], fb[j + 1]))
+    _xf(bm, [v for f, b in rows_v for v in f + b], M)
+
+
 # ---------------------------------------------------------------- objets
 PARTS = {}
 
@@ -342,8 +370,8 @@ def wing(root, tip, side=1, bulge=0.14, wscale=1.0):
         feathers.append((flip(place([(L * a, w * b) for a, b in PLUME], 1.0, ang, p)),
                          flip(place([(0.10 * L, 0.0), (0.78 * L, 0.0)], 1.0, ang, p)),
                          flip(place([(L, 0.0)], 1.0, ang, p))[0],
-                         [flip(place([(c - 0.13 * L, 0.36 * w), (c, 0.0), (c - 0.13 * L, -0.60 * w)], 1.0, ang, p))
-                          for c in (0.42 * L, 0.64 * L)]))
+                         [flip(place([(c + 0.13 * L, 0.36 * w), (c, 0.0), (c + 0.13 * L, -0.60 * w)], 1.0, ang, p))
+                          for c in (0.30 * L, 0.52 * L)]))
     ridge = flip([tuple(curve(0.05 + 0.9 * i / 8)) for i in range(9)])
     return arm, feathers, ridge
 
@@ -375,6 +403,18 @@ bm = part("Javelot_Poignee", CUIR_BLANC, JAV)
 for i in range(9):
     prism(bm, 0.0262, -0.012, 0.012,
           M=Matrix.Translation((0, 0, 0.522 + i * 0.0335)) @ Matrix.Rotation(math.radians(14), 4, "X"))
+
+# --- Bandeau : ruban violet noué sous les bagues dorées, deux pans fendus à bande dorée
+Z_NOEUD = 0.250
+bm_t = part("Javelot_Bandeau", TISSU, JAV)
+bm_tor = part("Javelot_Bandeau_Or", OR, JAV)
+prism(bm_t, 0.0262, Z_NOEUD - 0.014, Z_NOEUD + 0.012)
+box(bm_t, (0.024, 0.012, 0.022), (0, -0.0285, Z_NOEUD), rot=(0, math.pi / 4, 0))
+for x0, y0, rz, length, sway, twist in ((0.019, -0.024, -0.65, 0.140, 0.012, 0.30),
+                                       (-0.019, -0.024, 0.65, 0.118, 0.010, -0.30)):
+    M = Matrix.Translation((x0, y0, Z_NOEUD - 0.004)) @ Matrix.Rotation(rz, 4, "Z")
+    cloth(bm_t, 0.0, 1.0, 5, length, 0.025, 0.0040, sway, twist, notch=0.013, crease=0.0, M=M)
+    cloth(bm_tor, 0.68, 0.78, 1, length, 0.0262, 0.0064, sway, twist, crease=0.0, M=M)
 
 # --- Douille : bagues, bande violette sertie, cône d'argent, ailes de valkyrie
 bm = part("Javelot_Douille_Or", OR, JAV)
@@ -525,14 +565,27 @@ pts = place(FOUDRE, 0.112, 0.0, (0.0, -0.158))
 slab(part("Targe_Foudre", VIOLET, TAR), pts, Y_FACE - 0.0018, Y_FACE + 0.001)
 bm = part("Targe_Motifs_Or", OR, TAR)
 outline(bm, pts, 0.008, Y_FACE - 0.0028, Y_FACE + 0.001)
-for line in ([(0, 0.112), (0, 0.200)], [(-0.032, 0.196), (0, 0.160), (0.032, 0.196)]):
-    segments(bm, line, 0.010, Y_FACE - 0.003, Y_FACE + 0.001)
-# volutes en filigrane de part et d'autre de la rune et de l'éclair
+# volutes en filigrane de part et d'autre de l'éclair
 for side in (1, -1):
-    for c, r0, a0 in (((0.060, 0.152), 0.017, math.pi), ((0.064, -0.150), 0.019, math.pi)):
+    for c, r0, a0 in (((0.064, -0.150), 0.019, math.pi),):
         pts = spiral((side * c[0], c[1]), r0, 0.0035, 1.35, a0=a0 if side > 0 else 0.0, sense=-side)
         tail = [(side * (c[0] - r0 - 0.016), c[1] - 0.010), pts[0]]
         segments(bm, tail + pts[1:], 0.0045, Y_FACE - 0.0028, Y_FACE + 0.001)
+# cimier : éventail de cinq plumes d'or nervurées de violet qui sortent de derrière l'umbo
+CIMIER = (0.0, 0.050)
+PLUME_S = [(0.0, -0.30), (0.62, -0.95), (1.0, 0.0), (0.62, 0.95), (0.0, 0.30)]
+bm_cv = part("Targe_Ailes_Nervures", VIOLET, TAR)
+for k, (deg, L) in enumerate(((141, 0.112), (39, 0.112), (115, 0.138), (65, 0.138), (90, 0.152))):
+    ang, w = math.radians(deg), 0.150 * L
+    shape = PLUME if deg < 89 else ([(a, -b) for a, b in PLUME] if deg > 91 else PLUME_S)
+    y0 = Y_FACE - 0.0030 - 0.0005 * k
+    slab(part("Targe_Ailes", OR, TAR), place([(L * a, w * b) for a, b in shape], 1.0, ang, CIMIER),
+         y0, Y_FACE + 0.001)
+    slab(bm_cv, stroke(place([(0.20 * L, 0.0), (0.84 * L, 0.0)], 1.0, ang, CIMIER), 0.0034, 0.0022),
+         y0 - 0.0024, Y_FACE + 0.001)
+    for c in (0.48 * L, 0.64 * L):                # barbes en V vers la pointe
+        segments(bm_cv, place([(c + 0.10 * L, 0.45 * w), (c, 0.0), (c + 0.10 * L, -0.55 * w)], 1.0, ang, CIMIER),
+                 0.0026, y0 - 0.0006, Y_FACE + 0.001)
 # filet doré intérieur et perles sur le cercle violet
 outline(bm, circle(0.207, 48), 0.0035, Y_FACE - 0.0016, Y_FACE + 0.001)
 for k in range(8):
