@@ -1,0 +1,784 @@
+[
+ {
+  "id": "Ballon_Classique_Lumiere",
+  "name": "Ballon Classique Lumière",
+  "element": "Lumière",
+  "pv": 15,
+  "verts": 3599,
+  "tris": 6350,
+  "bones": 21,
+  "materials": 10,
+  "actions": {
+   "Attack": [
+    1,
+    43
+   ],
+   "Death": [
+    1,
+    61
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Ballon_Classique/Lumiere.blend",
+  "fbx": "FBX/Ballon_Classique/Lumiere.fbx"
+ },
+ {
+  "id": "Ballon_Classique_Tenebres",
+  "name": "Ballon Classique Ténèbres",
+  "element": "Ténèbres",
+  "pv": 15,
+  "verts": 6439,
+  "tris": 12026,
+  "bones": 21,
+  "materials": 12,
+  "actions": {
+   "Attack": [
+    1,
+    43
+   ],
+   "Death": [
+    1,
+    61
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Ballon_Classique/Tenebres.blend",
+  "fbx": "FBX/Ballon_Classique/Tenebres.fbx"
+ },
+ {
+  "id": "Ballon_Classique_Glace",
+  "name": "Ballon Classique Glace",
+  "element": "Glace",
+  "pv": 15,
+  "verts": 4723,
+  "tris": 7616,
+  "bones": 21,
+  "materials": 11,
+  "actions": {
+   "Attack": [
+    1,
+    43
+   ],
+   "Death": [
+    1,
+    61
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Ballon_Classique/Glace.blend",
+  "fbx": "FBX/Ballon_Classique/Glace.fbx"
+ },
+ {
+  "id": "Ballon_Classique_Feu",
+  "name": "Ballon Classique Feu",
+  "element": "Feu",
+  "pv": 15,
+  "verts": 4639,
+  "tris": 8562,
+  "bones": 21,
+  "materials": 11,
+  "actions": {
+   "Attack": [
+    1,
+    43
+   ],
+   "Death": [
+    1,
+    61
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Ballon_Classique/Feu.blend",
+  "fbx": "FBX/Ballon_Classique/Feu.fbx"
+ },
+ {
+  "id": "Ballon_Classique_Eau",
+  "name": "Ballon Classique Eau",
+  "element": "Eau",
+  "pv": 15,
+  "verts": 5321,
+  "tris": 9892,
+  "bones": 21,
+  "materials": 11,
+  "actions": {
+   "Attack": [
+    1,
+    43
+   ],
+   "Death": [
+    1,
+    61
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Ballon_Classique/Eau.blend",
+  "fbx": "FBX/Ballon_Classique/Eau.fbx"
+ },
+ {
+  "id": "Ballon_Classique_Plante",
+  "name": "Ballon Classique Plante",
+  "element": "Plante",
+  "pv": 15,
+  "verts": 6207,
+  "tris": 10122,
+  "bones": 21,
+  "materials": 13,
+  "actions": {
+   "Attack": [
+    1,
+    43
+   ],
+   "Death": [
+    1,
+    61
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Ballon_Classique/Plante.blend",
+  "fbx": "FBX/Ballon_Classique/Plante.fbx"
+ },
+ {
+  "id": "Ballon_Classique_Eclair",
+  "name": "Ballon Classique Éclair",
+  "element": "Éclair",
+  "pv": 15,
+  "verts": 3027,
+  "tris": 5541,
+  "bones": 21,
+  "materials": 11,
+  "actions": {
+   "Attack": [
+    1,
+    43
+   ],
+   "Death": [
+    1,
+    61
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Ballon_Classique/Eclair.blend",
+  "fbx": "FBX/Ballon_Classique/Eclair.fbx"
+ },
+ {
+  "id": "Ballon_Etoile_Lumiere",
+  "name": "Ballon Étoile Lumière",
+  "element": "Lumière",
+  "pv": 20,
+  "verts": 5046,
+  "tris": 9274,
+  "bones": 21,
+  "materials": 10,
+  "actions": {
+   "Attack": [
+    1,
+    43
+   ],
+   "Death": [
+    1,
+    61
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Ballon_Etoile/Lumiere.blend",
+  "fbx": "FBX/Ballon_Etoile/Lumiere.fbx"
+ },
+ {
+  "id": "Ballon_Etoile_Tenebres",
+  "name": "Ballon Étoile Ténèbres",
+  "element": "Ténèbres",
+  "pv": 20,
+  "verts": 6996,
+  "tris": 13204,
+  "bones": 21,
+  "materials": 12,
+  "actions": {
+   "Attack": [
+    1,
+    43
+   ],
+   "Death": [
+    1,
+    61
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Ballon_Etoile/Tenebres.blend",
+  "fbx": "FBX/Ballon_Etoile/Tenebres.fbx"
+ },
+ {
+  "id": "Ballon_Etoile_Glace",
+  "name": "Ballon Étoile Glace",
+  "element": "Glace",
+  "pv": 20,
+  "verts": 6135,
+  "tris": 10456,
+  "bones": 21,
+  "materials": 11,
+  "actions": {
+   "Attack": [
+    1,
+    43
+   ],
+   "Death": [
+    1,
+    61
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Ballon_Etoile/Glace.blend",
+  "fbx": "FBX/Ballon_Etoile/Glace.fbx"
+ },
+ {
+  "id": "Ballon_Etoile_Feu",
+  "name": "Ballon Étoile Feu",
+  "element": "Feu",
+  "pv": 20,
+  "verts": 6318,
+  "tris": 11924,
+  "bones": 21,
+  "materials": 11,
+  "actions": {
+   "Attack": [
+    1,
+    43
+   ],
+   "Death": [
+    1,
+    61
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Ballon_Etoile/Feu.blend",
+  "fbx": "FBX/Ballon_Etoile/Feu.fbx"
+ },
+ {
+  "id": "Ballon_Etoile_Eau",
+  "name": "Ballon Étoile Eau",
+  "element": "Eau",
+  "pv": 20,
+  "verts": 6808,
+  "tris": 12882,
+  "bones": 21,
+  "materials": 11,
+  "actions": {
+   "Attack": [
+    1,
+    43
+   ],
+   "Death": [
+    1,
+    61
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Ballon_Etoile/Eau.blend",
+  "fbx": "FBX/Ballon_Etoile/Eau.fbx"
+ },
+ {
+  "id": "Ballon_Etoile_Plante",
+  "name": "Ballon Étoile Plante",
+  "element": "Plante",
+  "pv": 20,
+  "verts": 8404,
+  "tris": 14136,
+  "bones": 21,
+  "materials": 13,
+  "actions": {
+   "Attack": [
+    1,
+    43
+   ],
+   "Death": [
+    1,
+    61
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Ballon_Etoile/Plante.blend",
+  "fbx": "FBX/Ballon_Etoile/Plante.fbx"
+ },
+ {
+  "id": "Ballon_Etoile_Eclair",
+  "name": "Ballon Étoile Éclair",
+  "element": "Éclair",
+  "pv": 20,
+  "verts": 4466,
+  "tris": 8423,
+  "bones": 21,
+  "materials": 11,
+  "actions": {
+   "Attack": [
+    1,
+    43
+   ],
+   "Death": [
+    1,
+    61
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Ballon_Etoile/Eclair.blend",
+  "fbx": "FBX/Ballon_Etoile/Eclair.fbx"
+ },
+ {
+  "id": "Mini_Dirigeable_Lumiere",
+  "name": "Mini-dirigeable Lumière",
+  "element": "Lumière",
+  "pv": 30,
+  "verts": 9206,
+  "tris": 17578,
+  "bones": 19,
+  "materials": 13,
+  "actions": {
+   "Attack": [
+    1,
+    45
+   ],
+   "Death": [
+    1,
+    67
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Mini_Dirigeable/Lumiere.blend",
+  "fbx": "FBX/Mini_Dirigeable/Lumiere.fbx"
+ },
+ {
+  "id": "Mini_Dirigeable_Tenebres",
+  "name": "Mini-dirigeable Ténèbres",
+  "element": "Ténèbres",
+  "pv": 30,
+  "verts": 12372,
+  "tris": 23872,
+  "bones": 19,
+  "materials": 15,
+  "actions": {
+   "Attack": [
+    1,
+    45
+   ],
+   "Death": [
+    1,
+    67
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Mini_Dirigeable/Tenebres.blend",
+  "fbx": "FBX/Mini_Dirigeable/Tenebres.fbx"
+ },
+ {
+  "id": "Mini_Dirigeable_Glace",
+  "name": "Mini-dirigeable Glace",
+  "element": "Glace",
+  "pv": 30,
+  "verts": 10035,
+  "tris": 18584,
+  "bones": 19,
+  "materials": 13,
+  "actions": {
+   "Attack": [
+    1,
+    45
+   ],
+   "Death": [
+    1,
+    67
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Mini_Dirigeable/Glace.blend",
+  "fbx": "FBX/Mini_Dirigeable/Glace.fbx"
+ },
+ {
+  "id": "Mini_Dirigeable_Feu",
+  "name": "Mini-dirigeable Feu",
+  "element": "Feu",
+  "pv": 30,
+  "verts": 10534,
+  "tris": 20324,
+  "bones": 19,
+  "materials": 13,
+  "actions": {
+   "Attack": [
+    1,
+    45
+   ],
+   "Death": [
+    1,
+    67
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Mini_Dirigeable/Feu.blend",
+  "fbx": "FBX/Mini_Dirigeable/Feu.fbx"
+ },
+ {
+  "id": "Mini_Dirigeable_Eau",
+  "name": "Mini-dirigeable Eau",
+  "element": "Eau",
+  "pv": 30,
+  "verts": 11136,
+  "tris": 21504,
+  "bones": 19,
+  "materials": 13,
+  "actions": {
+   "Attack": [
+    1,
+    45
+   ],
+   "Death": [
+    1,
+    67
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Mini_Dirigeable/Eau.blend",
+  "fbx": "FBX/Mini_Dirigeable/Eau.fbx"
+ },
+ {
+  "id": "Mini_Dirigeable_Plante",
+  "name": "Mini-dirigeable Plante",
+  "element": "Plante",
+  "pv": 30,
+  "verts": 12734,
+  "tris": 22728,
+  "bones": 19,
+  "materials": 15,
+  "actions": {
+   "Attack": [
+    1,
+    45
+   ],
+   "Death": [
+    1,
+    67
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Mini_Dirigeable/Plante.blend",
+  "fbx": "FBX/Mini_Dirigeable/Plante.fbx"
+ },
+ {
+  "id": "Mini_Dirigeable_Eclair",
+  "name": "Mini-dirigeable Éclair",
+  "element": "Éclair",
+  "pv": 30,
+  "verts": 8862,
+  "tris": 17138,
+  "bones": 19,
+  "materials": 13,
+  "actions": {
+   "Attack": [
+    1,
+    45
+   ],
+   "Death": [
+    1,
+    67
+   ],
+   "Hit": [
+    1,
+    19
+   ],
+   "Idle": [
+    1,
+    73
+   ],
+   "Move": [
+    1,
+    37
+   ]
+  },
+  "blend": "Blender/Mini_Dirigeable/Eclair.blend",
+  "fbx": "FBX/Mini_Dirigeable/Eclair.fbx"
+ },
+ {
+  "id": "MiniBoss_Montgolfiere_Plante",
+  "name": "Montgolfière Solaire",
+  "element": "Plante",
+  "pv": 250,
+  "verts": 18035,
+  "tris": 30114,
+  "bones": 19,
+  "materials": 18,
+  "actions": {
+   "Attack": [
+    1,
+    61
+   ],
+   "Death": [
+    1,
+    91
+   ],
+   "Hit": [
+    1,
+    25
+   ],
+   "Idle": [
+    1,
+    97
+   ],
+   "Move": [
+    1,
+    49
+   ]
+  },
+  "blend": "Blender/MiniBoss_Montgolfiere_Plante.blend",
+  "fbx": "FBX/MiniBoss_Montgolfiere_Plante.fbx"
+ },
+ {
+  "id": "Boss_Zeppelin_Plante",
+  "name": "Grand Zeppelin des Prairies",
+  "element": "Plante",
+  "pv": 1000,
+  "verts": 26405,
+  "tris": 46562,
+  "bones": 23,
+  "materials": 18,
+  "actions": {
+   "Attack": [
+    1,
+    73
+   ],
+   "Death": [
+    1,
+    111
+   ],
+   "Hit": [
+    1,
+    31
+   ],
+   "Idle": [
+    1,
+    121
+   ],
+   "Move": [
+    1,
+    61
+   ]
+  },
+  "blend": "Blender/Boss_Zeppelin_Plante.blend",
+  "fbx": "FBX/Boss_Zeppelin_Plante.fbx"
+ }
+]
