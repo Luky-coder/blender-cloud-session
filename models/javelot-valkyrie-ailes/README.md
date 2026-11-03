@@ -1,10 +1,11 @@
 # javelot-valkyrie-ailes
 
-Javelot de Valkyrie, proposition 2 « Ailes d'argent » : variante ailée de la lance courte (1,70 m).
-Fer en feuille d'argent à arête centrale, bordé d'or, avec rune ᛉ en relief, ailes de valkyrie en plumes
-sur la douille, poignée gainée de cuir blanc, pommeau doré serti de gemmes violettes ; targe ronde (54 cm)
-argent et or avec gemme violette, ailes en relief et éclair. Style Roblox : facettes plates, pièces en
-blocs, motifs en relief.
+Javelot de Valkyrie « Ailes d'argent » : lance courte à une main (1,70 m). Fer en feuille d'argent bien
+en volume (arête centrale, 7 cm d'épaisseur), biseau d'or, panneau violet orné d'une rune ᛉ, d'une plume
+gravée, d'un double filet et de perles d'or ; ailes de valkyrie en plumes barbées d'or sur la douille,
+poignée gainée de cuir blanc, pommeau doré serti de gemmes violettes. Targe ronde (54 cm) argent et or :
+gemme violette, ailes en relief, rune ᛉ, éclair, volutes en filigrane et cercle perlé.
+Style Roblox : facettes plates, pièces en blocs, motifs en relief.
 
 ![Aperçu](screenshots/preview.jpg)
 
@@ -15,4 +16,4 @@ Vues : [iso](screenshots/iso.jpg) · [front](screenshots/front.jpg) · [right](s
 | [`javelot-valkyrie-ailes.blend`](javelot-valkyrie-ailes.blend) | Fichier Blender 5.2.3 LTS |
 | [`build.py`](build.py) | Script qui génère le modèle |
 
-**Dimensions** : 1.122 × 0.140 × 1.697 m (X × Y × Z) · **Objets** : 27 · **Sommets** : 2 460 · **Faces** : 1 991
+**Dimensions** : 1.122 × 0.140 × 1.697 m (X × Y × Z) · **Objets** : 27 · **Sommets** : 4 836 · **Faces** : 3 863

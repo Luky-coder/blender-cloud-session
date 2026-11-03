@@ -1,8 +1,9 @@
-"""Javelot de Valkyrie, proposition 2 « Ailes d'argent » : variante ailée de la lance courte (1,70 m).
-Fer en feuille d'argent à arête centrale, bordé d'or, avec rune ᛉ en relief, ailes de valkyrie en plumes
-sur la douille, poignée gainée de cuir blanc, pommeau doré serti de gemmes violettes ; targe ronde (54 cm)
-argent et or avec gemme violette, ailes en relief et éclair. Style Roblox : facettes plates, pièces en
-blocs, motifs en relief.
+"""Javelot de Valkyrie « Ailes d'argent » : lance courte à une main (1,70 m). Fer en feuille d'argent bien
+en volume (arête centrale, 7 cm d'épaisseur), biseau d'or, panneau violet orné d'une rune ᛉ, d'une plume
+gravée, d'un double filet et de perles d'or ; ailes de valkyrie en plumes barbées d'or sur la douille,
+poignée gainée de cuir blanc, pommeau doré serti de gemmes violettes. Targe ronde (54 cm) argent et or :
+gemme violette, ailes en relief, rune ᛉ, éclair, volutes en filigrane et cercle perlé.
+Style Roblox : facettes plates, pièces en blocs, motifs en relief.
 """
 import math
 
@@ -92,6 +93,13 @@ def segments(bm, pts, w, y0, y1, M=None):
         _SEG[0] += 1
         e = 0.00035 * (_SEG[0] % 4)
         slab(bm, stroke([tuple(p - d), tuple(q + d)], w), y0 - e, y1 + (e if y1 > 0.005 else 0), M)
+
+
+def spiral(c, r0, r1, turns, a0=0.0, sense=1, n=None):
+    """Volute : spirale de rayon r0 -> r1 autour de c."""
+    n = n or max(8, int(18 * turns))
+    return [(c[0] + (r0 + (r1 - r0) * i / n) * math.cos(a0 + sense * 2 * math.pi * turns * i / n),
+             c[1] + (r0 + (r1 - r0) * i / n) * math.sin(a0 + sense * 2 * math.pi * turns * i / n)) for i in range(n + 1)]
 
 
 def place(pts, scale=1.0, rot=0.0, at=(0.0, 0.0)):
@@ -254,13 +262,16 @@ def leaf_height(half, he, hr):
     return h
 
 
-def lifted(bm, lines, h, t, M=None):
-    """Traits en relief posés sur une surface de demi-épaisseur h(u, v), sur les deux faces."""
+def lifted(bm, lines, h, t, M=None, ext=0.9, sub=1):
+    """Traits en relief posés sur une surface de demi-épaisseur h(u, v), sur les deux faces.
+    sub : découpe de chaque segment pour suivre la surface (ext=0 alors, sinon les morceaux se chevauchent)."""
     M = M or Matrix()
     for sign in (-1, 1):
         for line in lines:
-            for p, q in zip(line, line[1:]):
-                beam(bm, M @ Vector((p[0], sign * h(*p), p[1])), M @ Vector((q[0], sign * h(*q), q[1])), t)
+            pts = [tuple(Vector(p).lerp(Vector(q), k / sub)) for p, q in zip(line, line[1:]) for k in range(sub)]
+            pts.append(line[-1])
+            for p, q in zip(pts, pts[1:]):
+                beam(bm, M @ Vector((p[0], sign * h(*p), p[1])), M @ Vector((q[0], sign * h(*q), q[1])), t, ext)
 
 
 # ---------------------------------------------------------------- objets
@@ -311,7 +322,7 @@ PLUMES = ((0.08, -122, 0.30), (0.26, -102, 0.38), (0.44, -82, 0.46), (0.62, -60,
 
 def wing(root, tip, side=1, bulge=0.14, wscale=1.0):
     """Aile droite (side=1) ou gauche (side=-1) dans le plan XZ : bras courbe de root à tip, plumes qui
-    pendent dessous en éventail. Renvoie (bras, [(plume, nervure, pointe), ...], arête du bras)."""
+    pendent dessous en éventail. Renvoie (bras, [(plume, nervure, pointe, barbes), ...], arête du bras)."""
     R, W = Vector(root), Vector(tip)
     D = W - R
     A = D.length
@@ -330,7 +341,9 @@ def wing(root, tip, side=1, bulge=0.14, wscale=1.0):
         p, ang, L, w = tuple(curve(t)), alpha + math.radians(rel), lr * A, 0.15 * A * wscale
         feathers.append((flip(place([(L * a, w * b) for a, b in PLUME], 1.0, ang, p)),
                          flip(place([(0.10 * L, 0.0), (0.78 * L, 0.0)], 1.0, ang, p)),
-                         flip(place([(L, 0.0)], 1.0, ang, p))[0]))
+                         flip(place([(L, 0.0)], 1.0, ang, p))[0],
+                         [flip(place([(c - 0.13 * L, 0.36 * w), (c, 0.0), (c - 0.13 * L, -0.60 * w)], 1.0, ang, p))
+                          for c in (0.42 * L, 0.64 * L)]))
     ridge = flip([tuple(curve(0.05 + 0.9 * i / 8)) for i in range(9)])
     return arm, feathers, ridge
 
@@ -379,47 +392,86 @@ bm_pl = part("Javelot_Ailes_Plumes", ARGENT, JAV)
 bm_or = part("Javelot_Ailes_Or", OR, JAV)
 for side in (1, -1):
     arm, feathers, ridge = wing((0.016, 1.160), (0.136, 1.284), side)
-    for k, (pts, quill, tip) in enumerate(feathers):
-        h = 0.0085 - 0.0007 * k            # les plumes intérieures recouvrent les suivantes
+    for k, (pts, quill, tip, barbs) in enumerate(feathers):
+        h = 0.0095 - 0.0008 * k            # les plumes intérieures recouvrent les suivantes
         slab(bm_pl, pts, -h, h)
-        slab(bm_or, stroke(quill, 0.0040), -h - 0.0012, h + 0.0012)
-    roof(bm_or, arm, ridge, 0.0065, 0.0140)                            # bras doré à arête
-    roof(bm_pl, offset(arm, 0.0035), ridge, 0.0040, 0.0110)            # liseré d'argent dessous
-    for y in (-0.0140, 0.0140):
+        slab(bm_or, stroke(quill, 0.0042), -h - 0.0025, h + 0.0025)
+        for chev in barbs:                 # barbes dorées en chevrons
+            segments(bm_or, chev, 0.0030, -h - 0.0008, h + 0.0008)
+    roof(bm_or, arm, ridge, 0.0080, 0.0185)                            # bras doré à arête
+    roof(bm_pl, offset(arm, 0.0035), ridge, 0.0050, 0.0145)            # liseré d'argent dessous
+    for y in (-0.0185, 0.0185):
         diamond(part("Javelot_Gemmes", GEMME, JAV), (side * 0.040, y, 1.186), 0.0075, 1.3)
 
-# --- Fer en feuille, en volume : biseau d'or du tranchant, corps d'argent à arête centrale,
-#     panneau violet en relief cerné d'or, rune ᛉ et arête dorées
+# --- Fer en feuille, très en volume : biseau d'or du tranchant, corps d'argent à arête centrale (7 cm
+#     d'épaisseur au panneau), panneau violet en relief ; dorures : rune ᛉ, plume gravée, double filet, perles
 FEUILLE = [(0.016, 0.000), (0.022, 0.018), (0.046, 0.055), (0.064, 0.105), (0.069, 0.150), (0.064, 0.215),
            (0.050, 0.290), (0.032, 0.360), (0.014, 0.422), (0.0, L_LAME)]
 PANNEAU_D = [(0.0, 0.048), (0.016, 0.074), (0.033, 0.128), (0.035, 0.176), (0.026, 0.250), (0.012, 0.322),
              (0.0, 0.362)]
 M_LAME = Matrix.Translation((0, 0, Z_LAME))
-H_FIL, H_CORPS = (0.0025, 0.012), (0.0075, 0.019)     # demi-épaisseurs (bord, arête) en m
+
+
+def taper(v):
+    """L'arête s'abaisse vers la base du fer pour rester dans la douille."""
+    return min(1.0, 0.45 + 0.55 * v / 0.11)
+
+
+HE_FIL, HE_CORPS = 0.0030, 0.0100                     # demi-épaisseurs au bord (m)
+
+
+def hr_fil(u, v):
+    return 0.019 * taper(v)
+
+
+def hr_corps(u, v):
+    return 0.030 * taper(v)
+
+
+def hr_pan(u, v):
+    return hr_corps(u, v) + 0.005
+
 
 LAME, PANNEAU = mirror(FEUILLE), mirror(PANNEAU_D)
 CORPS = offset(LAME, -0.0115)
-roof(part("Javelot_Fer_Fil", OR, JAV), LAME, [(0, 0.004), (0, L_LAME - 0.070)], *H_FIL, M_LAME)
-roof(part("Javelot_Fer_Corps", ARGENT, JAV), CORPS, [(0, 0.014), (0, L_LAME - 0.085)], *H_CORPS, M_LAME)
-h_corps = leaf_height(CORPS[:len(FEUILLE)], *H_CORPS)
-HR_PAN = H_CORPS[1] + 0.003
+CORPS_D = CORPS[:len(FEUILLE)]
+roof(part("Javelot_Fer_Fil", OR, JAV), LAME, [(0, 0.004), (0, L_LAME - 0.070)], HE_FIL, hr_fil, M_LAME)
+roof(part("Javelot_Fer_Corps", ARGENT, JAV), CORPS, [(0, 0.014), (0, L_LAME - 0.085)], HE_CORPS, hr_corps, M_LAME)
+
+
+def h_corps(u, v):
+    hw = half_width(CORPS_D, v)
+    return HE_CORPS if hw < 1e-6 else HE_CORPS + (hr_corps(u, v) - HE_CORPS) * max(0.0, 1 - abs(u) / hw)
 
 
 def h_panneau(u, v):
     hw = half_width(PANNEAU_D, v)
     if hw < 1e-6:
-        return HR_PAN
-    he = h_corps(hw, v) + 0.002
-    return he + (HR_PAN - he) * max(0.0, 1 - abs(u) / hw)
+        return hr_pan(u, v)
+    he = h_corps(hw, v) + 0.0025
+    return he + (hr_pan(u, v) - he) * max(0.0, 1 - abs(u) / hw)
 
 
 arete_p = [(0, 0.058), (0, 0.345)]
 bm = part("Javelot_Fer_Gravures", OR, JAV)
-roof(bm, offset(PANNEAU, 0.0045), arete_p, lambda u, v: h_corps(u, v) + 0.0008, HR_PAN - 0.0015, M_LAME)
-roof(part("Javelot_Fer_Panneau", VIOLET, JAV), PANNEAU, arete_p, lambda u, v: h_corps(u, v) + 0.002, HR_PAN,
+roof(bm, offset(PANNEAU, 0.0045), arete_p, lambda u, v: h_corps(u, v) + 0.0010,
+     lambda u, v: hr_pan(u, v) - 0.0020, M_LAME)
+roof(part("Javelot_Fer_Panneau", VIOLET, JAV), PANNEAU, arete_p, lambda u, v: h_corps(u, v) + 0.0025, hr_pan,
      M_LAME)
-lifted(bm, [[(0, 0.084), (0, 0.160)], [(-0.017, 0.152), (0, 0.128), (0.017, 0.152)], [(0, 0.182), (0, 0.330)]],
-       h_panneau, 0.0052, M_LAME)
+# rune ᛉ, puis plume gravée : nervure centrale et barbes en chevrons
+lifted(bm, [[(0, 0.084), (0, 0.160)], [(-0.017, 0.152), (0, 0.128), (0.017, 0.152)], [(0, 0.176), (0, 0.338)]],
+       lambda u, v: h_panneau(u, v) + 0.0004, 0.0050, M_LAME)
+for v0 in (0.204, 0.236, 0.268, 0.300, 0.328):
+    w = 0.66 * half_width(PANNEAU_D, v0 - 0.022)
+    lifted(bm, [[(-w, v0 - 0.024), (0, v0), (w, v0 - 0.024)]], lambda u, v: h_panneau(u, v) + 0.0004, 0.0038,
+           M_LAME)
+# double filet doré sur l'argent, autour du panneau
+filet = offset(PANNEAU, 0.0115)
+lifted(bm, [filet + filet[:1]], lambda u, v: h_corps(u, v) + 0.0003, 0.0034, M_LAME, ext=0.0, sub=3)
+# perles dorées aux deux bouts du panneau
+for v in (0.064, 0.350):
+    for sgn in (-1, 1):
+        diamond(bm, (0, sgn * h_panneau(0, v), Z_LAME + v), 0.0062, 1.5)
 
 # ================================================================ LA TARGE
 # Debout sur sa jante, face avant tournée vers -Y, à droite du javelot.
@@ -458,10 +510,11 @@ bm_ai = part("Targe_Ailes", OR, TAR)
 bm_q = part("Targe_Ailes_Nervures", VIOLET, TAR)
 for side in (1, -1):
     arm, feathers, _ = wing((0.072, 0.026), (0.152, 0.112), side, wscale=1.45)
-    for k, (pts, quill, tip) in enumerate(feathers):
+    for k, (pts, quill, tip, barbs) in enumerate(feathers):
         y0 = Y_FACE - 0.0034 + 0.0003 * k
         slab(bm_ai, pts, y0, Y_FACE + 0.001)
-        slab(bm_q, stroke(quill, 0.0038), y0 - 0.0008, Y_FACE + 0.001)
+        slab(bm_q, stroke(quill, 0.0038), y0 - 0.0022, Y_FACE + 0.001)
+        segments(bm_q, barbs[1], 0.0026, y0 - 0.0006, Y_FACE + 0.001)
     slab(bm_ai, arm, Y_FACE - 0.0048, Y_FACE + 0.001)
     outline(bm_q, arm, 0.0035, Y_FACE - 0.0056, Y_FACE + 0.001)
 
@@ -474,6 +527,17 @@ bm = part("Targe_Motifs_Or", OR, TAR)
 outline(bm, pts, 0.008, Y_FACE - 0.0028, Y_FACE + 0.001)
 for line in ([(0, 0.112), (0, 0.200)], [(-0.032, 0.196), (0, 0.160), (0.032, 0.196)]):
     segments(bm, line, 0.010, Y_FACE - 0.003, Y_FACE + 0.001)
+# volutes en filigrane de part et d'autre de la rune et de l'éclair
+for side in (1, -1):
+    for c, r0, a0 in (((0.060, 0.152), 0.017, math.pi), ((0.064, -0.150), 0.019, math.pi)):
+        pts = spiral((side * c[0], c[1]), r0, 0.0035, 1.35, a0=a0 if side > 0 else 0.0, sense=-side)
+        tail = [(side * (c[0] - r0 - 0.016), c[1] - 0.010), pts[0]]
+        segments(bm, tail + pts[1:], 0.0045, Y_FACE - 0.0028, Y_FACE + 0.001)
+# filet doré intérieur et perles sur le cercle violet
+outline(bm, circle(0.207, 48), 0.0035, Y_FACE - 0.0016, Y_FACE + 0.001)
+for k in range(8):
+    u, v = polar(0.222, 22.5 + 45 * k)
+    diamond(bm, (u, Y_FACE - 0.0022, v), 0.0058, 1.0)
 
 # --- Dos : poignée et sangle de bras en cuir blanc, ferrures dorées
 bm = part("Targe_Dos_Cuir", CUIR_BLANC, TAR)
