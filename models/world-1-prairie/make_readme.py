@@ -68,14 +68,19 @@ L += ["",
       "- **Export propre pour les moteurs** : tous les os sont orientés comme le monde. Les échelles non uniformes "
       "ne sont portées que par des os sans enfants tournés, donc sans cisaillement : le FBX se lit à l'identique "
       "dans Unity, Unreal ou Godot. 4 influences maximum par sommet.",
-      "- **Matériaux** : Principled BSDF (couleur, rugosité, vernis, émission pour les lueurs). Pas de textures, pas d'UV.",
+      "- **Couleurs** : chaque ennemi a une petite **texture palette** (`*_Palette.png`, 128 × 128, une case de couleur "
+      "par matériau) branchée sur la Base Color de tous ses matériaux, des **UV** qui placent chaque face sur sa case, et "
+      "un attribut de **couleurs de sommets** (`Couleur`). La texture est **incrustée dans le FBX** (et fournie à côté) : "
+      "les couleurs s'affichent même dans les moteurs qui ignorent la couleur « Diffuse » des matériaux FBX.",
+      "- **Matériaux** : Principled BSDF (rugosité, vernis, émission pour les lueurs : halos, flammes, coutures violettes…).",
       "- **Propriétés personnalisées** sur l'armature (exportées dans le FBX) : `Nom`, `Famille`, `Element`, `PV`, `Avant`, `Animations`.",
       "", "## FBX", "",
       "Export Blender standard : `-Z` avant / `Y` haut (convention FBX), unités appliquées, pas d'os de bout (leaf bones), "
       "tous les os, une prise par Action (`<Rig>|Idle`, `<Rig>|Attack`…), toutes les images échantillonnées.",
       "Le résultat de la vérification automatique (réimport et comparaison au `.blend`) est dans "
       "[`FBX/verification.md`](FBX/verification.md).", "",
-      "- **Unity** : importer le FBX en *Rig > Generic*. Les clips `Idle` et `Move` se mettent en *Loop Time*.",
+      "- **Unity** : importer le FBX en *Rig > Generic*. Les clips `Idle` et `Move` se mettent en *Loop Time*. "
+      "Si les matériaux restent blancs : onglet *Materials* > *Extract Textures…* (la palette est alors extraite et reliée).",
       "- **Unreal** : importer avec *Import Animations* ; le squelette est propre à chaque ennemi.",
       "- **Godot 4** : importer le FBX directement ; mettre `Idle`/`Move` en boucle dans l'AnimationPlayer.", "",
       "## Régénérer", "",

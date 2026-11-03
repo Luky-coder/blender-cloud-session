@@ -22,7 +22,7 @@ import bpy
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-from prairie import anim, enemy, render  # noqa: E402
+from prairie import anim, enemy, palette, render  # noqa: E402
 
 OUT = os.path.join(HERE, "World_1_Prairie")
 SCRATCH = os.environ.get("PRAIRIE_TMP", os.path.join(HERE, ".frames"))
@@ -62,7 +62,7 @@ def export_fbx(path):
         secondary_bone_axis="X", use_armature_deform_only=False, armature_nodetype="NULL",
         bake_anim=True, bake_anim_use_all_bones=True, bake_anim_use_nla_strips=False,
         bake_anim_use_all_actions=True, bake_anim_force_startend_keying=True, bake_anim_step=1.0,
-        bake_anim_simplify_factor=0.0, path_mode="AUTO")
+        bake_anim_simplify_factor=0.0, path_mode="COPY", embed_textures=True, colors_type="SRGB")
 
 
 def key_frames(F):
@@ -138,9 +138,13 @@ def main():
         arm, mesh, F = enemy.build_enemy(family, element)
         blend, fbx, prev = paths(family, element)
         os.makedirs(os.path.dirname(blend), exist_ok=True)
-        bpy.ops.wm.save_as_mainfile(filepath=blend, compress=True)
+        # Couleurs exportables : texture palette (PNG à côté du FBX et incrustée dedans) + UV + couleurs de sommets
+        img = palette.bake(mesh, enemy.enemy_id(family, element) + "_Palette",
+                           os.path.splitext(fbx)[0] + "_Palette.png")
         if "--no-fbx" not in opts:
             export_fbx(fbx)
+        img.pack()
+        bpy.ops.wm.save_as_mainfile(filepath=blend, compress=True)
         info = dict(id=enemy.enemy_id(family, element), name=arm["Nom"], element=arm["Element"], pv=arm["PV"],
                     verts=len(mesh.data.vertices), tris=sum(len(p.vertices) - 2 for p in mesh.data.polygons),
                     bones=len(arm.data.bones), materials=len(mesh.data.materials),

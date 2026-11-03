@@ -81,6 +81,13 @@ def check(fbx):
                      f"déplacement max {moves:.2f} m, taille fin/début {d[-1][2].length / size0:.2f}")
         if n_src != n_dst or err > 0.01 * size0 + 0.002:
             ok = False
+    tex = [i for i in bpy.data.images if i.name.endswith("_Palette") and i.size[0] > 0]
+    uv, vcol = len(mesh2.data.uv_layers), len(mesh2.data.color_attributes)
+    linked = all(any(n.type == "TEX_IMAGE" and n.image in tex for n in m.node_tree.nodes) for m in mesh2.data.materials)
+    if not (tex and uv and vcol and linked):
+        ok = False
+    lines.insert(0, f"  Couleurs : texture palette incrustée {'oui' if tex else 'NON'}, UV {'oui' if uv else 'NON'}, "
+                    f"couleurs de sommets {'oui' if vcol else 'NON'}, texture sur tous les matériaux {'oui' if linked else 'NON'}")
     head = (f"{'OK ' if ok else 'ERREUR'} {rel} : {len(mesh2.data.vertices)} sommets, {nb_bones} os "
             f"({len(arm2.data.bones)} réimportés), {len(mesh2.data.materials)} matériaux, prises : "
             f"{', '.join(sorted(a.name for a in bpy.data.actions))}")
@@ -99,7 +106,8 @@ def main():
     if not argv:
         with open(os.path.join(OUT, "FBX", "verification.md"), "w", encoding="utf-8") as fh:
             fh.write("# Vérification des FBX\n\nChaque FBX est réimporté dans Blender et comparé au .blend source "
-                     "(boîte englobante du maillage déformé à 5 instants de chaque prise).\n\n```\n")
+                     "(boîte englobante du maillage déformé à 5 instants de chaque prise) ; on contrôle aussi que les couleurs "
+                     "sont portées par la texture palette incrustée, les UV et les couleurs de sommets.\n\n```\n")
             fh.write("\n".join(report) + "\n```\n")
     print("TOUT OK" if all_ok else "DES ERREURS", flush=True)
     sys.exit(0 if all_ok else 1)
