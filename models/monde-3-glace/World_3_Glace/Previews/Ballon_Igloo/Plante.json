@@ -1,0 +1,198 @@
+{
+ "name": "Ballon_Igloo_Plante",
+ "title": "Ballon Igloo Plante",
+ "family": "Ballon Igloo",
+ "element": "Plante",
+ "hp": 60,
+ "blend": "Blender/Ballon_Igloo/Plante.blend",
+ "fbx": "FBX/Ballon_Igloo/Ballon_Igloo_Plante.fbx",
+ "dims": [
+  1.411,
+  1.491,
+  1.15
+ ],
+ "bones": 10,
+ "deform_bones": 9,
+ "shape_keys": [
+  "Respiration",
+  "Impact",
+  "Degonfle"
+ ],
+ "actions": [
+  {
+   "name": "IDLE",
+   "frames": 61,
+   "loop": true,
+   "seconds": 2.0
+  },
+  {
+   "name": "MOVE",
+   "frames": 41,
+   "loop": true,
+   "seconds": 1.33
+  },
+  {
+   "name": "ATTACK",
+   "frames": 37,
+   "loop": false,
+   "seconds": 1.2
+  },
+  {
+   "name": "HIT",
+   "frames": 19,
+   "loop": false,
+   "seconds": 0.6
+  },
+  {
+   "name": "DEATH",
+   "frames": 61,
+   "loop": false,
+   "seconds": 2.0
+  }
+ ],
+ "materials": {
+  "Corps": {
+   "base_color": "#3E9C46",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Corps_2": {
+   "base_color": "#86CC5C",
+   "roughness": 0.2,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Liseré": {
+   "base_color": "#25632D",
+   "roughness": 0.25,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Bouche": {
+   "base_color": "#173A12",
+   "roughness": 0.4,
+   "metallic": 0.0,
+   "coat": 0.2,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Givre": {
+   "base_color": "#BFEFFF",
+   "roughness": 0.05,
+   "metallic": 0.0,
+   "coat": 1.0,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.55
+  },
+  "Langue": {
+   "base_color": "#FF6F8E",
+   "roughness": 0.25,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Oeil": {
+   "base_color": "#FFFFFF",
+   "roughness": 0.15,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Pupille": {
+   "base_color": "#10260F",
+   "roughness": 0.1,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Blanc": {
+   "base_color": "#FFFFFF",
+   "roughness": 0.15,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Valve_Argent": {
+   "base_color": "#C7D2DC",
+   "roughness": 0.22,
+   "metallic": 0.85,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Neige": {
+   "base_color": "#F4FAFF",
+   "roughness": 0.35,
+   "metallic": 0.0,
+   "coat": 0.3,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Or": {
+   "base_color": "#E8B43A",
+   "roughness": 0.22,
+   "metallic": 0.9,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Déco": {
+   "base_color": "#F57FB2",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Déco_2": {
+   "base_color": "#FFE15C",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  }
+ },
+ "verts": 18024,
+ "tris": 35376,
+ "seconds": 130.0
+}

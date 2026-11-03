@@ -1,0 +1,188 @@
+{
+ "name": "Ballon_Flocon_Lumiere",
+ "title": "Ballon Flocon Lumière",
+ "family": "Ballon Flocon",
+ "element": "Lumière",
+ "hp": 50,
+ "blend": "Blender/Ballon_Flocon/Lumiere.blend",
+ "fbx": "FBX/Ballon_Flocon/Ballon_Flocon_Lumiere.fbx",
+ "dims": [
+  1.557,
+  0.504,
+  1.728
+ ],
+ "bones": 11,
+ "deform_bones": 10,
+ "shape_keys": [
+  "Respiration",
+  "Impact",
+  "Degonfle"
+ ],
+ "actions": [
+  {
+   "name": "IDLE",
+   "frames": 61,
+   "loop": true,
+   "seconds": 2.0
+  },
+  {
+   "name": "MOVE",
+   "frames": 41,
+   "loop": true,
+   "seconds": 1.33
+  },
+  {
+   "name": "ATTACK",
+   "frames": 37,
+   "loop": false,
+   "seconds": 1.2
+  },
+  {
+   "name": "HIT",
+   "frames": 19,
+   "loop": false,
+   "seconds": 0.6
+  },
+  {
+   "name": "DEATH",
+   "frames": 61,
+   "loop": false,
+   "seconds": 2.0
+  }
+ ],
+ "materials": {
+  "Corps_2": {
+   "base_color": "#FFD970",
+   "roughness": 0.2,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Corps": {
+   "base_color": "#FFF3D9",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Neige": {
+   "base_color": "#F4FAFF",
+   "roughness": 0.35,
+   "metallic": 0.0,
+   "coat": 0.3,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Liseré": {
+   "base_color": "#D9A21B",
+   "roughness": 0.25,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Givre": {
+   "base_color": "#BFEFFF",
+   "roughness": 0.05,
+   "metallic": 0.0,
+   "coat": 1.0,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.55
+  },
+  "Oeil": {
+   "base_color": "#FFFFFF",
+   "roughness": 0.15,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": "#FFF6D0",
+   "emission_strength": 0.25,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Pupille": {
+   "base_color": "#3B2A0E",
+   "roughness": 0.1,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Blanc": {
+   "base_color": "#FFFFFF",
+   "roughness": 0.15,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Bouche": {
+   "base_color": "#7A4B12",
+   "roughness": 0.4,
+   "metallic": 0.0,
+   "coat": 0.2,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Langue": {
+   "base_color": "#FF6F8E",
+   "roughness": 0.25,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Valve_Argent": {
+   "base_color": "#C7D2DC",
+   "roughness": 0.22,
+   "metallic": 0.85,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Lueur": {
+   "base_color": "#FFE9A0",
+   "roughness": 0.3,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": "#FFE9A0",
+   "emission_strength": 3.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Or": {
+   "base_color": "#E8B43A",
+   "roughness": 0.22,
+   "metallic": 0.9,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  }
+ },
+ "verts": 10424,
+ "tris": 20480,
+ "seconds": 117.0
+}

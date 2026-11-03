@@ -1,0 +1,228 @@
+{
+ "name": "Dirigeable_Polaire_Tenebres",
+ "title": "Dirigeable Polaire Ténèbres",
+ "family": "Dirigeable Polaire",
+ "element": "Ténèbres",
+ "hp": 75,
+ "blend": "Blender/Dirigeable_Polaire/Tenebres.blend",
+ "fbx": "FBX/Dirigeable_Polaire/Dirigeable_Polaire_Tenebres.fbx",
+ "dims": [
+  1.596,
+  2.378,
+  1.53
+ ],
+ "bones": 11,
+ "deform_bones": 10,
+ "shape_keys": [
+  "Respiration",
+  "Impact",
+  "Degonfle"
+ ],
+ "actions": [
+  {
+   "name": "IDLE",
+   "frames": 61,
+   "loop": true,
+   "seconds": 2.0
+  },
+  {
+   "name": "MOVE",
+   "frames": 41,
+   "loop": true,
+   "seconds": 1.33
+  },
+  {
+   "name": "ATTACK",
+   "frames": 37,
+   "loop": false,
+   "seconds": 1.2
+  },
+  {
+   "name": "HIT",
+   "frames": 19,
+   "loop": false,
+   "seconds": 0.6
+  },
+  {
+   "name": "DEATH",
+   "frames": 61,
+   "loop": false,
+   "seconds": 2.0
+  }
+ ],
+ "materials": {
+  "Corps": {
+   "base_color": "#2B2140",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Liseré": {
+   "base_color": "#120E1A",
+   "roughness": 0.25,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Valve_Argent": {
+   "base_color": "#C7D2DC",
+   "roughness": 0.22,
+   "metallic": 0.85,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Oeil": {
+   "base_color": "#E6CCFF",
+   "roughness": 0.15,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": "#C27BFF",
+   "emission_strength": 1.2,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Pupille": {
+   "base_color": "#1A0B2E",
+   "roughness": 0.1,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Blanc": {
+   "base_color": "#FFFFFF",
+   "roughness": 0.15,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Bouche": {
+   "base_color": "#0B0712",
+   "roughness": 0.4,
+   "metallic": 0.0,
+   "coat": 0.2,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Langue": {
+   "base_color": "#9B4DFF",
+   "roughness": 0.25,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Neige": {
+   "base_color": "#F4FAFF",
+   "roughness": 0.35,
+   "metallic": 0.0,
+   "coat": 0.3,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Givre": {
+   "base_color": "#BFEFFF",
+   "roughness": 0.05,
+   "metallic": 0.0,
+   "coat": 1.0,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.55
+  },
+  "Corps_2": {
+   "base_color": "#4A2C7C",
+   "roughness": 0.2,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Sombre": {
+   "base_color": "#1A2230",
+   "roughness": 0.4,
+   "metallic": 0.0,
+   "coat": 0.2,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Hublot": {
+   "base_color": "#1E4E7A",
+   "roughness": 0.05,
+   "metallic": 0.0,
+   "coat": 1.0,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Or": {
+   "base_color": "#E8B43A",
+   "roughness": 0.22,
+   "metallic": 0.9,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Déco": {
+   "base_color": "#6E3FB0",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Déco_2": {
+   "base_color": "#1C1428",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Lueur": {
+   "base_color": "#C27BFF",
+   "roughness": 0.3,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": "#C27BFF",
+   "emission_strength": 3.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  }
+ },
+ "verts": 14006,
+ "tris": 27584,
+ "seconds": 126.7
+}

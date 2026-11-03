@@ -1,0 +1,1149 @@
+[
+ {
+  "file": "Ballon_Flocon_Eau.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 10546,
+  "materials": 13,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 8,
+  "bones": 10,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 100,
+    "moving_bone_curves": 54,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 59,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 100,
+    "moving_bone_curves": 39,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 56,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 100,
+    "moving_bone_curves": 36,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Ballon_Flocon_Eclair.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 9184,
+  "materials": 13,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 8,
+  "bones": 10,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 100,
+    "moving_bone_curves": 54,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 59,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 100,
+    "moving_bone_curves": 39,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 56,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 100,
+    "moving_bone_curves": 36,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Ballon_Flocon_Feu.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 9172,
+  "materials": 14,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 8,
+  "bones": 10,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 100,
+    "moving_bone_curves": 54,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 59,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 100,
+    "moving_bone_curves": 39,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 56,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 100,
+    "moving_bone_curves": 36,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Ballon_Flocon_Glace.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 9388,
+  "materials": 13,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 8,
+  "bones": 10,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 100,
+    "moving_bone_curves": 54,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 59,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 100,
+    "moving_bone_curves": 39,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 56,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 100,
+    "moving_bone_curves": 36,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Ballon_Flocon_Lumiere.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 10424,
+  "materials": 13,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 9,
+  "bones": 10,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 100,
+    "moving_bone_curves": 54,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 59,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 100,
+    "moving_bone_curves": 39,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 56,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 100,
+    "moving_bone_curves": 36,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Ballon_Flocon_Plante.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 17980,
+  "materials": 13,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 8,
+  "bones": 10,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 100,
+    "moving_bone_curves": 54,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 59,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 100,
+    "moving_bone_curves": 39,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 56,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 100,
+    "moving_bone_curves": 36,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Ballon_Flocon_Tenebres.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 10034,
+  "materials": 14,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 8,
+  "bones": 10,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 100,
+    "moving_bone_curves": 54,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 59,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 100,
+    "moving_bone_curves": 39,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 56,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 100,
+    "moving_bone_curves": 36,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Ballon_Igloo_Eau.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 11524,
+  "materials": 14,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 8,
+  "bones": 9,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 90,
+    "moving_bone_curves": 23,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 90,
+    "moving_bone_curves": 26,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 90,
+    "moving_bone_curves": 24,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 90,
+    "moving_bone_curves": 27,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 90,
+    "moving_bone_curves": 20,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Ballon_Igloo_Eclair.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 10184,
+  "materials": 14,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 8,
+  "bones": 9,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 90,
+    "moving_bone_curves": 23,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 90,
+    "moving_bone_curves": 26,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 90,
+    "moving_bone_curves": 24,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 90,
+    "moving_bone_curves": 27,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 90,
+    "moving_bone_curves": 20,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Ballon_Igloo_Feu.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 10232,
+  "materials": 15,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 8,
+  "bones": 9,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 90,
+    "moving_bone_curves": 23,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 90,
+    "moving_bone_curves": 26,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 90,
+    "moving_bone_curves": 24,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 90,
+    "moving_bone_curves": 27,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 90,
+    "moving_bone_curves": 20,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Ballon_Igloo_Glace.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 10298,
+  "materials": 14,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 8,
+  "bones": 9,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 90,
+    "moving_bone_curves": 23,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 90,
+    "moving_bone_curves": 26,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 90,
+    "moving_bone_curves": 24,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 90,
+    "moving_bone_curves": 27,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 90,
+    "moving_bone_curves": 20,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Ballon_Igloo_Lumiere.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 11424,
+  "materials": 13,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 8,
+  "bones": 9,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 90,
+    "moving_bone_curves": 23,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 90,
+    "moving_bone_curves": 26,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 90,
+    "moving_bone_curves": 24,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 90,
+    "moving_bone_curves": 27,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 90,
+    "moving_bone_curves": 20,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Ballon_Igloo_Plante.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 18024,
+  "materials": 14,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 8,
+  "bones": 9,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 90,
+    "moving_bone_curves": 23,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 90,
+    "moving_bone_curves": 26,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 90,
+    "moving_bone_curves": 24,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 90,
+    "moving_bone_curves": 27,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 90,
+    "moving_bone_curves": 20,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Ballon_Igloo_Tenebres.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 11094,
+  "materials": 15,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 8,
+  "bones": 9,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 90,
+    "moving_bone_curves": 23,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 90,
+    "moving_bone_curves": 26,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 90,
+    "moving_bone_curves": 24,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 90,
+    "moving_bone_curves": 27,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 90,
+    "moving_bone_curves": 20,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Boss_Gardien_Glaciers_Plante.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 48160,
+  "materials": 18,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 32,
+  "bones": 33,
+  "takes": {
+   "ATTACK": {
+    "frames": 51,
+    "bone_curves": 330,
+    "moving_bone_curves": 68,
+    "shape_curves": 3
+   },
+   "ATTACK_GrainesExplosives": {
+    "frames": 46,
+    "bone_curves": 330,
+    "moving_bone_curves": 75,
+    "shape_curves": 3
+   },
+   "ATTACK_Invocation": {
+    "frames": 51,
+    "bone_curves": 330,
+    "moving_bone_curves": 80,
+    "shape_curves": 3
+   },
+   "ATTACK_TempeteNeige": {
+    "frames": 61,
+    "bone_curves": 330,
+    "moving_bone_curves": 69,
+    "shape_curves": 3
+   },
+   "ATTACK_VagueRacines": {
+    "frames": 61,
+    "bone_curves": 330,
+    "moving_bone_curves": 88,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 91,
+    "bone_curves": 330,
+    "moving_bone_curves": 111,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 21,
+    "bone_curves": 330,
+    "moving_bone_curves": 72,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 330,
+    "moving_bone_curves": 79,
+    "shape_curves": 3
+   },
+   "IDLE_Phase2": {
+    "frames": 61,
+    "bone_curves": 330,
+    "moving_bone_curves": 82,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 330,
+    "moving_bone_curves": 72,
+    "shape_curves": 3
+   },
+   "PHASE2_Eveil": {
+    "frames": 61,
+    "bone_curves": 330,
+    "moving_bone_curves": 76,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Dirigeable_Polaire_Eau.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 14616,
+  "materials": 16,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 9,
+  "bones": 10,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 100,
+    "moving_bone_curves": 29,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 29,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 100,
+    "moving_bone_curves": 27,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 28,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 100,
+    "moving_bone_curves": 26,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Dirigeable_Polaire_Eclair.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 13656,
+  "materials": 16,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 9,
+  "bones": 10,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 100,
+    "moving_bone_curves": 29,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 29,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 100,
+    "moving_bone_curves": 27,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 28,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 100,
+    "moving_bone_curves": 26,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Dirigeable_Polaire_Feu.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 13644,
+  "materials": 17,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 9,
+  "bones": 10,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 100,
+    "moving_bone_curves": 29,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 29,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 100,
+    "moving_bone_curves": 27,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 28,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 100,
+    "moving_bone_curves": 26,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Dirigeable_Polaire_Glace.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 13860,
+  "materials": 16,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 9,
+  "bones": 10,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 100,
+    "moving_bone_curves": 29,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 29,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 100,
+    "moving_bone_curves": 27,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 28,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 100,
+    "moving_bone_curves": 26,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Dirigeable_Polaire_Lumiere.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 14896,
+  "materials": 15,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 9,
+  "bones": 10,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 100,
+    "moving_bone_curves": 29,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 29,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 100,
+    "moving_bone_curves": 27,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 28,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 100,
+    "moving_bone_curves": 26,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Dirigeable_Polaire_Plante.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 21710,
+  "materials": 16,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 9,
+  "bones": 10,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 100,
+    "moving_bone_curves": 29,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 29,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 100,
+    "moving_bone_curves": 27,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 28,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 100,
+    "moving_bone_curves": 26,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "Dirigeable_Polaire_Tenebres.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 14006,
+  "materials": 17,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 9,
+  "bones": 10,
+  "takes": {
+   "ATTACK": {
+    "frames": 37,
+    "bone_curves": 100,
+    "moving_bone_curves": 29,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 29,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 19,
+    "bone_curves": 100,
+    "moving_bone_curves": 27,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 100,
+    "moving_bone_curves": 28,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 100,
+    "moving_bone_curves": 26,
+    "shape_curves": 3
+   }
+  }
+ },
+ {
+  "file": "MiniBoss_Pin_Gonflable_Plante.fbx",
+  "meshes": 1,
+  "armatures": 1,
+  "errors": [],
+  "verts": 41524,
+  "materials": 16,
+  "shape_keys": [
+   "Respiration",
+   "Impact",
+   "Degonfle"
+  ],
+  "vertex_groups": 23,
+  "bones": 24,
+  "takes": {
+   "ATTACK": {
+    "frames": 45,
+    "bone_curves": 240,
+    "moving_bone_curves": 56,
+    "shape_curves": 3
+   },
+   "ATTACK_ChuteNeige": {
+    "frames": 46,
+    "bone_curves": 240,
+    "moving_bone_curves": 56,
+    "shape_curves": 3
+   },
+   "ATTACK_PommesDePin": {
+    "frames": 46,
+    "bone_curves": 240,
+    "moving_bone_curves": 49,
+    "shape_curves": 3
+   },
+   "ATTACK_Racines": {
+    "frames": 56,
+    "bone_curves": 240,
+    "moving_bone_curves": 80,
+    "shape_curves": 3
+   },
+   "DEATH": {
+    "frames": 81,
+    "bone_curves": 240,
+    "moving_bone_curves": 92,
+    "shape_curves": 3
+   },
+   "HIT": {
+    "frames": 21,
+    "bone_curves": 240,
+    "moving_bone_curves": 53,
+    "shape_curves": 3
+   },
+   "IDLE": {
+    "frames": 61,
+    "bone_curves": 240,
+    "moving_bone_curves": 62,
+    "shape_curves": 3
+   },
+   "IDLE_Phase2": {
+    "frames": 61,
+    "bone_curves": 240,
+    "moving_bone_curves": 70,
+    "shape_curves": 3
+   },
+   "MOVE": {
+    "frames": 41,
+    "bone_curves": 240,
+    "moving_bone_curves": 67,
+    "shape_curves": 3
+   },
+   "PHASE2_Deploiement": {
+    "frames": 61,
+    "bone_curves": 240,
+    "moving_bone_curves": 67,
+    "shape_curves": 3
+   }
+  }
+ }
+]

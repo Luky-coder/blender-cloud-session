@@ -1,0 +1,9 @@
+Aucune texture image n'est nécessaire.
+
+Tous les matériaux sont des Principled BSDF à couleurs unies (plastique gonflable brillant) : le
+FBX transporte la couleur de base, la rugosité, le métal et l'émission. Les motifs élémentaires
+(flammes, cristaux, bulles, feuilles, éclairs, montagnes...) sont de la vraie géométrie.
+
+materiaux.json liste, pour chaque ennemi, les réglages exacts de chaque matériau (couleur sRGB,
+rugosité, métal, vernis/coat, émission, transparence) pour recréer les shaders dans le moteur :
+le vernis (coat) et la transmission ne passent pas par le FBX.
