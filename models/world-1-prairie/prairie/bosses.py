@@ -30,7 +30,7 @@ def _leaf_decals(F, P, spots, size, name="Motif_Feuille"):
         up = Quaternion(Vector(n), math.radians(rot_deg)) @ up
         col = P["accent2"] if k % 2 == 0 else P["body2"]
         vein = P["body2"] if k % 2 == 0 else P["accent2"]
-        rig.add(decal(F.surf, f"{name}_{k}", [poly_leaf(12, 0.45)], p, n, up, size, 0.012 * F.s, col))
+        rig.add(decal(F.surf, f"{name}_{k}", [poly_leaf(10, 0.45)], p, n, up, size, 0.012 * F.s, col, subdiv=1))
         rig.add(decal(F.surf, f"{name}_{k}_Nervure", [[(-0.035, -0.8), (0.035, -0.8), (0.02, 0.85), (-0.02, 0.85)]],
                       p, n, up, size, 0.022 * F.s, vein))
 
@@ -58,10 +58,10 @@ def build_montgolfiere(P):
     # Sangles (coutures porteuses) dorées entre les fuseaux
     for k in range(12):
         a = TAU * k / 12
-        thetas = [x for x in range(4, 150, 4) if not (k == 3 and 62 < x < 112)]  # visage dégagé
+        thetas = [x for x in range(4, 150, 7) if not (k == 3 and 62 < x < 112)]  # visage dégagé
         runs, cur = [], []
         for x in thetas:
-            if cur and x - cur[-1] > 4:
+            if cur and x - cur[-1] > 7:
                 runs.append(cur)
                 cur = []
             cur.append(x)
@@ -109,7 +109,7 @@ def build_montgolfiere(P):
             ph = math.radians(a0 + 130 * t)
             dirs.append((math.sin(th) * math.cos(ph), math.sin(th) * math.sin(ph), math.cos(th)))
         path = [F.surf.ray(d) for d in dirs]
-        vine(F, P, path, radius=0.011, leaf_every=0.07, flowers=(0.3, 0.75), leaf_size=0.075, seed=10 + v)
+        vine(F, P, path, radius=0.011, leaf_every=0.08, flowers=(0.3, 0.75), leaf_size=0.08, seed=10 + v)
     # Lianes pendantes sous l'enveloppe
     for k in range(5):
         a = TAU * k / 5 + 0.5
@@ -178,27 +178,27 @@ def build_zeppelin(P):
     def rad(y):
         return _blimp_radius(y / L + 0.5, Rm, 0.56)
 
-    N = 44
+    N = 36
     prof = []
     for i in range(N + 1):
         u = (1 - math.cos(math.pi * i / N)) / 2
         prof.append((_blimp_radius(u, Rm, 0.56) if 0 < i < N else 0.0, (u - 0.5) * L))
-    env = geo.lathe("Enveloppe", prof, 32, "Y", [P["body"], gore2], C, angle0=math.pi / 32)
-    _alt_gores(env, "Y", 16, C)
+    env = geo.lathe("Enveloppe", prof, 28, "Y", [P["body"], gore2], C, angle0=math.pi / 28)
+    _alt_gores(env, "Y", 14, C)
     rig.add(env)
     F.surf = Surface([env], C)
 
     # Anneaux et liserés dorés
     for k, y in enumerate((-3.2, -0.6, 2.4)):
-        dirs = [(math.cos(TAU * i / 48), 0, math.sin(TAU * i / 48)) for i in range(48)]
-        rig.add(seam_line(F.surf, f"Anneau_Or_{k}", dirs, 0.07, gold, closed=True, origins=[C + Vector((0, y, 0))] * 48))
+        dirs = [(math.cos(TAU * i / 32), 0, math.sin(TAU * i / 32)) for i in range(32)]
+        rig.add(seam_line(F.surf, f"Anneau_Or_{k}", dirs, 0.07, gold, closed=True, origins=[C + Vector((0, y, 0))] * 32))
     for side in (-1, 1):
-        ys = [-4.3 + 8.4 * i / 60 for i in range(61)]
+        ys = [-4.3 + 8.4 * i / 30 for i in range(31)]
         rig.add(seam_line(F.surf, "Lisere_Or", [(side, 0, 0.12)] * len(ys), 0.05, gold,
                           origins=[C + Vector((0, y, 0)) for y in ys]))
     for k, a in enumerate((45, 135, 225, 315)):
         a = math.radians(a)
-        ys = [-4.6 + 8.6 * i / 60 for i in range(61)]
+        ys = [-4.6 + 8.6 * i / 30 for i in range(31)]
         rig.add(seam_line(F.surf, f"Couture_{k}", [(math.cos(a), 0, math.sin(a))] * len(ys), 0.025, P["seam"],
                           origins=[C + Vector((0, y, 0)) for y in ys]))
     nose = geo.lathe("Nez_Or", [(0.0, L / 2 + 0.02), (0.32, L / 2 - 0.06), (0.5, L / 2 - 0.2)], 24, "Y", gold, C)
@@ -207,17 +207,17 @@ def build_zeppelin(P):
     # Ailerons gonflables à liseré doré
     s7 = 7.4
     fin_pts = geo.catmull([(-0.73, 0.03), (-0.30, 0.17), (-0.50, 0.40), (-0.70, 0.40), (-0.77, 0.25)], 10, closed=True)
-    fin_pts = [(p.x * s7, p.y * s7) for p in geo.resample(fin_pts, 80, closed=True)]
+    fin_pts = [(p.x * s7, p.y * s7) for p in geo.resample(fin_pts, 32, closed=True)]
     for k, d in enumerate(((0, 0, 1), (0, 0, -1), (1, 0, 0), (-1, 0, 0))):
         d = Vector(d)
-        fin = geo.pillow(f"Aileron_{k}", fin_pts, 0.2, rings=7, edge=0.35, material=P["body2"], power=0.6)
+        fin = geo.pillow(f"Aileron_{k}", fin_pts, 0.2, rings=4, edge=0.35, material=P["body2"], power=0.6)
         ey = Vector((0, 1, 0))
         M = Matrix((ey, d.cross(ey), d)).transposed().to_4x4()
         M.translation = C
         geo.transform(fin, M)
         rig.add(fin)
         edge = [M @ Vector((x, 0, z)) for x, z in fin_pts]
-        rig.add(geo.tube("Aileron_Lisere", edge + [edge[0]], 0.045, 6, gold, caps=False))
+        rig.add(geo.tube("Aileron_Lisere", edge + [edge[0]], 0.045, 4, gold, caps=False))
 
     # Grandes feuilles : crête dorsale et bouquets de queue
     for k, y in enumerate((-2.6, -1.4, -0.2, 1.0)):
@@ -241,12 +241,12 @@ def build_zeppelin(P):
     # Lianes et fleurs
     for v, a0 in enumerate((20, 200)):
         path = []
-        for i in range(120):
-            t = i / 119
+        for i in range(80):
+            t = i / 79
             y = -3.0 + 6.6 * t
             a = math.radians(a0 + 720 * t)
             path.append(F.surf.ray((math.cos(a), 0, math.sin(a)), C + Vector((0, y, 0))))
-        vine(F, P, path, radius=0.012, leaf_every=0.1, flowers=(0.2, 0.45, 0.7, 0.92), leaf_size=0.085, seed=30 + v)
+        vine(F, P, path, radius=0.012, leaf_every=0.14, flowers=(0.25, 0.6, 0.9), leaf_size=0.1, seed=30 + v)
 
     # Nacelle (cabine en bois et or)
     gy, gl = 0.9, 3.4
@@ -257,13 +257,13 @@ def build_zeppelin(P):
     geo.transform(cab, Matrix.Translation((0, gy, gz)) @ Matrix.Diagonal((1, 1, 1.2, 1)) @ Matrix.Translation((0, -gy, -gz)))
     rig.add(cab)
     for yy in (-1.2, 0.0, 1.2):
-        rig.add(geo.torus("Cabine_Cerclage", 0.49, 0.035, 24, 6, gold,
+        rig.add(geo.torus("Cabine_Cerclage", 0.49, 0.035, 20, 4, gold,
                           Matrix.Translation((0, gy + yy, gz)) @ geo.rot((1, 0, 0), 90) @ Matrix.Diagonal((1, 1.2, 1, 1))))
     for side in (-1, 1):
         for k in range(6):
             yy = gy - 1.25 + 0.5 * k
-            rig.add(geo.sphere("Cabine_Hublot", (side * 0.455, yy, gz + 0.12), 0.13, 12, 6, (0.3, 1, 1.15), P["glass"]))
-            rig.add(geo.torus("Cabine_Hublot_Cadre", 0.135, 0.022, 14, 5, gold,
+            rig.add(geo.sphere("Cabine_Hublot", (side * 0.455, yy, gz + 0.12), 0.13, 8, 4, (0.3, 1, 1.15), P["glass"]))
+            rig.add(geo.torus("Cabine_Hublot_Cadre", 0.135, 0.022, 8, 3, gold,
                               Matrix.Translation((side * 0.475, yy, gz + 0.12)) @ geo.rot((0, 1, 0), 90) @ Matrix.Diagonal((1.15, 1, 1, 1))))
     for yy in (-1.0, 0.0, 1.0):
         for side in (-1, 1):

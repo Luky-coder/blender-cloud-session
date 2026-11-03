@@ -12,6 +12,7 @@ Sorties (dans models/world-1-prairie/World_1_Prairie/) :
     Previews/<Famille>/<Type>_Animations.jpg  images clés des 5 animations
 """
 import json
+import math
 import os
 import subprocess
 import sys
@@ -110,6 +111,30 @@ def render_sheet(arm, mesh, F, prefix, samples, gif=False):
             scene.frame_set(int(act.frame_start) + f)
             p = render.render_to(os.path.join(tmp, f"{name}_{f:03d}.jpg"))
             tiles[name].append((f, p))
+    # Gros plans du visage : yeux animés (clignement, regard, plissement, impact, douleur, étourdissement)
+    if F.eye_rig:
+        A = anim.PARAMS[F.kind]
+        a = A["attack"]
+        a1, a2, a3 = (round(a * x) for x in (0.30, 0.42, 0.50))
+        eye_frames = [("Idle", round(0.62 * A["idle"])), ("Idle", A["idle"] // 4), ("Move", A["move"] // 2),
+                      ("Attack", a1), ("Attack", a2 - 1), ("Attack", a3), ("Hit", max(2, round(A["hit"] * 0.12)) + 1),
+                      ("Death", round(A["death"] * 0.3))]
+        e = F.eye_rig[0]
+        half = (abs(F.eyes["spacing"]) + e["size"]) * 1.5
+        scene.render.resolution_x, scene.render.resolution_y = 400, 300
+        tiles["Eyes"] = []
+        for name, f in eye_frames:
+            act = bpy.data.actions[name]
+            arm.animation_data.action = act
+            scene.frame_set(int(act.frame_start) + f)
+            c = sum((arm.matrix_world @ arm.pose.bones[x["eye"]].head for x in F.eye_rig), type(e["t"])()) / len(F.eye_rig)
+            c += e["b"] * e["size"] * 0.35
+            d = type(e["t"])((half, half * 0.4, half * 0.75))
+            fn = (arm.matrix_world.to_3x3() @ arm.pose.bones["Motion"].matrix.to_3x3() @ e["n"]).normalized()
+            az = math.degrees(math.atan2(-fn.x, fn.y)) - 12
+            el = math.degrees(math.asin(max(-1.0, min(1.0, fn.z)))) * 0.5 + 6
+            render.camera("yeux", c - d, c + d, az, el, lens=50, margin=1.0)
+            tiles["Eyes"].append((f"{name} {f}", render.render_to(os.path.join(tmp, f"eyes_{name}_{f:03d}.jpg"))))
     gif_frames = []
     if gif:
         act = bpy.data.actions["Attack"]

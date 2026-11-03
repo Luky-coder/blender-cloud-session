@@ -74,30 +74,41 @@ def poly_snowflake():
 # ------------------------------------------------------------------------------------------- visage
 
 def face(F, P, angry=1.0):
-    """Yeux imprimés sur l'enveloppe (comme un ballon de fête) : regard en colère, ils marquent l'avant (+Y)."""
+    """Yeux imprimés sur l'enveloppe (comme un ballon de fête), regard en colère : ils marquent l'avant (+Y).
+
+    Chaque côté a 3 os (animés) : Oeil_X (blanc de l'oeil : clignement, écarquillement), Pupille_X (enfant de
+    l'oeil : direction du regard) et Sourcil_X (expression). X = G/D, gauche/droite du modèle (G = -X).
+    """
     e = F.eyes
     p, n, sp, sz, up = e["p"], e["n"], e["spacing"], e["size"], e.get("up", (0, 0, 1))
+    t, b, nn = frame_at(p, n, up)  # t = droite de l'observateur (vu de face), b = haut
     k = F.s
     white = P["iris"] if P.get("iris") else P["eye_white"]
-    sclera, pupils, shines, brows = [], [], [], []
-    for side in (-1, 1):
+    F.eye_rig = []
+    for side, tag in ((-1, "D"), (1, "G")):
         cx = side * sp
-        sclera.append(ellipse(cx, 0, sz * 0.78, sz, 22))
+        eye_b, pup_b, brow_b = f"Oeil_{tag}", f"Pupille_{tag}", f"Sourcil_{tag}"
+        rig.add(decal(F.surf, eye_b, [ellipse(cx, 0, sz * 0.78, sz, 22)], p, n, up, 1.0, 0.0035 * k, white),
+                ("bone", eye_b))
         if P.get("iris"):
-            pupils.append(ellipse(cx - side * 0.1 * sz, -0.08 * sz, sz * 0.16, sz * 0.62, 14))
+            pupil = ellipse(cx - side * 0.1 * sz, -0.08 * sz, sz * 0.16, sz * 0.62, 14)
         else:
-            pupils.append(ellipse(cx - side * 0.13 * sz, -0.12 * sz, sz * 0.4, sz * 0.5, 16))
-            shines.append(ellipse(cx - side * 0.02 * sz, 0.12 * sz, sz * 0.13, sz * 0.13, 8))
+            pupil = ellipse(cx - side * 0.13 * sz, -0.12 * sz, sz * 0.4, sz * 0.5, 16)
+            rig.add(decal(F.surf, pup_b + "_Reflet", [ellipse(cx - side * 0.02 * sz, 0.12 * sz, sz * 0.13, sz * 0.13, 8)],
+                          p, n, up, 1.0, 0.009 * k, P["shine"], subdiv=0), ("bone", pup_b))
+        rig.add(decal(F.surf, pup_b, [pupil], p, n, up, 1.0, 0.0065 * k, P["pupil"]), ("bone", pup_b))
         th = 0.3 * sz
         x_in, x_out = cx - side * 0.95 * sz, cx + side * 0.95 * sz
         y_in, y_out = 0.78 * sz, (0.78 + 0.5 * angry) * sz
         quad = [(x_in, y_in - th / 2), (x_out, y_out - th / 2), (x_out, y_out + th / 2), (x_in, y_in + th / 2)]
-        brows.append(quad if side > 0 else list(reversed(quad)))
-    rig.add(decal(F.surf, "Yeux", sclera, p, n, up, 1.0, 0.0035 * k, white))
-    rig.add(decal(F.surf, "Pupilles", pupils, p, n, up, 1.0, 0.0065 * k, P["pupil"]))
-    if shines:
-        rig.add(decal(F.surf, "Yeux_Reflets", shines, p, n, up, 1.0, 0.009 * k, P["shine"], subdiv=0))
-    rig.add(decal(F.surf, "Sourcils", brows, p, n, up, 1.0, 0.0085 * k, P["brow"]))
+        rig.add(decal(F.surf, brow_b, [quad if side > 0 else list(reversed(quad))], p, n, up, 1.0, 0.0085 * k, P["brow"]),
+                ("bone", brow_b))
+        ce, _n = F.surf.project(Vector(p) + t * cx, nn)
+        cb, _n = F.surf.project(Vector(p) + t * cx + b * (0.78 + 0.25 * angry) * sz, nn)
+        F.extra_bones += [dict(name=eye_b, head=ce, length=sz * 0.8),
+                          dict(name=pup_b, head=ce, length=sz * 0.5, parent=eye_b),
+                          dict(name=brow_b, head=cb, length=sz * 0.8)]
+        F.eye_rig.append(dict(side=side, eye=eye_b, pupil=pup_b, brow=brow_b, t=t.copy(), b=b.copy(), n=nn.copy(), size=sz))
 
 
 def shine(F, P):
@@ -152,8 +163,8 @@ def _path_offset(path, amp_fn, offset):
     return out
 
 
-def _leaf_on(name, p, direction, normal, length, width, mat, bend=0.25, fold=0.22):
-    lf = geo.leaf(name, length, width, mat, fold=fold, bend=bend, nu=7, nv=2, thick=0.003 * max(length / 0.1, 1))
+def _leaf_on(name, p, direction, normal, length, width, mat, bend=0.25, fold=0.22, nu=6, nv=2):
+    lf = geo.leaf(name, length, width, mat, fold=fold, bend=bend, nu=nu, nv=nv, thick=0.003 * max(length / 0.1, 1))
     geo.transform(lf, geo.basis(p, direction, normal))
     return lf
 
@@ -164,7 +175,7 @@ def vine(F, P, path, radius=0.013, leaf_every=0.075, flowers=(0.42, 0.86), leaf_
     rnd = random.Random(seed)
     s = F.s
     pts = [p + Vector(n) * radius * 0.6 for p, n in path]
-    rig.add(geo.tube("Liane", pts, radius * s, 7, P.get("vine", P["string"])), rule)
+    rig.add(geo.tube("Liane", geo.resample(pts, max(8, len(pts) // 2)), radius * s, 5, P.get("vine", P["string"])), rule)
     acc = 0.0
     side = 1
     for i in range(1, len(path) - 1):
@@ -178,7 +189,7 @@ def vine(F, P, path, radius=0.013, leaf_every=0.075, flowers=(0.42, 0.86), leaf_
         d = (n.cross(tan) * side * 0.8 + n * 0.35 + tan * 0.3).normalized()
         L = leaf_size * s * rnd.uniform(0.75, 1.1)
         rig.add(_leaf_on("Liane_Feuille", pts[i], d, n, L, L * 0.55, P["accent"] if side > 0 else P["accent2"],
-                         bend=0.15, fold=0.18), rule)
+                         bend=0.15, fold=0.18, nu=4, nv=1), rule)
         side = -side
     for f in flowers:
         i = int(f * (len(path) - 1))

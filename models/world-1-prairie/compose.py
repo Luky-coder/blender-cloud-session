@@ -9,7 +9,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 FONT_R = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-LABELS = {"Idle": "IDLE", "Move": "MOVE", "Attack": "ATTACK", "Hit": "HIT", "Death": "DEATH"}
+LABELS = {"Idle": "IDLE", "Move": "MOVE", "Attack": "ATTACK", "Hit": "HIT", "Death": "DEATH", "Eyes": "YEUX"}
 
 
 def font(path, size):
@@ -43,7 +43,8 @@ def main(job_path):
             im = Image.open(path).convert("RGB").resize((tw, th), Image.LANCZOS)
             x = lw + c * (tw + 4)
             sheet.paste(im, (x, y))
-            d.text((x + 4, y + th + 3), f"image {frame}", fill=(80, 80, 80), font=f_cap)
+            cap_txt = frame if isinstance(frame, str) else f"image {frame}"
+            d.text((x + 4, y + th + 3), cap_txt, fill=(80, 80, 80), font=f_cap)
     sheet.save(job["out"], quality=88)
     if job.get("gif"):
         frames = [Image.open(p).convert("RGB") for p in job["gif"]]

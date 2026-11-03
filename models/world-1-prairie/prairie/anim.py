@@ -231,6 +231,24 @@ def _chain(P, F, angles_x, angles_y=None):
         P.rot(b, (ax, ay, 0))
 
 
+def bump(f, center, half):
+    """0 -> 1 -> 0 autour de `center` (clignement)."""
+    u = 1 - abs(f - center) / half
+    return 0.0 if u <= 0 else u * u * (3 - 2 * u)
+
+
+def _eyes(P, F, blink=0.0, look=(0.0, 0.0), anger=0.0, raise_=0.0, wide=1.0):
+    """Yeux : blink 0 = ouverts, 1 = fermés ; look en fraction de la taille de l'oeil (x vers la droite de
+    l'observateur, y vers le haut) ; anger en degrés (sourcils froncés si > 0, inquiets si < 0) ; raise_ lève les
+    sourcils ; wide écarquille."""
+    for e in F.eye_rig:
+        sz = e["size"]
+        P.scl(e["eye"], (wide, 1.0, max(0.05, wide * (1 - 0.95 * min(max(blink, 0.0), 1.0)))))
+        P.loc(e["pupil"], e["t"] * (look[0] * 0.32 * sz) + e["b"] * (look[1] * 0.3 * sz))
+        P.rot_axis(e["brow"], e["n"], e["side"] * anger)
+        P.loc(e["brow"], e["b"] * (raise_ * sz))
+
+
 def _body_vol(P, sy, extra=(1, 1, 1)):
     sxz = 1 / math.sqrt(max(sy, 1e-3))
     P.scl("Body", (sxz * extra[0], sy * extra[1], sxz * extra[2]))
@@ -257,6 +275,9 @@ def idle(F, A, f, n):
         P.spin(pb, TAU * A["prop"][0] * t)
     if F.nacelle:
         P.rot(F.nacelle, (A["nac"] * math.sin(w - 1.2), 0.6 * A["nac"] * math.sin(w + 0.5), 0))
+    glance = max(-1.0, min(1.0, 1.8 * math.sin(w + 0.3))) * 0.55
+    _eyes(P, F, blink=bump(f, 0.62 * n, 3.5), look=(glance, 0.12 * math.sin(2 * w)),
+          anger=2.0 * math.sin(w), raise_=0.03 * math.sin(2 * w))
     return P
 
 
@@ -278,6 +299,7 @@ def move(F, A, f, n):
         P.spin(pb, TAU * A["prop"][1] * t)
     if F.nacelle:
         P.rot(F.nacelle, (-0.8 * L + A["nac"] * 0.5 * math.sin(2 * w - 1.0), 0.5 * A["nac"] * math.sin(w), 0))
+    _eyes(P, F, blink=0.15, look=(0.15 * math.sin(w), -0.35), anger=7 + 2 * math.sin(2 * w), raise_=-0.05)
     return P
 
 
@@ -308,6 +330,12 @@ def attack(F, A, f, n):
     if F.nacelle:
         nac = track(f, [(0, 0), (a1, 10), (a2, -20, "in2"), (a3, 28, "out"), (a4, -8, "inout"), (n, 0, "inout")])
         P.rot(F.nacelle, (nac + vib(f, a4, 4, n * 0.2, n), 0, 0))
+    _eyes(P, F,
+          blink=track(f, [(0, 0), (a1, 0.45), (a2 - 1, 0, "out"), (a3, 0.9, "out"), (a4, 0.0), (n, 0)]),
+          look=(0.0, track(f, [(0, 0), (a1, -0.4), (a4, -0.3), (n, 0)])),
+          anger=track(f, [(0, 0), (a1, 15), (a3, 18), (a4, 8), (n, 0)]),
+          raise_=track(f, [(0, 0), (a1, -0.12), (a3, -0.1), (n, 0)]),
+          wide=track(f, [(0, 1), (a1, 1), (a2 - 1, 1.15, "out"), (a3, 1.0), (n, 1)]))
     return P
 
 
@@ -333,6 +361,12 @@ def hit(F, A, f, n):
         P.spin(pb, TAU * max(1, A["prop"][0] // 4) * f / n)
     if F.nacelle:
         P.rot(F.nacelle, (track(f, [(0, 0), (i1, -8), (round(n * 0.5), 5), (n, 0)]) + vib(f, i1, 3, n * 0.3, n), 0, 0))
+    _eyes(P, F,
+          blink=track(f, [(0, 0), (i1, 1, "out"), (round(n * 0.45), 1), (round(n * 0.6), 0, "out"), (n, 0)]),
+          look=(vib(f, round(n * 0.6), 0.5, 3.0, n, 0.4), 0.0),
+          anger=track(f, [(0, 0), (i1, -14), (round(n * 0.6), -8), (n, 0)]),
+          raise_=track(f, [(0, 0), (i1, 0.25), (n, 0)]),
+          wide=track(f, [(0, 1), (round(n * 0.6), 1), (round(n * 0.72), 1.15), (n, 1)]))
     return P
 
 
@@ -374,6 +408,15 @@ def death(F, A, f, n):
         P.spin(pb, TAU * A["prop"][0] * 0.5 * ease(f / n, "out2"))
     if F.nacelle:
         P.rot(F.nacelle, (track(f, [(0, 0), (j, -10), (n, 18)]) + 8 * env * math.sin(TAU * f / (n * 0.3)), 6 * env, 0))
+    # yeux : choc, puis regard étourdi (les pupilles tournent), puis les yeux se ferment
+    r = track(f, [(0, 0), (j, 0.0), (round(n * 0.3), 0.8), (round(n * 0.7), 0.8), (round(n * 0.8), 0.2)])
+    a = TAU * 3.0 * f / n
+    _eyes(P, F,
+          blink=track(f, [(0, 0), (round(n * 0.68), 0), (round(n * 0.85), 1, "inout"), (n, 1)]),
+          look=(r * math.cos(a), r * math.sin(a)),
+          anger=track(f, [(0, 0), (j, -16, "out"), (n, -16)]),
+          raise_=track(f, [(0, 0), (j, 0.3, "out"), (n, 0.25)]),
+          wide=track(f, [(0, 1), (j, 1.2, "out"), (round(n * 0.6), 1.1), (n, 1.0)]))
     return P
 
 

@@ -38,7 +38,8 @@ class Frame:
         self.props = []            # os d'hélices
         self.nacelle = None
         self.extra_bones = []
-        self.followers = {}        # os enfants de Motion qui suivent la déformation de l'enveloppe
+        self.followers = {}
+        self.eye_rig = []          # os des yeux (voir elements.face)        # os enfants de Motion qui suivent la déformation de l'enveloppe
 
 
 def _ray_pairs(surf, dirs, origins=None):
@@ -212,10 +213,10 @@ def build_dirigeable(P):
 
     # Ailerons gonflables (4, en croix)
     fin_pts = geo.catmull([(-0.73, 0.03), (-0.30, 0.17), (-0.50, 0.40), (-0.70, 0.40), (-0.77, 0.25)], 10, closed=True)
-    fin_pts = [(p.x, p.y) for p in geo.resample(fin_pts, 72, closed=True)]
+    fin_pts = [(p.x, p.y) for p in geo.resample(fin_pts, 36, closed=True)]
     for k, d in enumerate(((0, 0, 1), (0, 0, -1), (1, 0, 0), (-1, 0, 0))):
         d = Vector(d)
-        fin = geo.pillow(f"Aileron_{k}", fin_pts, 0.032, rings=7, edge=0.05, material=P["body2"], power=0.6)
+        fin = geo.pillow(f"Aileron_{k}", fin_pts, 0.032, rings=4, edge=0.05, material=P["body2"], power=0.6)
         ey = Vector((0, 1, 0))
         t = d.cross(ey)
         M = Matrix((ey, t, d)).transposed().to_4x4()
@@ -254,9 +255,9 @@ def build_dirigeable(P):
                           Matrix.Translation((0, gy + yy, gz)) @ geo.rot((1, 0, 0), 90) @ Matrix.Diagonal((1, 1.12, 1, 1))))
     for side in (-1, 1):
         for k, yy in enumerate((-0.04, 0.03, 0.10)):
-            w = geo.sphere("Hublot", (side * 0.062, gy + yy, gz + 0.012), 0.022, 12, 6, (0.35, 1, 1), P["glass"])
+            w = geo.sphere("Hublot", (side * 0.062, gy + yy, gz + 0.012), 0.022, 8, 4, (0.35, 1, 1), P["glass"])
             rig.add(w)
-            rig.add(geo.torus("Hublot_Cadre", 0.022, 0.005, 14, 5, P["metal"],
+            rig.add(geo.torus("Hublot_Cadre", 0.022, 0.005, 10, 4, P["metal"],
                               Matrix.Translation((side * 0.066, gy + yy, gz + 0.012)) @ geo.rot((0, 1, 0), 90)))
     for yy in (-0.06, 0.16):
         top = zc - rad(gy + yy) + 0.02
@@ -270,7 +271,7 @@ def build_dirigeable(P):
     for k, a in enumerate((45, 135, 225, 315)):
         a = math.radians(a)
         d = Vector((math.cos(a), 0, math.sin(a)))
-        ys = [-0.62 + 1.16 * i / 40 for i in range(41)]
+        ys = [-0.62 + 1.16 * i / 24 for i in range(25)]
         rig.add(seam_line(F.surf, f"Couture_L{k}", [d] * len(ys), 0.0045, P["seam"],
                           origins=[C + Vector((0, y, 0)) for y in ys]))
     for k, y in enumerate((-0.26, 0.40)):

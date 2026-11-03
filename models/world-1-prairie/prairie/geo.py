@@ -461,8 +461,8 @@ def puff_cluster(name, center, size, material, count=4, seed=0, flatten=0.8):
         a = TAU * k / count + rnd.uniform(-0.4, 0.4)
         off = Vector((math.cos(a), math.sin(a), rnd.uniform(-0.3, 0.4))) * size * 0.55
         rr = size * rnd.uniform(0.45, 0.7)
-        parts.append(sphere(f"{name}_{k}", Vector(center) + off, rr, 12, 6, (1, 1, flatten), material))
-    parts.append(sphere(f"{name}_c", center, size * 0.7, 12, 6, (1, 1, flatten), material))
+        parts.append(sphere(f"{name}_{k}", Vector(center) + off, rr, 8, 5, (1, 1, flatten), material))
+    parts.append(sphere(f"{name}_c", center, size * 0.7, 9, 5, (1, 1, flatten), material))
     return join(parts, name)
 
 
@@ -470,11 +470,11 @@ def flower(name, radius, petal_mat, center_mat, n=5, cup=22):
     """Fleur. Locale : face vers +Z, centre à l'origine."""
     parts = []
     for k in range(n):
-        p = leaf(f"{name}_p{k}", radius, radius * 0.75, petal_mat, fold=0.08, bend=-0.1, nu=5, nv=2,
+        p = leaf(f"{name}_p{k}", radius, radius * 0.75, petal_mat, fold=0.08, bend=-0.1, nu=3, nv=1,
                  thick=radius * 0.04)
         transform(p, rot((0, 0, 1), 360 * k / n) @ rot((1, 0, 0), cup))
         parts.append(p)
-    parts.append(sphere(f"{name}_coeur", (0, 0, radius * 0.12), radius * 0.32, 10, 5, (1, 1, 0.6), center_mat))
+    parts.append(sphere(f"{name}_coeur", (0, 0, radius * 0.12), radius * 0.32, 8, 4, (1, 1, 0.6), center_mat))
     return join(parts, name)
 
 

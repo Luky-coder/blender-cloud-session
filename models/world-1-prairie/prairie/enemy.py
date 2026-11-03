@@ -5,6 +5,8 @@ from mathutils import Matrix
 from . import anim, elements, families, geo, rig
 from .materials import palette
 
+MAX_TRIS = 20000  # budget par ennemi (maillage final, triangulé)
+
 ELEMENTS = {  # id -> (nom affiché, nom de fichier)
     "lumiere": ("Lumière", "Lumiere"),
     "tenebres": ("Ténèbres", "Tenebres"),
@@ -57,6 +59,10 @@ def build_enemy(family, element="plante", with_anims=True, offset=None):
         elements.DECOR[element](F, P)
     arm = rig.build_armature(F, name + "_Rig")
     mesh = rig.skin_and_join(F, arm, name)
+    tris = sum(len(p.vertices) - 2 for p in mesh.data.polygons)
+    if tris > MAX_TRIS:
+        raise RuntimeError(f"{name} : {tris} triangles, limite {MAX_TRIS}")
+    arm["Triangles"] = tris
     if family in BOSSES:
         disp, _f, pv, rank = BOSSES[family]
         arm["Famille"] = rank

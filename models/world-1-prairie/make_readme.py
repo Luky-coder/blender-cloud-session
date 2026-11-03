@@ -64,7 +64,12 @@ L += ["",
       "du ballon) ; la nacelle de la montgolfière pivote sous la bouche de l'enveloppe ; chaque hélice sur son moyeu.",
       "- **Os** : `Root` (sol, immobile) → `Motion` (déplacements, rotations) → `Body` (écrasement / étirement) → "
       "14 `Lobe_*` (6 axes + 8 coins : déforment l'enveloppe, servent au dégonflement). Suiveurs enfants de `Motion` : "
-      "`Orbite` (éléments flottants : étoiles, bulles, braises…), `Ficelle_1..3`, `Helice*`, `Nacelle`.",
+      "`Orbite` (éléments flottants : étoiles, bulles, braises…), `Ficelle_1..3`, `Helice*`, `Nacelle`, et pour le visage "
+      "`Oeil_G/D` (clignement, écarquillement), `Pupille_G/D` (regard) et `Sourcil_G/D` (expression).",
+      "- **Yeux animés** dans les 5 actions : clignement et coups d'oeil en `Idle`, regard concentré en `Move`, "
+      "plissement à l'anticipation puis yeux écarquillés et crispés à l'impact en `Attack`, yeux fermés de douleur en "
+      "`Hit`, regard étourdi (pupilles qui tournent) puis fermeture en `Death`. Ligne « YEUX » des planches d'animation.",
+      "- **Budget** : 20 000 triangles maximum par ennemi (vérifié à chaque génération, colonne « Triangles »).",
       "- **Export propre pour les moteurs** : tous les os sont orientés comme le monde. Les échelles non uniformes "
       "ne sont portées que par des os sans enfants tournés, donc sans cisaillement : le FBX se lit à l'identique "
       "dans Unity, Unreal ou Godot. 4 influences maximum par sommet.",

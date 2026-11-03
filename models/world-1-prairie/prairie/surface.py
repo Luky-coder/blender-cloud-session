@@ -128,7 +128,7 @@ def surface_path(surf, dirs, offset, origins=None):
     return out
 
 
-def seam_line(surf, name, dirs, radius, material, offset=0.0, closed=False, origins=None, seg=6):
+def seam_line(surf, name, dirs, radius, material, offset=0.0, closed=False, origins=None, seg=4):
     pts = [p for p, _n in surface_path(surf, dirs, offset + radius * 0.4, origins)]
     if closed:
         pts = pts + [pts[0]]
