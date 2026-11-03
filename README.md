@@ -2,7 +2,7 @@
 
 Faire créer des modèles 3D par Claude Code **en session cloud** (claude.ai/code), avec Blender en headless
 sur la VM. Claude écrit un script Python par modèle, le génère avec Blender, regarde les rendus, corrige,
-puis pousse sur une branche au nom de l'objet (`model/<nom>`) :
+puis, quand tu lui donnes ton accord, pousse sur une branche au nom de l'objet (`model/<nom>`) :
 
 - le `.blend` ;
 - des screenshots (4 vues et une grille d'aperçu) ;
@@ -30,13 +30,20 @@ Lance une session sur ce repo avec cet environnement, puis demande par exemple :
 > Crée une lampe de bureau articulée, style scandinave, en bois clair et métal blanc.
 
 Claude crée la branche `model/lampe-bureau` et le script `models/lampe-bureau/build.py`, génère le modèle,
-vérifie les rendus et pousse sur cette branche. Pour récupérer le résultat :
+vérifie les rendus, te les décrit et te demande s'il peut pousser. **Rien ne part sur GitHub sans ton
+accord explicite** : tant que tu ne dis pas « oui », le travail reste sur la VM de la session. Le push
+affiche aussi une demande de permission (règle `ask` dans `.claude/settings.json`).
+
+Attention, la VM est éphémère : un modèle jamais poussé est perdu à la fin de la session.
+
+Pour récupérer le résultat une fois poussé :
 
 - **Sur GitHub** : ouvre la branche `model/<nom>`, puis `models/<nom>/README.md`. L'aperçu et les vues s'affichent.
 - **En local** : `git fetch && git checkout model/<nom>`, puis ouvre `models/<nom>/<nom>.blend` dans Blender.
 
 Pour une retouche, il suffit de continuer la conversation, par exemple « pieds plus fins » ou « ajoute un
-tiroir ». Chaque itération est commitée sur la même branche. Dans une nouvelle session, demande par exemple
+tiroir ». Les retouches restent locales jusqu'à ton prochain accord, et chaque push ajoute un seul commit
+sur la même branche. L'historique ne garde donc pas un `.blend` par essai. Dans une nouvelle session, demande par exemple
 « retouche lampe-bureau : … » : Claude repart de la branche `model/lampe-bureau`.
 
 Pour regrouper un modèle terminé dans `main`, fusionne sa branche (pull request sur GitHub).
@@ -45,7 +52,7 @@ Pour regrouper un modèle terminé dans `main`, fusionne sa branche (pull reques
 
 ```
 CLAUDE.md                     instructions pour Claude (workflow, conventions)
-.claude/settings.json         hook SessionStart + permissions
+.claude/settings.json         hook SessionStart + permissions (git push demande confirmation)
 .claude/hooks/session-start.sh  installe Blender si absent (sessions cloud uniquement)
 scripts/setup_blender.sh      installation de Blender 5.2 (setup script / hook)
 tools/build.sh                bash tools/build.sh models/<nom> : génère tout le modèle

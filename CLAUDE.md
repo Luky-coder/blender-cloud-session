@@ -2,8 +2,8 @@
 
 Ce repo sert à créer des modèles 3D avec Blender **sans écran ni GPU**, dans une session Claude Code cloud.
 L'utilisateur décrit un objet ; tu écris un script Python `bpy` qui le construit, tu le génères, tu regardes
-les rendus, tu corriges, puis tu pousses le résultat (fichiers + screenshots) sur une branche
-`model/<nom>` dédiée à l'objet (voir la section Git).
+les rendus, tu corriges, puis, **seulement avec l'accord explicite de l'utilisateur**, tu pousses le
+résultat (fichiers + screenshots) sur une branche `model/<nom>` dédiée à l'objet (voir la section Git).
 Réponds à l'utilisateur en français.
 
 ## Environnement
@@ -35,7 +35,9 @@ Réponds à l'utilisateur en français.
 3. **Regarder** `models/<nom>/screenshots/preview.jpg` avec l'outil Read, et les vues individuelles pour
    les détails. Vérifier proportions, matériaux, pièces manquantes ou qui se chevauchent. Corriger
    `build.py` et régénérer tant que le résultat ne correspond pas à la demande.
-4. Commit + push (voir plus bas), **à chaque itération montrable**, pas seulement à la fin.
+4. Quand le résultat est bon : décrire les rendus à l'utilisateur et lui demander s'il veut pousser.
+   **Ne jamais pousser sans réponse explicite** (voir « Push : seulement sur accord » plus bas). Sans
+   accord, tout reste en local.
 
 Options de `tools/build.sh` :
 
@@ -47,7 +49,7 @@ Options de `tools/build.sh` :
 Pas d'export `.glb`, `.fbx` ou autre : l'utilisateur ne veut que le `.blend`.
 
 Pour itérer vite : `--samples 8 --width 480 --height 360`. Garder les valeurs par défaut pour la version
-poussée.
+proposée au push.
 
 ## Écrire `build.py`
 
@@ -93,21 +95,46 @@ branche.
   git fetch origin model/<nom>
   git checkout -B model/<nom> FETCH_HEAD
   ```
-- **Plusieurs objets dans la même session** : une branche par objet, chacune partant de `main`.
-- **Après chaque génération réussie** et vérifiée visuellement :
+- **Plusieurs objets dans la même session** : une branche par objet, chacune partant de `main`. Avant de
+  quitter un objet dont le travail n'est pas poussé, demander à l'utilisateur s'il veut le pousser. Sinon,
+  faire un commit local sur sa branche, sans pousser, avant de changer de branche :
+  `git add models/<nom> && git commit -m "<nom> : en cours (non poussé)"`.
+- Aucun fichier de plus de 50 Mo (GitHub refuse au-delà de 100 Mo). Si un fichier est trop gros, réduire
+  la géométrie : moins de segments, moins de subdivisions.
+
+### Push : seulement sur accord explicite
+
+**Demande explicite de l'utilisateur** : ne pas pousser en boucle. Chaque push ajoute au dépôt un `.blend`
+et des images que Git compresse mal, et qui restent dans l'historique.
+
+- **Pendant les itérations** : ne pas committer. Les fichiers restent dans la copie de travail.
+- **Quand le résultat est bon** : l'utilisateur ne voit pas les rendus avant le push. Lui décrire ce qu'ils
+  montrent (proportions, matériaux, défauts éventuels restants), puis demander « Je pousse sur
+  `model/<nom>` ? ». Attendre une réponse explicite (« oui », « pousse », etc.).
+- **Un accord vaut pour un seul push**, sauf si l'utilisateur dit explicitement qu'il vaut pour la suite
+  de la session. Une nouvelle retouche demande un nouvel accord.
+- **Après accord**, un seul commit par push :
   ```bash
   git add models/<nom>
   git commit -m "<nom> : <ce qui a changé>"
   git push -u origin model/<nom>
   ```
-- Aucun fichier de plus de 50 Mo (GitHub refuse au-delà de 100 Mo). Si un fichier est trop gros, réduire
-  la géométrie : moins de segments, moins de subdivisions.
-- Dans le message final à l'utilisateur :
-  - ce qui a été fait ;
-  - les dimensions ;
-  - le nom de la branche (`model/<nom>`) ;
-  - le lien GitHub vers le README du modèle, qui affiche les screenshots :
-    `https://github.com/Gregoire-W/blender-cloud-session/blob/model/<nom>/models/<nom>/README.md`
+  Si la branche a déjà un commit local non poussé (cas du changement d'objet ci-dessus), le compléter avec
+  `git commit --amend` au lieu d'en créer un second.
+- `git push` est en `ask` dans `.claude/settings.json` : une demande de permission s'affiche aussi. C'est
+  un filet de sécurité, pas un remplacement de la question dans la conversation.
+- **Rappel** : la VM cloud est éphémère, et ce qui n'est pas poussé est perdu à la fin de la session.
+  Tant qu'il reste du travail non poussé, le rappeler en une ligne à la fin de chaque réponse.
+
+### Message de fin d'itération
+
+- ce qui a été fait ;
+- les dimensions ;
+- le nom de la branche (`model/<nom>`) ;
+- si c'est poussé : le lien GitHub vers le README du modèle, qui affiche les screenshots :
+  `https://github.com/Gregoire-W/blender-cloud-session/blob/model/<nom>/models/<nom>/README.md` ;
+- sinon : préciser que rien n'est poussé et demander si l'utilisateur veut pousser. Ne pas donner le lien,
+  qui ne fonctionne pas avant le push.
 
 ## Outils du repo
 
