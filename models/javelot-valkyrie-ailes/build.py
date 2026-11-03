@@ -1,10 +1,10 @@
 """Javelot de Valkyrie, proposition 2 « Ailes d'argent » : variante ailée de la lance courte (1,70 m).
-Fer en feuille d'argent bordé d'or avec rune ᛉ, ailes de valkyrie en plumes sur la douille, poignée gainée
-de cuir blanc, pommeau doré à gemmes et éclairs violets ; targe ronde (54 cm) argent et or avec gemme
-violette, ailes en relief et éclair. Style Roblox : facettes plates, pièces en blocs, motifs plats en relief.
+Fer en feuille d'argent à arête centrale, bordé d'or, avec rune ᛉ en relief, ailes de valkyrie en plumes
+sur la douille, poignée gainée de cuir blanc, pommeau doré serti de gemmes violettes ; targe ronde (54 cm)
+argent et or avec gemme violette, ailes en relief et éclair. Style Roblox : facettes plates, pièces en
+blocs, motifs en relief.
 """
 import math
-import random
 
 import bmesh
 import bpy
@@ -29,8 +29,6 @@ VIOLET = material("Violet", lin(104, 58, 180), roughness=0.45, metallic=0.1)
 NUIT = material("Violet_nuit", lin(44, 34, 84), roughness=0.45, metallic=0.15)
 CUIR_BLANC = material("Cuir_blanc", lin(236, 226, 208), roughness=0.7)
 GEMME = material("Gemme", lin(170, 100, 255), roughness=0.2, emission=lin(150, 70, 255), emission_strength=1.2)
-ECLAIR = material("Eclair", lin(205, 130, 255), roughness=0.3, emission=lin(175, 90, 255), emission_strength=1.6)
-ETINCELLE = material("Etincelle", lin(255, 236, 255), roughness=0.3, emission=lin(255, 200, 255), emission_strength=1.0)
 
 
 # ---------------------------------------------------------------- géométrie 2D (u = X, v = Z)
@@ -172,17 +170,17 @@ def box(bm, size, loc, rot=(0, 0, 0)):
     bmesh.ops.create_cube(bm, size=1.0, matrix=M)
 
 
-def beam(bm, p0, p1, t):
-    """Poutre de section carrée t entre deux points 3D."""
+def beam(bm, p0, p1, t, ext=0.9):
+    """Poutre de section carrée t entre deux points 3D (prolongée de ext * t pour bien raccorder)."""
     p0, p1 = Vector(p0), Vector(p1)
     d = p1 - p0
     M = (Matrix.Translation((p0 + p1) / 2) @ d.to_track_quat("Z", "Y").to_matrix().to_4x4()
-         @ Matrix.Diagonal((t, t, d.length + t * 0.9, 1)))
+         @ Matrix.Diagonal((t, t, d.length + t * ext, 1)))
     bmesh.ops.create_cube(bm, size=1.0, matrix=M)
 
 
 def diamond(bm, loc, r, stretch=1.0):
-    """Petit octaèdre (étincelle, clou en losange)."""
+    """Petit octaèdre (gemme, clou en losange)."""
     x, y, z = loc
     vs = [bm.verts.new(p) for p in ((x + r, y, z), (x, y + r, z), (x - r, y, z), (x, y - r, z),
                                      (x, y, z + r * stretch), (x, y, z - r * stretch))]
@@ -191,35 +189,78 @@ def diamond(bm, loc, r, stretch=1.0):
         bm.faces.new((vs[(k + 1) % 4], vs[k], vs[5]))
 
 
-def arc(bm, rng, a, c, b, n=8, jitter=0.012, t=0.0075, forks=1):
-    """Arc électrique stylisé : courbe a -> b tirée vers c, cassée en zigzag de poutres carrées,
-    avec de petites fourches. Renvoie les points du zigzag."""
-    a, c, b = Vector(a), Vector(c), Vector(b)
-    normal = (c - a).cross(b - a)
-    if normal.length < 1e-9:
-        normal = (b - a).orthogonal()
-    normal.normalize()
-    pts = []
-    for i in range(n + 1):
-        s = i / n
-        p = (1 - s) ** 2 * a + 2 * (1 - s) * s * c + s * s * b
-        if 0 < i < n:
-            tan = (2 * (1 - s) * (c - a) + 2 * s * (b - c)).normalized()
-            side = normal.cross(tan).normalized()
-            p = p + side * (1 if i % 2 else -1) * jitter * rng.uniform(0.55, 1.0) \
-                + normal * jitter * rng.uniform(-0.4, 0.4)
-        pts.append(p)
+# ---------------------------------------------------------------- lames en volume (section en losange)
+def _const(h):
+    return h if callable(h) else (lambda u, v: h)
+
+
+def roof(bm, outline, ridge, he, hr, M=None):
+    """Solide « en toit » dans le plan XZ : chaque face (avant et arrière) monte du contour (demi-épaisseur
+    he) jusqu'à la ligne de faîte `ridge` (demi-épaisseur hr). Donne une lame à arête centrale, à facettes.
+    he et hr : nombres ou fonctions (u, v) -> demi-épaisseur."""
+    he, hr = _const(he), _const(hr)
+    cum = [0.0]
+    for a, b in zip(ridge, ridge[1:]):
+        cum.append(cum[-1] + (Vector(b) - Vector(a)).length)
+
+    def project(p):
+        best = (1e9, 0.0)
+        for k, (a, b) in enumerate(zip(ridge, ridge[1:])):
+            a, b, p_ = Vector(a), Vector(b), Vector(p)
+            d = b - a
+            t = max(0.0, min(1.0, (p_ - a).dot(d) / d.length_squared))
+            best = min(best, ((a + d * t - p_).length, cum[k] + t * d.length))
+        return round(best[1], 7)
+
+    def at(s):
+        for k in range(len(ridge) - 1):
+            if s <= cum[k + 1] + 1e-9 or k == len(ridge) - 2:
+                a, b = Vector(ridge[k]), Vector(ridge[k + 1])
+                return a + (b - a) * ((s - cum[k]) / (cum[k + 1] - cum[k]))
+
+    s_out = [project(p) for p in outline]
+    s_all = sorted(set(s_out) | {round(c, 7) for c in cum if min(s_out) <= round(c, 7) <= max(s_out)})
+    idx = {s: i for i, s in enumerate(s_all)}
+    rp = [at(s) for s in s_all]
+    n, sides, new = len(outline), [], []
+    for sign in (-1, 1):
+        O = [bm.verts.new((u, sign * he(u, v), v)) for u, v in outline]
+        R = [bm.verts.new((p.x, sign * hr(p.x, p.y), p.y)) for p in rp]
+        for i in range(n):
+            a, b = idx[s_out[i]], idx[s_out[(i + 1) % n]]
+            seq = range(a, b + 1) if a <= b else range(a, b - 1, -1)
+            bm.faces.new([O[i], O[(i + 1) % n]] + [R[k] for k in reversed(list(seq))])
+        sides.append(O)
+        new += O + R
     for i in range(n):
-        taper = 1 - 0.4 * abs(2 * i / max(n - 1, 1) - 1)    # plus épais au milieu de l'arc
-        beam(bm, pts[i], pts[i + 1], t * taper)
-    for _ in range(forks):
-        k = rng.randint(2, n - 2)
-        out = pts[k] - Vector((0, 0, pts[k].z))              # s'éloigne de l'axe de la lance
-        d = (out.normalized() + Vector((rng.uniform(-0.5, 0.5), rng.uniform(-0.5, 0.5),
-                                        rng.uniform(-0.3, 0.6)))).normalized()
-        e = pts[k] + d * rng.uniform(0.035, 0.055)
-        arc(bm, rng, pts[k], (pts[k] + e) / 2, e, n=3, jitter=jitter * 0.6, t=t * 0.65, forks=0)
-    return pts
+        j = (i + 1) % n
+        bm.faces.new((sides[0][i], sides[0][j], sides[1][j], sides[1][i]))
+    _xf(bm, new, M)
+
+
+def half_width(half, v):
+    """Demi-largeur à la hauteur v d'un demi-profil (u >= 0) monotone en v."""
+    for (u0, v0), (u1, v1) in zip(half, half[1:]):
+        if v0 <= v <= v1 and v1 > v0:
+            return u0 + (u1 - u0) * (v - v0) / (v1 - v0)
+    return half[0][0] if v < half[0][1] else 0.0
+
+
+def leaf_height(half, he, hr):
+    """Demi-épaisseur d'une feuille à arête centrale (u = 0) : he au bord, hr sur l'arête."""
+    def h(u, v):
+        hw = half_width(half, v)
+        return he if hw < 1e-6 else he + (hr - he) * max(0.0, 1 - abs(u) / hw)
+    return h
+
+
+def lifted(bm, lines, h, t, M=None):
+    """Traits en relief posés sur une surface de demi-épaisseur h(u, v), sur les deux faces."""
+    M = M or Matrix()
+    for sign in (-1, 1):
+        for line in lines:
+            for p, q in zip(line, line[1:]):
+                beam(bm, M @ Vector((p[0], sign * h(*p), p[1])), M @ Vector((q[0], sign * h(*q), q[1])), t)
 
 
 # ---------------------------------------------------------------- objets
@@ -270,7 +311,7 @@ PLUMES = ((0.08, -122, 0.30), (0.26, -102, 0.38), (0.44, -82, 0.46), (0.62, -60,
 
 def wing(root, tip, side=1, bulge=0.14, wscale=1.0):
     """Aile droite (side=1) ou gauche (side=-1) dans le plan XZ : bras courbe de root à tip, plumes qui
-    pendent dessous en éventail. Renvoie (bras, [(plume, nervure, pointe), ...])."""
+    pendent dessous en éventail. Renvoie (bras, [(plume, nervure, pointe), ...], arête du bras)."""
     R, W = Vector(root), Vector(tip)
     D = W - R
     A = D.length
@@ -290,14 +331,14 @@ def wing(root, tip, side=1, bulge=0.14, wscale=1.0):
         feathers.append((flip(place([(L * a, w * b) for a, b in PLUME], 1.0, ang, p)),
                          flip(place([(0.10 * L, 0.0), (0.78 * L, 0.0)], 1.0, ang, p)),
                          flip(place([(L, 0.0)], 1.0, ang, p))[0]))
-    return arm, feathers
+    ridge = flip([tuple(curve(0.05 + 0.9 * i / 8)) for i in range(9)])
+    return arm, feathers, ridge
 
 
 # ================================================================ LE JAVELOT
 # Debout le long de Z, pointe en haut, pommeau sur Z = 0, fer à plat face à -Y.
 col_j = collection("Javelot")
 JAV = empty("Javelot", col_j)
-ECL = empty("Javelot_Eclairs", col_j, parent=JAV)
 
 R_HAMPE = 0.023
 Z_LAME = 1.232            # base du fer
@@ -336,54 +377,49 @@ loft(part("Javelot_Douille_Cone", ARGENT, JAV), [(1.146, 0.026), (1.185, 0.0225)
 
 bm_pl = part("Javelot_Ailes_Plumes", ARGENT, JAV)
 bm_or = part("Javelot_Ailes_Or", OR, JAV)
-wing_tips = []
 for side in (1, -1):
-    arm, feathers = wing((0.016, 1.160), (0.136, 1.284), side)
+    arm, feathers, ridge = wing((0.016, 1.160), (0.136, 1.284), side)
     for k, (pts, quill, tip) in enumerate(feathers):
         h = 0.0085 - 0.0007 * k            # les plumes intérieures recouvrent les suivantes
         slab(bm_pl, pts, -h, h)
         slab(bm_or, stroke(quill, 0.0040), -h - 0.0012, h + 0.0012)
-        wing_tips.append(tip)
-    slab(bm_or, arm, -0.0115, 0.0115)
-    outline(bm_pl, arm, 0.0035, -0.0125, 0.0125)
-    for y in (-0.0125, 0.0125):
+    roof(bm_or, arm, ridge, 0.0065, 0.0140)                            # bras doré à arête
+    roof(bm_pl, offset(arm, 0.0035), ridge, 0.0040, 0.0110)            # liseré d'argent dessous
+    for y in (-0.0140, 0.0140):
         diamond(part("Javelot_Gemmes", GEMME, JAV), (side * 0.040, y, 1.186), 0.0075, 1.3)
 
-# --- Fer en feuille : liseré d'or, corps d'argent, panneau violet gravé d'une rune ᛉ
-LAME = mirror([(0.016, 0.000), (0.022, 0.018), (0.046, 0.055), (0.064, 0.105), (0.069, 0.150),
-               (0.064, 0.215), (0.050, 0.290), (0.032, 0.360), (0.014, 0.422), (0.0, L_LAME)])
-PANNEAU = mirror([(0.0, 0.048), (0.016, 0.074), (0.033, 0.128), (0.035, 0.176), (0.026, 0.250),
-                  (0.012, 0.322), (0.0, 0.362)])
+# --- Fer en feuille, en volume : biseau d'or du tranchant, corps d'argent à arête centrale,
+#     panneau violet en relief cerné d'or, rune ᛉ et arête dorées
+FEUILLE = [(0.016, 0.000), (0.022, 0.018), (0.046, 0.055), (0.064, 0.105), (0.069, 0.150), (0.064, 0.215),
+           (0.050, 0.290), (0.032, 0.360), (0.014, 0.422), (0.0, L_LAME)]
+PANNEAU_D = [(0.0, 0.048), (0.016, 0.074), (0.033, 0.128), (0.035, 0.176), (0.026, 0.250), (0.012, 0.322),
+             (0.0, 0.362)]
 M_LAME = Matrix.Translation((0, 0, Z_LAME))
-slab(part("Javelot_Fer_Fil", OR, JAV), LAME, -0.0055, 0.0055, M_LAME)
-slab(part("Javelot_Fer_Corps", ARGENT, JAV), offset(LAME, -0.0115), -0.0105, 0.0105, M_LAME)
-slab(part("Javelot_Fer_Panneau", VIOLET, JAV), PANNEAU, -0.0125, 0.0125, M_LAME)
-bm = part("Javelot_Fer_Gravures", OR, JAV)
-outline(bm, offset(PANNEAU, 0.0035), 0.0045, -0.0132, 0.0132, M_LAME)
-for line in ([(0, 0.084), (0, 0.160)], [(-0.017, 0.152), (0, 0.128), (0.017, 0.152)], [(0, 0.182), (0, 0.330)]):
-    segments(bm, line, 0.0055, -0.0136, 0.0136, M_LAME)
+H_FIL, H_CORPS = (0.0025, 0.012), (0.0075, 0.019)     # demi-épaisseurs (bord, arête) en m
 
-# --- Électricité violette : arcs autour du fer et entre les pointes des ailes
-rng = random.Random(5)
-bm = part("Javelot_Eclairs_Arcs", ECLAIR, ECL)
-tr, tl = wing_tips[len(PLUMES) - 1], wing_tips[-1]
-ARCS = (
-    ((0.066, 0.004, 1.400), (0.175, -0.055, 1.450), (0.052, -0.004, 1.525)),
-    ((-0.066, 0.004, 1.370), (-0.170, 0.055, 1.420), (-0.058, -0.004, 1.495)),
-    ((0.030, 0.000, 1.610), (0.120, 0.045, 1.660), (0.010, 0.000, 1.685)),
-    ((-0.030, 0.000, 1.600), (-0.110, -0.050, 1.640), (-0.012, 0.000, 1.678)),
-    ((tr[0], 0.004, tr[1]), (0.150, -0.050, 1.390), (0.068, 0.000, 1.400)),
-    ((tl[0], -0.004, tl[1]), (-0.150, 0.050, 1.380), (-0.068, 0.000, 1.390)),
-    ((0.024, -0.020, 1.100), (0.100, -0.070, 1.040), (0.024, -0.012, 0.985)),
-    ((0.068, 0.000, 1.460), (0.190, 0.020, 1.500), (0.215, -0.030, 1.575)),
-    ((-0.068, 0.000, 1.430), (-0.190, -0.020, 1.480), (-0.210, 0.030, 1.555)))
-tips = []
-for a, c, b in ARCS:
-    tips += arc(bm, rng, a, c, b, n=8, forks=1)[2::3]
-bm = part("Javelot_Eclairs_Etincelles", ETINCELLE, ECL)
-for p in rng.sample(tips, 12):
-    off = Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-0.5, 1))).normalized() * 0.035
-    diamond(bm, p + off, 0.0085, 1.7)
+LAME, PANNEAU = mirror(FEUILLE), mirror(PANNEAU_D)
+CORPS = offset(LAME, -0.0115)
+roof(part("Javelot_Fer_Fil", OR, JAV), LAME, [(0, 0.004), (0, L_LAME - 0.070)], *H_FIL, M_LAME)
+roof(part("Javelot_Fer_Corps", ARGENT, JAV), CORPS, [(0, 0.014), (0, L_LAME - 0.085)], *H_CORPS, M_LAME)
+h_corps = leaf_height(CORPS[:len(FEUILLE)], *H_CORPS)
+HR_PAN = H_CORPS[1] + 0.003
+
+
+def h_panneau(u, v):
+    hw = half_width(PANNEAU_D, v)
+    if hw < 1e-6:
+        return HR_PAN
+    he = h_corps(hw, v) + 0.002
+    return he + (HR_PAN - he) * max(0.0, 1 - abs(u) / hw)
+
+
+arete_p = [(0, 0.058), (0, 0.345)]
+bm = part("Javelot_Fer_Gravures", OR, JAV)
+roof(bm, offset(PANNEAU, 0.0045), arete_p, lambda u, v: h_corps(u, v) + 0.0008, HR_PAN - 0.0015, M_LAME)
+roof(part("Javelot_Fer_Panneau", VIOLET, JAV), PANNEAU, arete_p, lambda u, v: h_corps(u, v) + 0.002, HR_PAN,
+     M_LAME)
+lifted(bm, [[(0, 0.084), (0, 0.160)], [(-0.017, 0.152), (0, 0.128), (0.017, 0.152)], [(0, 0.182), (0, 0.330)]],
+       h_panneau, 0.0052, M_LAME)
 
 # ================================================================ LA TARGE
 # Debout sur sa jante, face avant tournée vers -Y, à droite du javelot.
@@ -421,7 +457,7 @@ for k in range(8):
 bm_ai = part("Targe_Ailes", OR, TAR)
 bm_q = part("Targe_Ailes_Nervures", VIOLET, TAR)
 for side in (1, -1):
-    arm, feathers = wing((0.072, 0.026), (0.152, 0.112), side, wscale=1.45)
+    arm, feathers, _ = wing((0.072, 0.026), (0.152, 0.112), side, wscale=1.45)
     for k, (pts, quill, tip) in enumerate(feathers):
         y0 = Y_FACE - 0.0034 + 0.0003 * k
         slab(bm_ai, pts, y0, Y_FACE + 0.001)
