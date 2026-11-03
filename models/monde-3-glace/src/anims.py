@@ -168,6 +168,116 @@ def death(spec, t):
     return p
 
 
+def string_motion(name, t, p):
+    """Ficelle pendante (chaîne verticale) : rot X = balancier avant/arrière (négatif = traîne
+    vers l'arrière), rot Y = balancier latéral."""
+    for i in range(3):
+        b = f"Ficelle_{i + 1}"
+        lag = 0.9 * i
+        if name == "IDLE":
+            p.set(b, rot=(4 * osc(t, 60, lag + 0.5), 6 * osc(t, 60, lag), 0))
+        elif name == "MOVE":
+            p.set(b, rot=((-12 if i == 0 else -5) + 4 * osc(t, 40, lag, 2), 7 * osc(t, 40, lag), 0))
+        elif name == "ATTACK":
+            p.set(b, rot=(track(t - 1.5 * i, [(0, 0), (9, 12), (14, -30), (19, 22), (26, -10), (32, 4), (36, 0)]),
+                          decay(t, 16 + 2 * i, 18, 2.5, 10), 0))
+        elif name == "HIT":
+            p.set(b, rot=(decay(t, 2 + i, 16, 3, 18), decay(t, 2 + i, 16, 2.5, 12), 0))
+        elif name == "DEATH":
+            on = 1.0 if 6 < t < 46 else 0.0
+            p.set(b, rot=(25 * on * math.sin(TAU * t / 9 + lag), 30 * on * math.sin(TAU * t / 7 + lag), 0))
+
+
+# --------------------------------------------------------------------------------------------
+# Yeux : ouverture (Oeil_G/D), regard (Pupille_G/D), sourcils (Sourcil_G/D)
+# --------------------------------------------------------------------------------------------
+def _blink(t, at, w=1.4):
+    return 1 - 0.92 * math.exp(-((t - at) / w) ** 2)
+
+
+def eye_motion(name, t, p, n, r):
+    """Superpose le jeu des yeux à une pose. `n` = nombre d'images de l'action, `r` = rayon des yeux.
+    Regard : rot Z > 0 = vers la gauche du modèle (-X), rot X > 0 = vers le haut.
+    Sourcils : loc Z = hausse, rot Y = inclinaison (fâché = côté intérieur abaissé)."""
+    T = n - 1
+    u = t / T if T else 0.0
+
+    def k(keys):   # clés en fraction de durée -> images
+        return track(t, [(a * T, *rest) for a, *rest in keys])
+
+    p.set("Visage", scl=(1, 1, 1))
+    lr = ud = 0.0
+    opn = wide = pup = 1.0
+    angry = raise_ = 0.0
+    if name.startswith("IDLE"):
+        P = T
+        lr = k([(0, 0), (0.13, 0), (0.2, 20, "ease"), (0.37, 20), (0.43, -20, "ease"), (0.6, -20), (0.67, 0, "ease"),
+                (1, 0)])
+        ud = k([(0, 0), (0.43, 0), (0.5, 9, "ease"), (0.6, 9), (0.67, -4, "ease"), (0.85, -4), (0.93, 0, "ease"), (1, 0)])
+        opn = _blink(t, 0.3 * P) * _blink(t, 0.78 * P) * _blink(t, 0.84 * P)
+        raise_ = 0.25 * max(0.0, ud / 9)
+        angry = 12 if "Phase2" in name else 4
+        wide = 1.0 + 0.04 * math.sin(TAU * u)
+    elif name.startswith("MOVE"):
+        lr = 8 * math.sin(TAU * u)
+        ud = -6
+        opn = 0.85 * _blink(t, 0.7 * T)
+        angry, raise_ = 12, -0.2
+    elif name.startswith("ATTACK") or name == "CHARGE":
+        opn = k([(0, 1), (0.22, 0.55), (0.36, 1.0), (0.46, 0.12), (0.56, 1.0), (0.85, 0.85), (0.9, 0.15), (0.95, 1), (1, 1)])
+        wide = k([(0, 1), (0.22, 0.95), (0.36, 1.25), (0.46, 1.1), (0.56, 1.05), (0.8, 1), (1, 1)])
+        pup = k([(0, 1), (0.22, 1.1), (0.36, 0.72), (0.5, 0.9), (0.7, 1), (1, 1)])
+        angry = k([(0, 4), (0.22, 22), (0.36, 14), (0.46, 20), (0.6, 8), (1, 4)])
+        raise_ = k([(0, 0), (0.22, -0.35), (0.36, 0.3), (0.46, -0.2), (0.6, 0.1), (1, 0)])
+        ud = k([(0, 0), (0.22, -6), (0.36, 0), (1, 0)])
+        dz = max(0.0, min(1.0, (u - 0.52) / 0.06)) * (1 - max(0.0, min(1.0, (u - 0.62) / 0.2)))
+        lr += 13 * math.cos(TAU * 2.5 * u) * dz
+        ud += 14 * math.sin(TAU * 2.5 * u) * dz
+    elif name == "HIT":
+        opn = k([(0, 1), (0.08, 0.08), (0.3, 0.1), (0.42, 1.15), (0.7, 1.05), (0.8, 0.15), (0.88, 1), (1, 1)])
+        wide = k([(0, 1), (0.42, 1.18), (0.75, 1.0), (1, 1)])
+        pup = k([(0, 1), (0.42, 0.7), (0.8, 1), (1, 1)])
+        angry = k([(0, 4), (0.1, -16), (0.45, -12), (0.8, 0), (1, 4)])
+        raise_ = k([(0, 0), (0.1, 0.45), (0.5, 0.35), (1, 0)])
+        dz = max(0.0, min(1.0, (u - 0.35) / 0.08)) * (1 - max(0.0, min(1.0, (u - 0.6) / 0.15)))
+        lr = 14 * math.cos(TAU * 3 * u) * dz
+        ud = 14 * math.sin(TAU * 3 * u) * dz
+    elif name == "DEATH":
+        opn = k([(0, 1), (0.05, 0.08), (0.12, 1.2), (0.5, 1.2), (0.62, 0.65), (0.78, 0.5), (0.86, 0.1), (1, 0.08)])
+        wide = k([(0, 1), (0.12, 1.3), (0.5, 1.25), (0.7, 1.0), (1, 1)])
+        pup = k([(0, 1), (0.12, 0.55), (0.5, 0.6), (0.7, 0.9), (1, 0.9)])
+        angry = k([(0, 4), (0.08, -20), (0.6, -22), (1, -10)])
+        raise_ = k([(0, 0), (0.1, 0.5), (0.6, 0.45), (1, -0.1)])
+        dart = max(0.0, min(1.0, (u - 0.12) / 0.05)) * (1 - max(0.0, min(1.0, (u - 0.48) / 0.05)))
+        lr = 17 * math.sin(TAU * 4.3 * u) * dart
+        ud = 12 * math.sin(TAU * 3.1 * u + 1) * dart
+        dz = max(0.0, min(1.0, (u - 0.5) / 0.05)) * (1 - max(0.0, min(1.0, (u - 0.8) / 0.06)))
+        lr += 15 * math.cos(TAU * 3.5 * u) * dz
+        ud += 12 * math.sin(TAU * 3.5 * u) * dz
+    elif name.startswith("PHASE2"):
+        opn = k([(0, 1), (0.2, 0.35), (0.32, 1.25), (0.6, 1.0), (1, 0.9)])
+        wide = k([(0, 1), (0.32, 1.35), (0.6, 1.1), (1, 1.05)])
+        pup = k([(0, 1), (0.32, 0.65), (0.7, 0.85), (1, 0.85)])
+        angry = k([(0, 4), (0.2, 25), (0.32, 10), (0.6, 18), (1, 14)])
+        raise_ = k([(0, 0), (0.2, -0.4), (0.32, 0.45), (0.6, 0), (1, -0.1)])
+    for side, sx in (("G", -1), ("D", 1)):
+        p.set(f"Oeil_{side}", scl=(wide, wide, max(wide * opn, 0.02)))
+        p.set(f"Pupille_{side}", rot=(ud, 0, lr))   # regard seul : pas de rétrécissement (yeux de biais)
+        p.set(f"Sourcil_{side}", loc=(0, 0, raise_ * r), rot=(0, -sx * angry, 0))
+
+
+def with_eyes(actions, r):
+    """Enveloppe un dictionnaire d'actions {nom: (n, boucle, fn)} avec le jeu des yeux."""
+    out = {}
+    for name, (n, loop, fn) in actions.items():
+        def f(t, fn=fn, name=name, n=n):
+            pose = fn(t)
+            eye_motion(name, t, pose, n, r)
+            return pose
+        out[name] = (n, loop, f)
+    return out
+
+
 def make_mob_actions(spec, attack_fn, extra=None):
     """Retourne {nom: (n_images, boucle, fonction)}."""
     base = {"IDLE": idle, "MOVE": move, "ATTACK": attack_fn, "HIT": hit, "DEATH": death}
@@ -177,6 +287,10 @@ def make_mob_actions(spec, attack_fn, extra=None):
             pose = fn(spec, t)
             if extra:
                 extra(name, t, pose)
+            if "Ficelle_1" in spec["bones"]:
+                string_motion(name, t, pose)
+            if "Oeil_G" in spec["bones"]:
+                eye_motion(name, t, pose, LENGTHS[name], spec.get("eye_r", 0.1))
             return pose
         out[name] = (LENGTHS[name], LOOPS[name], f)
     return out

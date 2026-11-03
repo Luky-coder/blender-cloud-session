@@ -19,6 +19,7 @@ FAMILY = ("Ballon_Flocon", "Ballon Flocon", 50)
 RT, BULB, RC = 0.64, 0.095, 0.3     # rayon des pointes, bulbe terminal, disque central
 HC = RT + BULB + 0.005              # hauteur du centre (pointe basse posée au sol)
 C = V((0, 0, HC))
+LIFT = 0.5                          # hauteur de vol (longueur de la ficelle)
 ANG = [math.radians(90 + 60 * k) for k in range(6)]   # haut, haut-gauche, bas-gauche, bas, bas-droite, haut-droite
 
 
@@ -80,9 +81,9 @@ def build_geometry(m, mats):
 
     # Visage
     for sx in (-1, 1):
-        E.eye(m, mats, C + V((sx * 0.105, 0.135, 0.06)), V((sx * 0.25, 1, 0.12)), 0.097, "Visage",
+        E.eye(m, mats, C + V((sx * 0.105, 0.135, 0.06)), V((sx * 0.25, 1, 0.12)), 0.097, "Visage", side=("G" if sx < 0 else "D"),
               look=V((-sx * 0.15, 0, -0.1)))
-        E.brow(m, mats, C + V((sx * 0.11, 0.135, 0.175)), V((sx * 0.2, 1, 0.4)), 0.13, 0.022, 22 * sx, "Visage")
+        E.brow(m, mats, C + V((sx * 0.11, 0.135, 0.175)), V((sx * 0.2, 1, 0.4)), 0.13, 0.022, 22 * sx, "Visage", side=("G" if sx < 0 else "D"))
     E.grin(m, mats, C + V((0, 0.15, -0.1)), V((0, 1, -0.25)), 0.1, 0.07, "Visage")
     for sx in (-1, 1):   # joues
         m.add(L.ellipsoid("joue", C + V((sx * 0.2, 0.1, -0.06)), (0.045, 0.02, 0.03), 10, 6,
@@ -135,8 +136,10 @@ def build(elem):
     mats = E.materials(elem)
     anchors = build_geometry(m, mats)
     E.decorate(m, elem, mats, anchors)
+    m.lift(LIFT)                                  # le ballon flotte au-dessus de sa ficelle
+    E.add_hanging_string(m, mats, (0, 0.0, LIFT - 0.005), parent="Branche_3")
     m.build(shape_amp=0.8)
-    spec = dict(L=1.4, hover=0.1, body_h=HC, bones=set(m.bones), lean=14)
+    spec = dict(L=1.4, hover=0.1, body_h=HC + LIFT, bones=set(m.bones), eye_r=m.meta.get("eye_r", 0.1), lean=14)
 
     def attack(spec, t):
         """Toupie rapide (2 tours dans le plan) puis projection vers l'avant."""

@@ -8,11 +8,11 @@
  "fbx": "FBX/Ballon_Flocon/Ballon_Flocon_Eau.fbx",
  "dims": [
   1.57,
-  0.482,
-  1.632
+  0.486,
+  2.104
  ],
- "bones": 11,
- "deform_bones": 10,
+ "bones": 20,
+ "deform_bones": 19,
  "shape_keys": [
   "Respiration",
   "Impact",
@@ -182,7 +182,7 @@
    "transmission": 0.7
   }
  },
- "verts": 10546,
- "tris": 20664,
- "seconds": 113.2
+ "verts": 11082,
+ "tris": 21728,
+ "seconds": 89.8
 }

@@ -9,10 +9,10 @@
  "dims": [
   1.557,
   0.504,
-  1.728
+  2.199
  ],
- "bones": 11,
- "deform_bones": 10,
+ "bones": 20,
+ "deform_bones": 19,
  "shape_keys": [
   "Respiration",
   "Impact",
@@ -182,7 +182,7 @@
    "transmission": 0.0
   }
  },
- "verts": 10424,
- "tris": 20480,
- "seconds": 117.0
+ "verts": 10960,
+ "tris": 21544,
+ "seconds": 108.9
 }

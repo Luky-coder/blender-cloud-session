@@ -192,8 +192,8 @@ def build_geometry(m, mats):
         s_e = find_s(1, 0.74)
         p = tier_point(1, s_e, ph, 0.0) + V((0, 0, 0.12))
         nrm = V((math.cos(ph), math.sin(ph), 0.45)).normalized()
-        E.eye(m, mats, p, nrm, 0.27, "Visage", look=V((0, 0, -0.25)), pupil_k=0.5)
-        E.brow(m, mats, p + V((sx * 0.02, 0.08, 0.31)), nrm, 0.38, 0.06, 22 * sx, "Visage")
+        E.eye(m, mats, p, nrm, 0.27, "Visage", side=("G" if sx < 0 else "D"), look=V((0, 0, -0.25)), pupil_k=0.5)
+        E.brow(m, mats, p + V((sx * 0.02, 0.08, 0.31)), nrm, 0.38, 0.06, 22 * sx, "Visage", side=("G" if sx < 0 else "D"))
     pm = tier_point(1, find_s(1, 1.0, upper=False) + 0.03, math.pi / 2, 0.0)
     E.grin(m, mats, pm + V((0, 0.05, 0.14)), V((0, 1, 0.1)), 0.55, 0.3, "Bouche")
 
@@ -492,4 +492,5 @@ def build(elem="plante"):
     mats = materials()
     build_geometry(m, mats)
     m.build(shape_amp=0.5, wrinkle=0.025)
-    return m, ACTIONS
+    import anims
+    return m, anims.with_eyes(ACTIONS, m.meta.get("eye_r", 0.25))

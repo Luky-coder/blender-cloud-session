@@ -4,44 +4,44 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 10546,
+  "verts": 11082,
   "materials": 13,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 8,
-  "bones": 10,
+  "vertex_groups": 17,
+  "bones": 19,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 100,
-    "moving_bone_curves": 54,
+    "bone_curves": 190,
+    "moving_bone_curves": 85,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 59,
+    "bone_curves": 190,
+    "moving_bone_curves": 90,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 100,
-    "moving_bone_curves": 39,
+    "bone_curves": 190,
+    "moving_bone_curves": 70,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 56,
+    "bone_curves": 190,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 100,
-    "moving_bone_curves": 36,
+    "bone_curves": 190,
+    "moving_bone_curves": 58,
     "shape_curves": 3
    }
   }
@@ -51,44 +51,44 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 9184,
+  "verts": 9720,
   "materials": 13,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 8,
-  "bones": 10,
+  "vertex_groups": 17,
+  "bones": 19,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 100,
-    "moving_bone_curves": 54,
+    "bone_curves": 190,
+    "moving_bone_curves": 85,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 59,
+    "bone_curves": 190,
+    "moving_bone_curves": 90,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 100,
-    "moving_bone_curves": 39,
+    "bone_curves": 190,
+    "moving_bone_curves": 70,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 56,
+    "bone_curves": 190,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 100,
-    "moving_bone_curves": 36,
+    "bone_curves": 190,
+    "moving_bone_curves": 58,
     "shape_curves": 3
    }
   }
@@ -98,44 +98,44 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 9172,
+  "verts": 9708,
   "materials": 14,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 8,
-  "bones": 10,
+  "vertex_groups": 17,
+  "bones": 19,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 100,
-    "moving_bone_curves": 54,
+    "bone_curves": 190,
+    "moving_bone_curves": 85,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 59,
+    "bone_curves": 190,
+    "moving_bone_curves": 90,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 100,
-    "moving_bone_curves": 39,
+    "bone_curves": 190,
+    "moving_bone_curves": 70,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 56,
+    "bone_curves": 190,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 100,
-    "moving_bone_curves": 36,
+    "bone_curves": 190,
+    "moving_bone_curves": 58,
     "shape_curves": 3
    }
   }
@@ -145,44 +145,44 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 9388,
+  "verts": 9924,
   "materials": 13,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 8,
-  "bones": 10,
+  "vertex_groups": 17,
+  "bones": 19,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 100,
-    "moving_bone_curves": 54,
+    "bone_curves": 190,
+    "moving_bone_curves": 85,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 59,
+    "bone_curves": 190,
+    "moving_bone_curves": 90,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 100,
-    "moving_bone_curves": 39,
+    "bone_curves": 190,
+    "moving_bone_curves": 70,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 56,
+    "bone_curves": 190,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 100,
-    "moving_bone_curves": 36,
+    "bone_curves": 190,
+    "moving_bone_curves": 58,
     "shape_curves": 3
    }
   }
@@ -192,44 +192,44 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 10424,
+  "verts": 10960,
   "materials": 13,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 9,
-  "bones": 10,
+  "vertex_groups": 18,
+  "bones": 19,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 100,
-    "moving_bone_curves": 54,
+    "bone_curves": 190,
+    "moving_bone_curves": 85,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 59,
+    "bone_curves": 190,
+    "moving_bone_curves": 90,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 100,
-    "moving_bone_curves": 39,
+    "bone_curves": 190,
+    "moving_bone_curves": 70,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 56,
+    "bone_curves": 190,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 100,
-    "moving_bone_curves": 36,
+    "bone_curves": 190,
+    "moving_bone_curves": 58,
     "shape_curves": 3
    }
   }
@@ -239,44 +239,44 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 17980,
+  "verts": 18516,
   "materials": 13,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 8,
-  "bones": 10,
+  "vertex_groups": 17,
+  "bones": 19,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 100,
-    "moving_bone_curves": 54,
+    "bone_curves": 190,
+    "moving_bone_curves": 85,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 59,
+    "bone_curves": 190,
+    "moving_bone_curves": 90,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 100,
-    "moving_bone_curves": 39,
+    "bone_curves": 190,
+    "moving_bone_curves": 70,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 56,
+    "bone_curves": 190,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 100,
-    "moving_bone_curves": 36,
+    "bone_curves": 190,
+    "moving_bone_curves": 58,
     "shape_curves": 3
    }
   }
@@ -286,44 +286,44 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 10034,
+  "verts": 10570,
   "materials": 14,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 8,
-  "bones": 10,
+  "vertex_groups": 17,
+  "bones": 19,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 100,
-    "moving_bone_curves": 54,
+    "bone_curves": 190,
+    "moving_bone_curves": 85,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 59,
+    "bone_curves": 190,
+    "moving_bone_curves": 90,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 100,
-    "moving_bone_curves": 39,
+    "bone_curves": 190,
+    "moving_bone_curves": 70,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 56,
+    "bone_curves": 190,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 100,
-    "moving_bone_curves": 36,
+    "bone_curves": 190,
+    "moving_bone_curves": 58,
     "shape_curves": 3
    }
   }
@@ -333,44 +333,44 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 11524,
+  "verts": 12710,
   "materials": 14,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 8,
-  "bones": 9,
+  "vertex_groups": 16,
+  "bones": 18,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 90,
-    "moving_bone_curves": 23,
+    "bone_curves": 180,
+    "moving_bone_curves": 54,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 90,
-    "moving_bone_curves": 26,
+    "bone_curves": 180,
+    "moving_bone_curves": 57,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 90,
-    "moving_bone_curves": 24,
+    "bone_curves": 180,
+    "moving_bone_curves": 55,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 90,
-    "moving_bone_curves": 27,
+    "bone_curves": 180,
+    "moving_bone_curves": 54,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 90,
-    "moving_bone_curves": 20,
+    "bone_curves": 180,
+    "moving_bone_curves": 42,
     "shape_curves": 3
    }
   }
@@ -380,44 +380,44 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 10184,
+  "verts": 11370,
   "materials": 14,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 8,
-  "bones": 9,
+  "vertex_groups": 16,
+  "bones": 18,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 90,
-    "moving_bone_curves": 23,
+    "bone_curves": 180,
+    "moving_bone_curves": 54,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 90,
-    "moving_bone_curves": 26,
+    "bone_curves": 180,
+    "moving_bone_curves": 57,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 90,
-    "moving_bone_curves": 24,
+    "bone_curves": 180,
+    "moving_bone_curves": 55,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 90,
-    "moving_bone_curves": 27,
+    "bone_curves": 180,
+    "moving_bone_curves": 54,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 90,
-    "moving_bone_curves": 20,
+    "bone_curves": 180,
+    "moving_bone_curves": 42,
     "shape_curves": 3
    }
   }
@@ -427,44 +427,44 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 10232,
+  "verts": 11418,
   "materials": 15,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 8,
-  "bones": 9,
+  "vertex_groups": 16,
+  "bones": 18,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 90,
-    "moving_bone_curves": 23,
+    "bone_curves": 180,
+    "moving_bone_curves": 54,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 90,
-    "moving_bone_curves": 26,
+    "bone_curves": 180,
+    "moving_bone_curves": 57,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 90,
-    "moving_bone_curves": 24,
+    "bone_curves": 180,
+    "moving_bone_curves": 55,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 90,
-    "moving_bone_curves": 27,
+    "bone_curves": 180,
+    "moving_bone_curves": 54,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 90,
-    "moving_bone_curves": 20,
+    "bone_curves": 180,
+    "moving_bone_curves": 42,
     "shape_curves": 3
    }
   }
@@ -474,44 +474,44 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 10298,
+  "verts": 11484,
   "materials": 14,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 8,
-  "bones": 9,
+  "vertex_groups": 16,
+  "bones": 18,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 90,
-    "moving_bone_curves": 23,
+    "bone_curves": 180,
+    "moving_bone_curves": 54,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 90,
-    "moving_bone_curves": 26,
+    "bone_curves": 180,
+    "moving_bone_curves": 57,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 90,
-    "moving_bone_curves": 24,
+    "bone_curves": 180,
+    "moving_bone_curves": 55,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 90,
-    "moving_bone_curves": 27,
+    "bone_curves": 180,
+    "moving_bone_curves": 54,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 90,
-    "moving_bone_curves": 20,
+    "bone_curves": 180,
+    "moving_bone_curves": 42,
     "shape_curves": 3
    }
   }
@@ -521,44 +521,44 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 11424,
+  "verts": 12610,
   "materials": 13,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 8,
-  "bones": 9,
+  "vertex_groups": 16,
+  "bones": 18,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 90,
-    "moving_bone_curves": 23,
+    "bone_curves": 180,
+    "moving_bone_curves": 54,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 90,
-    "moving_bone_curves": 26,
+    "bone_curves": 180,
+    "moving_bone_curves": 57,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 90,
-    "moving_bone_curves": 24,
+    "bone_curves": 180,
+    "moving_bone_curves": 55,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 90,
-    "moving_bone_curves": 27,
+    "bone_curves": 180,
+    "moving_bone_curves": 54,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 90,
-    "moving_bone_curves": 20,
+    "bone_curves": 180,
+    "moving_bone_curves": 42,
     "shape_curves": 3
    }
   }
@@ -568,44 +568,44 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 18024,
+  "verts": 19210,
   "materials": 14,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 8,
-  "bones": 9,
+  "vertex_groups": 16,
+  "bones": 18,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 90,
-    "moving_bone_curves": 23,
+    "bone_curves": 180,
+    "moving_bone_curves": 54,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 90,
-    "moving_bone_curves": 26,
+    "bone_curves": 180,
+    "moving_bone_curves": 57,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 90,
-    "moving_bone_curves": 24,
+    "bone_curves": 180,
+    "moving_bone_curves": 55,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 90,
-    "moving_bone_curves": 27,
+    "bone_curves": 180,
+    "moving_bone_curves": 54,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 90,
-    "moving_bone_curves": 20,
+    "bone_curves": 180,
+    "moving_bone_curves": 42,
     "shape_curves": 3
    }
   }
@@ -615,44 +615,44 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 11094,
+  "verts": 12280,
   "materials": 15,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 8,
-  "bones": 9,
+  "vertex_groups": 16,
+  "bones": 18,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 90,
-    "moving_bone_curves": 23,
+    "bone_curves": 180,
+    "moving_bone_curves": 54,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 90,
-    "moving_bone_curves": 26,
+    "bone_curves": 180,
+    "moving_bone_curves": 57,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 90,
-    "moving_bone_curves": 24,
+    "bone_curves": 180,
+    "moving_bone_curves": 55,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 90,
-    "moving_bone_curves": 27,
+    "bone_curves": 180,
+    "moving_bone_curves": 54,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 90,
-    "moving_bone_curves": 20,
+    "bone_curves": 180,
+    "moving_bone_curves": 42,
     "shape_curves": 3
    }
   }
@@ -662,80 +662,80 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 48160,
+  "verts": 48704,
   "materials": 18,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 32,
-  "bones": 33,
+  "vertex_groups": 38,
+  "bones": 39,
   "takes": {
    "ATTACK": {
     "frames": 51,
-    "bone_curves": 330,
-    "moving_bone_curves": 68,
+    "bone_curves": 390,
+    "moving_bone_curves": 87,
     "shape_curves": 3
    },
    "ATTACK_GrainesExplosives": {
     "frames": 46,
-    "bone_curves": 330,
-    "moving_bone_curves": 75,
+    "bone_curves": 390,
+    "moving_bone_curves": 95,
     "shape_curves": 3
    },
    "ATTACK_Invocation": {
     "frames": 51,
-    "bone_curves": 330,
-    "moving_bone_curves": 80,
+    "bone_curves": 390,
+    "moving_bone_curves": 99,
     "shape_curves": 3
    },
    "ATTACK_TempeteNeige": {
     "frames": 61,
-    "bone_curves": 330,
-    "moving_bone_curves": 69,
+    "bone_curves": 390,
+    "moving_bone_curves": 88,
     "shape_curves": 3
    },
    "ATTACK_VagueRacines": {
     "frames": 61,
-    "bone_curves": 330,
-    "moving_bone_curves": 88,
+    "bone_curves": 390,
+    "moving_bone_curves": 107,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 91,
-    "bone_curves": 330,
-    "moving_bone_curves": 111,
+    "bone_curves": 390,
+    "moving_bone_curves": 133,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 21,
-    "bone_curves": 330,
-    "moving_bone_curves": 72,
+    "bone_curves": 390,
+    "moving_bone_curves": 91,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 330,
-    "moving_bone_curves": 79,
+    "bone_curves": 390,
+    "moving_bone_curves": 94,
     "shape_curves": 3
    },
    "IDLE_Phase2": {
     "frames": 61,
-    "bone_curves": 330,
-    "moving_bone_curves": 82,
+    "bone_curves": 390,
+    "moving_bone_curves": 97,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 330,
-    "moving_bone_curves": 72,
+    "bone_curves": 390,
+    "moving_bone_curves": 82,
     "shape_curves": 3
    },
    "PHASE2_Eveil": {
     "frames": 61,
-    "bone_curves": 330,
-    "moving_bone_curves": 76,
+    "bone_curves": 390,
+    "moving_bone_curves": 87,
     "shape_curves": 3
    }
   }
@@ -752,37 +752,37 @@
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 9,
-  "bones": 10,
+  "vertex_groups": 15,
+  "bones": 16,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 100,
-    "moving_bone_curves": 29,
+    "bone_curves": 160,
+    "moving_bone_curves": 48,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 29,
+    "bone_curves": 160,
+    "moving_bone_curves": 48,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 100,
-    "moving_bone_curves": 27,
+    "bone_curves": 160,
+    "moving_bone_curves": 46,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 28,
+    "bone_curves": 160,
+    "moving_bone_curves": 43,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 100,
-    "moving_bone_curves": 26,
+    "bone_curves": 160,
+    "moving_bone_curves": 36,
     "shape_curves": 3
    }
   }
@@ -799,37 +799,37 @@
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 9,
-  "bones": 10,
+  "vertex_groups": 15,
+  "bones": 16,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 100,
-    "moving_bone_curves": 29,
+    "bone_curves": 160,
+    "moving_bone_curves": 48,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 29,
+    "bone_curves": 160,
+    "moving_bone_curves": 48,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 100,
-    "moving_bone_curves": 27,
+    "bone_curves": 160,
+    "moving_bone_curves": 46,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 28,
+    "bone_curves": 160,
+    "moving_bone_curves": 43,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 100,
-    "moving_bone_curves": 26,
+    "bone_curves": 160,
+    "moving_bone_curves": 36,
     "shape_curves": 3
    }
   }
@@ -846,37 +846,37 @@
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 9,
-  "bones": 10,
+  "vertex_groups": 15,
+  "bones": 16,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 100,
-    "moving_bone_curves": 29,
+    "bone_curves": 160,
+    "moving_bone_curves": 48,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 29,
+    "bone_curves": 160,
+    "moving_bone_curves": 48,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 100,
-    "moving_bone_curves": 27,
+    "bone_curves": 160,
+    "moving_bone_curves": 46,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 28,
+    "bone_curves": 160,
+    "moving_bone_curves": 43,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 100,
-    "moving_bone_curves": 26,
+    "bone_curves": 160,
+    "moving_bone_curves": 36,
     "shape_curves": 3
    }
   }
@@ -893,37 +893,37 @@
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 9,
-  "bones": 10,
+  "vertex_groups": 15,
+  "bones": 16,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 100,
-    "moving_bone_curves": 29,
+    "bone_curves": 160,
+    "moving_bone_curves": 48,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 29,
+    "bone_curves": 160,
+    "moving_bone_curves": 48,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 100,
-    "moving_bone_curves": 27,
+    "bone_curves": 160,
+    "moving_bone_curves": 46,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 28,
+    "bone_curves": 160,
+    "moving_bone_curves": 43,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 100,
-    "moving_bone_curves": 26,
+    "bone_curves": 160,
+    "moving_bone_curves": 36,
     "shape_curves": 3
    }
   }
@@ -940,37 +940,37 @@
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 9,
-  "bones": 10,
+  "vertex_groups": 15,
+  "bones": 16,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 100,
-    "moving_bone_curves": 29,
+    "bone_curves": 160,
+    "moving_bone_curves": 48,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 29,
+    "bone_curves": 160,
+    "moving_bone_curves": 48,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 100,
-    "moving_bone_curves": 27,
+    "bone_curves": 160,
+    "moving_bone_curves": 46,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 28,
+    "bone_curves": 160,
+    "moving_bone_curves": 43,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 100,
-    "moving_bone_curves": 26,
+    "bone_curves": 160,
+    "moving_bone_curves": 36,
     "shape_curves": 3
    }
   }
@@ -987,37 +987,37 @@
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 9,
-  "bones": 10,
+  "vertex_groups": 15,
+  "bones": 16,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 100,
-    "moving_bone_curves": 29,
+    "bone_curves": 160,
+    "moving_bone_curves": 48,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 29,
+    "bone_curves": 160,
+    "moving_bone_curves": 48,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 100,
-    "moving_bone_curves": 27,
+    "bone_curves": 160,
+    "moving_bone_curves": 46,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 28,
+    "bone_curves": 160,
+    "moving_bone_curves": 43,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 100,
-    "moving_bone_curves": 26,
+    "bone_curves": 160,
+    "moving_bone_curves": 36,
     "shape_curves": 3
    }
   }
@@ -1034,37 +1034,37 @@
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 9,
-  "bones": 10,
+  "vertex_groups": 15,
+  "bones": 16,
   "takes": {
    "ATTACK": {
     "frames": 37,
-    "bone_curves": 100,
-    "moving_bone_curves": 29,
+    "bone_curves": 160,
+    "moving_bone_curves": 48,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 29,
+    "bone_curves": 160,
+    "moving_bone_curves": 48,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 19,
-    "bone_curves": 100,
-    "moving_bone_curves": 27,
+    "bone_curves": 160,
+    "moving_bone_curves": 46,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 100,
-    "moving_bone_curves": 28,
+    "bone_curves": 160,
+    "moving_bone_curves": 43,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 100,
-    "moving_bone_curves": 26,
+    "bone_curves": 160,
+    "moving_bone_curves": 36,
     "shape_curves": 3
    }
   }
@@ -1081,67 +1081,67 @@
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 23,
-  "bones": 24,
+  "vertex_groups": 28,
+  "bones": 30,
   "takes": {
    "ATTACK": {
     "frames": 45,
-    "bone_curves": 240,
-    "moving_bone_curves": 56,
+    "bone_curves": 300,
+    "moving_bone_curves": 75,
     "shape_curves": 3
    },
    "ATTACK_ChuteNeige": {
     "frames": 46,
-    "bone_curves": 240,
-    "moving_bone_curves": 56,
+    "bone_curves": 300,
+    "moving_bone_curves": 75,
     "shape_curves": 3
    },
    "ATTACK_PommesDePin": {
     "frames": 46,
-    "bone_curves": 240,
-    "moving_bone_curves": 49,
+    "bone_curves": 300,
+    "moving_bone_curves": 68,
     "shape_curves": 3
    },
    "ATTACK_Racines": {
     "frames": 56,
-    "bone_curves": 240,
-    "moving_bone_curves": 80,
+    "bone_curves": 300,
+    "moving_bone_curves": 99,
     "shape_curves": 3
    },
    "DEATH": {
     "frames": 81,
-    "bone_curves": 240,
-    "moving_bone_curves": 92,
+    "bone_curves": 300,
+    "moving_bone_curves": 115,
     "shape_curves": 3
    },
    "HIT": {
     "frames": 21,
-    "bone_curves": 240,
-    "moving_bone_curves": 53,
+    "bone_curves": 300,
+    "moving_bone_curves": 72,
     "shape_curves": 3
    },
    "IDLE": {
     "frames": 61,
-    "bone_curves": 240,
-    "moving_bone_curves": 62,
+    "bone_curves": 300,
+    "moving_bone_curves": 77,
     "shape_curves": 3
    },
    "IDLE_Phase2": {
     "frames": 61,
-    "bone_curves": 240,
-    "moving_bone_curves": 70,
+    "bone_curves": 300,
+    "moving_bone_curves": 85,
     "shape_curves": 3
    },
    "MOVE": {
     "frames": 41,
-    "bone_curves": 240,
-    "moving_bone_curves": 67,
+    "bone_curves": 300,
+    "moving_bone_curves": 77,
     "shape_curves": 3
    },
    "PHASE2_Deploiement": {
     "frames": 61,
-    "bone_curves": 240,
-    "moving_bone_curves": 67,
+    "bone_curves": 300,
+    "moving_bone_curves": 78,
     "shape_curves": 3
    }
   }

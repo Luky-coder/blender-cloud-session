@@ -8,11 +8,11 @@
  "fbx": "FBX/Ballon_Flocon/Ballon_Flocon_Plante.fbx",
  "dims": [
   1.636,
-  0.477,
-  1.636
+  0.48,
+  2.108
  ],
- "bones": 11,
- "deform_bones": 10,
+ "bones": 20,
+ "deform_bones": 19,
  "shape_keys": [
   "Respiration",
   "Impact",
@@ -182,7 +182,7 @@
    "transmission": 0.0
   }
  },
- "verts": 17980,
- "tris": 35308,
- "seconds": 120.2
+ "verts": 18516,
+ "tris": 36372,
+ "seconds": 100.5
 }

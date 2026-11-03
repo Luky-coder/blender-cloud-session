@@ -407,6 +407,15 @@ class Model:
         """soft = (sigma, poids_de_base) si l'os participe à la pondération douce (RBF)."""
         self.bones[name] = dict(head=V(head), parent=parent, soft=soft, deform=deform, length=length)
 
+    def lift(self, dz):
+        """Soulève tout le modèle de dz (pièces déjà ajoutées et têtes d'os, sauf Root et CTRL_Formes)."""
+        T = Matrix.Translation((0, 0, dz))
+        for ob, _ in self.parts:
+            ob.data.transform(T)
+        for n, b in self.bones.items():
+            if n not in ("Root", "CTRL_Formes"):
+                b["head"] = b["head"] + V((0, 0, dz))
+
     # -- pièces
     def add(self, ob, material, bone=None):
         """bone : nom d'os (rigide), None (pondération douce sur tous les os soft) ou

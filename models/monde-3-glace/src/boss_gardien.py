@@ -155,9 +155,9 @@ def build_geometry(m, mats):
     brow_mats = dict(mats, accent=mats["snow"])
     for sx in (-1, 1):
         p, n = env(0.9, math.pi / 2 - sx * 0.5, -0.06)
-        E.eye(m, mats, p, n + V((0, 0.5, 0)), 0.42, "Visage", look=V((0, 0, -0.35)), pupil_k=0.52)
+        E.eye(m, mats, p, n + V((0, 0.5, 0)), 0.42, "Visage", side=("G" if sx < 0 else "D"), look=V((0, 0, -0.35)), pupil_k=0.52)
         pb, nb = env(0.87, math.pi / 2 - sx * 0.3, 0.08)
-        E.brow(m, brow_mats, pb + V((0, 0.12, 0.05)), nb + V((0, 0.6, 0)), 0.8, 0.12, 20 * sx, "Visage")
+        E.brow(m, brow_mats, pb + V((0, 0.12, 0.05)), nb + V((0, 0.6, 0)), 0.8, 0.12, 20 * sx, "Visage", side=("G" if sx < 0 else "D"))
         for j in range(3):
             m.add(L.icicle("givre_sourcil", pb + V((sx * (0.16 * j - 0.16), 0.22, -0.06)), 0.14, 0.04), mats["ice"], "Visage")
     zmo = 0.5
@@ -272,6 +272,12 @@ def build_geometry(m, mats):
         c = m.bones[b]["head"]
         m.add(L.ellipsoid("mini_ballon", c, (0.38, 0.36, 0.42), 20, 12), mats["second"], b)
         m.add(L.tube("mini_noeud", [c + V((0, 0, -0.42)), c + V((0, 0, -0.55))], [0.06, 0.03], 8, cap_rings=2), mats["accent"], b)
+        top = c + V((0, 0, -0.55))
+        hang = [top + V((0.04 * math.sin(j * 0.8), 0.03 * math.sin(j * 0.5), -0.9 * j / 18)) for j in range(19)]
+        for j in range(1, 25):
+            a = L.TAU * 3 * j / 24
+            hang.append(hang[18] + V((0.05 * math.sin(a), 0.05 * (1 - math.cos(a)), -0.35 * j / 24)))
+        E.balloon_string(m, mats, hang, [(b, top)], r=0.014, knot=False)
         E.leaf(m, mats, c + V((0, 0, 0.38)), V((0.4 * (1 if i == 1 else -1), 0, 1)), V((0, 1, 0)), 0.3, b)
         for sx in (-1, 1):
             E.eye(m, mats, c + V((sx * 0.13, 0.31, 0.08)), V((sx * 0.3, 1, 0.1)), 0.1, b, look=V((0, 0, -0.2)))
@@ -528,4 +534,5 @@ def build(elem="plante"):
     mats = materials()
     build_geometry(m, mats)
     m.build(shape_amp=0.4, wrinkle=0.012)
-    return m, ACTIONS
+    import anims
+    return m, anims.with_eyes(ACTIONS, m.meta.get("eye_r", 0.25))

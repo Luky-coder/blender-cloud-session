@@ -20,6 +20,7 @@ RH, HD, ZB = 0.58, 0.56, 0.13            # rayon du dôme, hauteur du dôme, bas
 ROWS = [0.0, 0.36, 0.72, 1.07, math.pi / 2]
 BLOCKS = [11, 9, 7]
 PUFF = 0.045
+LIFT = 0.55                         # hauteur de vol (longueur de la ficelle)
 
 
 def dome_point(th, ph, puff=0.0):
@@ -95,9 +96,9 @@ def build_geometry(m, mats):
     for sx in (-1, 1):
         ph = math.pi / 2 - sx * 0.36
         p, n = dome_point(0.9, ph, PUFF * 0.6)
-        E.eye(m, mats, p, n, 0.125, "Visage", look=V((0, 0, -0.2)))
+        E.eye(m, mats, p, n, 0.125, "Visage", side=("G" if sx < 0 else "D"), look=V((0, 0, -0.2)))
         pb, nb = dome_point(1.16, math.pi / 2 - sx * 0.36, PUFF * 1.2)
-        E.brow(m, mats, pb, nb, 0.19, 0.03, 20 * sx, "Visage")
+        E.brow(m, mats, pb, nb, 0.19, 0.03, 20 * sx, "Visage", side=("G" if sx < 0 else "D"))
 
     # Valve de gonflage (arrière droit)
     pv, nv = dome_point(0.62, -math.pi / 2 + 0.55, PUFF)
@@ -131,6 +132,10 @@ def build_geometry(m, mats):
     E.snowflake_emblem(m, mats, top + V((0.075, 0.016, -0.06)), V((0, 1, 0)), 0.03, "Drapeau")
 
     # Ancres pour les décorations élémentaires
+    # Fond gonflable (le ballon flotte : on voit le dessous)
+    m.add(L.ellipsoid("fond", (0, 0, 0.07), (RH + 0.02, RH + 0.02, 0.07), 40, 10), mats["second"], None)
+    m.add(L.torus("fond_couture", (0, 0, 0.035), RH * 0.55, 0.012, 48, 6), mats["accent"], None)
+
     anchors = dict(face=V((0, 1, 0)), crown=[], scatter=[], base=[])
     for ph in (math.pi / 2 - 1.15, math.pi / 2 + 1.15):
         p, n = dome_point(1.18, ph, PUFF)
@@ -155,8 +160,10 @@ def build(elem):
     mats = E.materials(elem)
     anchors = build_geometry(m, mats)
     E.decorate(m, elem, mats, anchors)
+    m.lift(LIFT)                                  # le ballon flotte au-dessus de sa ficelle
+    E.add_hanging_string(m, mats, (0, 0.0, LIFT + 0.005), parent="Body")
     m.build()
-    spec = dict(L=1.2, hover=0.06, body_h=0.38, bones=set(m.bones))
+    spec = dict(L=1.2, hover=0.06, body_h=0.38 + LIFT, bones=set(m.bones), eye_r=m.meta.get("eye_r", 0.1))
 
     def attack(spec, t):
         # charge frontale : gros recul, projection, impact du tunnel-bouche

@@ -92,9 +92,9 @@ def build_geometry(m, mats):
     for sx in (-1, 1):
         ph = math.pi / 2 - sx * 0.62
         p, n = env(0.905, ph, 0.0)
-        E.eye(m, mats, p, n, 0.1, "Visage", look=V((-sx * 0.1, 0, -0.1)))
+        E.eye(m, mats, p, n, 0.1, "Visage", side=("G" if sx < 0 else "D"), look=V((-sx * 0.1, 0, -0.1)))
         pb, nb = env(0.86, math.pi / 2 - sx * 0.5, 0.02)
-        E.brow(m, mats, pb + V((0, 0.04, 0.02)), nb + V((0, 0.6, 0)), 0.15, 0.025, 20 * sx, "Visage")
+        E.brow(m, mats, pb + V((0, 0.04, 0.02)), nb + V((0, 0.6, 0)), 0.15, 0.025, 20 * sx, "Visage", side=("G" if sx < 0 else "D"))
     pm, nm = env(0.962, -math.pi / 2 + 0.25, -0.01)
     E.grin(m, mats, V((0, pm.y, pm.z)), V((0, 1, -0.35)), 0.15, 0.1, "Visage")
 
@@ -238,7 +238,7 @@ def build(elem):
     anchors = build_geometry(m, mats)
     E.decorate(m, elem, mats, anchors)
     m.build(shape_amp=0.7)
-    spec = dict(L=2.2, hover=0.08, body_h=ZC, bones=set(m.bones), lean=7)
+    spec = dict(L=2.2, hover=0.08, body_h=ZC, bones=set(m.bones), eye_r=m.meta.get("eye_r", 0.1), lean=7)
 
     def attack(spec, t):
         """Charge horizontale : recul, hélices à fond, ruée nez en avant, impact, rebond."""

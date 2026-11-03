@@ -76,26 +76,39 @@ def materials(elem, prefix=""):
 # --------------------------------------------------------------------------------------------
 # Visage commun
 # --------------------------------------------------------------------------------------------
-def eye(model, mats, pos, out, r, bone, look=V((0, 0, 0)), squint=0.0, name="oeil", pupil_k=0.55):
-    """Œil gonflable : globe aplati + pupille + reflet."""
+def eye(model, mats, pos, out, r, bone, look=V((0, 0, 0)), squint=0.0, name="oeil", pupil_k=0.55, side=None):
+    """Œil gonflable : globe aplati + pupille + reflet.
+    side ('G' ou 'D') : crée les os Oeil_<side> (ouverture/clignement, enfant de `bone`) et
+    Pupille_<side> (regard : rotation autour du centre du globe)."""
     M = L.orient(V(pos), out)
+    if side:
+        model.bone(f"Oeil_{side}", V(pos), bone, length=r * 0.5)
+        model.bone(f"Pupille_{side}", V(pos), f"Oeil_{side}", length=r * 0.4)
+        model.meta["eye_r"] = r
+        bone, pbone = f"Oeil_{side}", f"Pupille_{side}"
+    else:
+        pbone = bone
     g = L.ellipsoid(name, (0, 0, 0), (r, r * 0.55, r * 1.12 * (1 - squint)), 18, 12)
     L.xform(g, M)
     model.add(g, mats["eye"], bone)
     pr = r * pupil_k
-    p = L.ellipsoid(name + "_p", (look.x * r * 0.35, r * 0.42, r * 0.05 + look.z * r * 0.3),
-                    (pr, pr * 0.45, pr * 1.1 * (1 - squint)), 14, 10)
+    p = L.ellipsoid(name + "_p", (look.x * r * 0.35, r * 0.46, r * 0.05 + look.z * r * 0.3),
+                    (pr, pr * 0.5, pr * 1.1 * (1 - squint)), 14, 10)
     L.xform(p, M)
-    model.add(p, mats["pupil"], bone)
-    h = L.sphere(name + "_h", (look.x * r * 0.35 + pr * 0.35, r * 0.5 + pr * 0.35, r * 0.05 + pr * 0.45),
+    model.add(p, mats["pupil"], pbone)
+    h = L.sphere(name + "_h", (look.x * r * 0.35 + pr * 0.35, r * 0.54 + pr * 0.35, r * 0.05 + pr * 0.45),
                  pr * 0.28, 8, 6)
     L.xform(h, M)
-    model.add(h, mats["white"], bone)
+    model.add(h, mats["white"], pbone)
 
 
-def brow(model, mats, pos, out, length, r, angle_deg, bone, name="sourcil"):
-    """Sourcil boudin (angle > 0 : extrémité intérieure plus basse = air fâché)."""
+def brow(model, mats, pos, out, length, r, angle_deg, bone, name="sourcil", side=None):
+    """Sourcil boudin (angle > 0 : extrémité intérieure plus basse = air fâché).
+    side : crée l'os Sourcil_<side> (enfant de `bone`)."""
     M = L.orient(V(pos), out)
+    if side:
+        model.bone(f"Sourcil_{side}", V(pos), bone, length=length * 0.3)
+        bone = f"Sourcil_{side}"
     a = math.radians(angle_deg)
     d = V((math.cos(a), 0, math.sin(a))) * length / 2
     pts = [-d, V((0, r * 0.3, 0)), d]
@@ -313,6 +326,79 @@ def vine(model, mats, pts, bone, r=0.018, leaf_size=0.08, every=4, name="liane")
         sgn = 1 if (i // every) % 2 else -1
         leaf(model, mats, pts[i], (side * sgn + d * 0.4).normalized(), V((0, 0, 1)) if abs(d.z) < 0.7 else V((0, 1, 0)),
              leaf_size, bone, name=name + "_f")
+
+
+def string_path(p0, ground, end, curl_turns=3.0, curl_r=0.032, n=14):
+    """Ficelle de ballon : descend du nœud jusqu'au sol, traîne en S, puis frise en spirale (bolduc)."""
+    p0, ground, end = V(p0), V(ground), V(end)
+    pts = L.bezier_pts(p0, p0 + V((0, 0, -0.6 * (p0.z - ground.z))), ground + (ground - end).normalized() * 0.08 + V((0, 0, 0.02)),
+                       ground, 8)
+    d = (end - ground)
+    side = d.cross(V((0, 0, 1))).normalized()
+    for i in range(1, n + 1):
+        t = i / n
+        pts.append(ground + d * 0.55 * t + side * 0.04 * math.sin(math.pi * 2 * t))
+    c0 = ground + d * 0.55
+    dn = d.normalized()
+    m = 40
+    for i in range(1, m + 1):
+        t = i / m
+        a = L.TAU * curl_turns * t
+        r = curl_r * (1 - 0.3 * t)
+        pts.append(c0 + d * 0.45 * t + (side * math.sin(a) + V((0, 0, 1)) * (1 - math.cos(a))) * r)
+    return pts
+
+
+def hanging_path(top, bottom_z=0.02, curl_turns=3.0, curl_r=0.03, curl_h=0.13, n=18):
+    """Ficelle de ballon qui pend à la verticale sous le nœud, légèrement ondulée, frisée au bout."""
+    top = V(top)
+    zc = bottom_z + curl_h
+    pts = []
+    for i in range(n + 1):
+        t = i / n
+        pts.append(V((top.x + 0.022 * math.sin(math.pi * 2.2 * t) * t, top.y - 0.015 * math.sin(math.pi * t),
+                      top.z + (zc - top.z) * t)))
+    c = pts[-1]
+    m = 36
+    for i in range(1, m + 1):
+        t = i / m
+        a = L.TAU * curl_turns * t
+        r = curl_r * (1 - 0.25 * t) * min(1.0, t * 6)
+        pts.append(c + V((r * math.sin(a), r * (1 - math.cos(a)) - 0.0, -curl_h * t)))
+    return pts
+
+
+def add_hanging_string(model, mats, knot, bottom_z=0.02, parent="Body"):
+    """Ficelle pendante skinnée sur la chaîne Ficelle_1..3 (os créés ici)."""
+    knot = V(knot)
+    pts = hanging_path(knot, bottom_z)
+    h = knot.z - bottom_z
+    heads = [knot, knot - V((0, 0, h * 0.4)), knot - V((0, 0, h * 0.75))]
+    model.bone("Ficelle_1", heads[0], parent)
+    model.bone("Ficelle_2", heads[1], "Ficelle_1")
+    model.bone("Ficelle_3", heads[2], "Ficelle_2")
+    balloon_string(model, mats, pts, [(f"Ficelle_{i + 1}", heads[i]) for i in range(3)])
+
+
+def balloon_string(model, mats, pts, bones, r=0.007, mat_key="accent", knot=True, name="ficelle"):
+    """Ajoute la ficelle `pts` ; `bones` = [(nom_os, position_tête)] pour une pondération en chaîne."""
+    pts = [V(p) for p in pts]
+    heads = [(b, V(h)) for b, h in bones]
+
+    def w(co):
+        out = {}
+        for b, h in heads:
+            out[b] = math.exp(-((co - h).length / 0.16) ** 2) + 1e-6
+        return out
+
+    model.add(L.tube(name, pts, r, 6, cap_rings=1), mats[mat_key], w if len(heads) > 1 else heads[0][0])
+    if knot:
+        k = pts[0]
+        b0 = heads[0][0]
+        model.add(L.ellipsoid(name + "_noeud", k + V((0, 0, 0.012)), (0.022, 0.022, 0.03), 10, 6), mats[mat_key], b0)
+        for sx in (-1, 1):   # petit nœud papillon
+            model.add(L.torus(name + "_boucle", k + V((sx * 0.03, 0, 0.015)), 0.022, 0.006, 14, 5,
+                              M=Matrix.Rotation(math.pi / 2, 4, "X") @ Matrix.Rotation(sx * 0.4, 4, "Y")), mats[mat_key], b0)
 
 
 def star_deco(model, mats, pos, out, size, bone, n=4, mat_key="gold", name="etoile"):

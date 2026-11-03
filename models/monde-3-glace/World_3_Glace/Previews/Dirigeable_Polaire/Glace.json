@@ -11,8 +11,8 @@
   2.118,
   1.515
  ],
- "bones": 11,
- "deform_bones": 10,
+ "bones": 17,
+ "deform_bones": 16,
  "shape_keys": [
   "Respiration",
   "Impact",
@@ -214,5 +214,5 @@
  },
  "verts": 13860,
  "tris": 27204,
- "seconds": 128.9
+ "seconds": 121.1
 }
