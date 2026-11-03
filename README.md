@@ -1,0 +1,71 @@
+# blender-cloud-session
+
+Faire créer des modèles 3D par Claude Code **en session cloud** (claude.ai/code), avec Blender en headless
+sur la VM. Claude écrit un script Python par modèle, le génère avec Blender, regarde les rendus, corrige,
+puis pousse sur sa branche :
+
+- le `.blend` ;
+- un `.glb` ;
+- des screenshots (4 vues et une grille d'aperçu) ;
+- un README par modèle qui affiche l'aperçu directement sur GitHub.
+
+![Exemple](models/exemple-table/screenshots/preview.png)
+
+## Configuration (une seule fois)
+
+Sur [claude.ai/code](https://claude.ai/code), ouvre les paramètres de l'environnement cloud que tu utiliseras
+pour ce repo, ou crée un environnement dédié, par exemple « Blender ».
+
+1. **Accès réseau** → `Custom`.
+   - Dans *Allowed domains*, ajouter `download.blender.org`.
+   - Cocher *Also include default list of common package managers*.
+2. **Setup script** (recommandé) : coller tout le contenu de [`scripts/setup_blender.sh`](scripts/setup_blender.sh).
+   Blender est alors installé une fois puis mis en cache, et les sessions démarrent vite.
+   Sans setup script, le hook SessionStart du repo installe quand même Blender, mais à chaque nouvelle
+   session, ce qui prend environ 1 à 2 minutes. L'étape 1 reste indispensable dans les deux cas.
+
+## Utilisation
+
+Lance une session sur ce repo avec cet environnement, puis demande par exemple :
+
+> Crée une lampe de bureau articulée, style scandinave, en bois clair et métal blanc.
+
+Claude crée `models/lampe-bureau/build.py`, génère le modèle, vérifie les rendus et pousse sur la branche
+de la session. Pour récupérer le résultat :
+
+- **Sur GitHub** : ouvre la branche, puis `models/<nom>/README.md`. L'aperçu et les vues s'affichent.
+- **En local** : `git fetch && git checkout <branche>`, puis ouvre `models/<nom>/<nom>.blend` dans Blender.
+
+Pour une retouche, il suffit de continuer la conversation, par exemple « pieds plus fins » ou « ajoute un
+tiroir ». Chaque itération est commitée.
+
+## Structure
+
+```
+CLAUDE.md                     instructions pour Claude (workflow, conventions)
+.claude/settings.json         hook SessionStart + permissions
+.claude/hooks/session-start.sh  installe Blender si absent (sessions cloud uniquement)
+scripts/setup_blender.sh      installation de Blender 5.2 (setup script / hook)
+tools/build.sh                bash tools/build.sh models/<nom> : génère tout le modèle
+tools/build.py                scène vide → build.py → .blend → .glb → screenshots → README
+tools/preview.py              rendus Cycles CPU multi-vues + grille (utilisable sur tout .blend)
+tools/helpers.py              matériaux, bevel, lissage
+models/<nom>/build.py         le script source d'un modèle (le reste est généré)
+```
+
+## En local (optionnel)
+
+Avec Blender 5.2 installé :
+
+```bash
+BLENDER="/chemin/vers/blender" bash tools/build.sh models/exemple-table
+```
+
+## Limites
+
+- **Pas de GPU** sur la VM : les rendus utilisent Cycles sur CPU, quelques secondes à quelques minutes par
+  vue selon la scène. EEVEE n'est pas disponible.
+- **Pas de MCP Blender** : en session cloud, Claude a un terminal et pilote Blender directement par
+  scripts, ce qui est plus simple et plus fiable en headless. Un MCP pourra être ajouté plus tard pour des
+  intégrations précises (bibliothèques d'assets, génération 3D…).
+- Les fichiers de plus de 100 Mo sont refusés par GitHub.

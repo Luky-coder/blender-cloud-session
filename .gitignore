@@ -1,0 +1,12 @@
+# Sauvegardes automatiques de Blender
+*.blend[0-9]
+*.blend[0-9][0-9]
+
+# Python
+__pycache__/
+*.pyc
+
+# Divers
+/tmp/
+.DS_Store
+Thumbs.db

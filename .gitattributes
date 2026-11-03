@@ -1,0 +1,8 @@
+# Fins de ligne LF partout (les scripts bash doivent tourner sur la VM Linux)
+* text=auto eol=lf
+
+*.blend binary
+*.glb binary
+*.png binary
+*.jpg binary
+*.exr binary
