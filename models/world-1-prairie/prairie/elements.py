@@ -103,12 +103,19 @@ def face(F, P, angry=1.0):
         quad = [(x_in, y_in - th / 2), (x_out, y_out - th / 2), (x_out, y_out + th / 2), (x_in, y_in + th / 2)]
         rig.add(decal(F.surf, brow_b, [quad if side > 0 else list(reversed(quad))], p, n, up, 1.0, 0.0085 * k, P["brow"]),
                 ("bone", brow_b))
-        ce, _n = F.surf.project(Vector(p) + t * cx, nn)
+        ce, ne = F.surf.project(Vector(p) + t * cx, nn)
+        te, be, ne = frame_at(ce, ne, b)  # repère propre à chaque oeil (sa normale à lui)
         cb, _n = F.surf.project(Vector(p) + t * cx + b * (0.78 + 0.25 * angry) * sz, nn)
-        F.extra_bones += [dict(name=eye_b, head=ce, length=sz * 0.8),
-                          dict(name=pup_b, head=ce, length=sz * 0.5, parent=eye_b),
+        # Os de l'oeil orienté sur la surface (X = droite, Y = haut, Z = normale), pivot sur le blanc de l'oeil :
+        # le clignement écrase l'oeil en hauteur ET aplatit sa courbure, il reste au-dessus de l'enveloppe.
+        piv = ce + ne * 0.0035 * k
+        F.extra_bones += [dict(name=eye_b, head=piv, length=sz * 0.8, y_axis=be, z_axis=ne),
+                          dict(name=pup_b, head=piv, length=sz * 0.5, parent=eye_b, y_axis=be, z_axis=ne),
                           dict(name=brow_b, head=cb, length=sz * 0.8)]
-        F.eye_rig.append(dict(side=side, eye=eye_b, pupil=pup_b, brow=brow_b, t=t.copy(), b=b.copy(), n=nn.copy(), size=sz))
+        F.face_push[eye_b] = (ne.copy(), sz, (te.copy(), be.copy(), ne.copy()))
+        F.face_push[brow_b] = (ne.copy(), sz, None)
+        F.eye_rig.append(dict(side=side, eye=eye_b, pupil=pup_b, brow=brow_b, t=te.copy(), b=be.copy(), n=ne.copy(),
+                              size=sz))
 
 
 def shine(F, P):

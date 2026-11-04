@@ -49,6 +49,42 @@ def bbox_at(scene, f, mesh):
     return bbox(mesh)
 
 
+def eye_depth(arm, mesh, acts):
+    """Profondeur minimale (m) des yeux/sourcils par rapport à l'enveloppe déformée, sur toutes les images
+    (négatif = sous la surface)."""
+    from mathutils.bvhtree import BVHTree
+    me = mesh.data
+    env = {i for i, m in enumerate(me.materials) if any(k in m.name for k in ("Enveloppe", "Mylar", "Fuseau"))}
+    gi = {g.index: g.name for g in mesh.vertex_groups}
+    face_v = [v.index for v in me.vertices
+              if any(g.weight > 0.5 and gi[g.group].split("_")[0] in ("Oeil", "Pupille", "Sourcil") for g in v.groups)]
+    env_f = [p.index for p in me.polygons if p.material_index in env]
+    scene = bpy.context.scene
+    worst = {}
+    for name in NAMES:
+        act = acts.get(name)
+        if act is None or not face_v:
+            continue
+        arm.animation_data.action = act
+        if act.slots:
+            arm.animation_data.action_slot = act.slots[0]
+        f0, f1 = int(round(act.frame_range[0])), int(round(act.frame_range[1]))
+        w = 1e9
+        for f in range(f0, f1 + 1):
+            scene.frame_set(f)
+            ev = mesh.evaluated_get(bpy.context.evaluated_depsgraph_get())
+            m2 = ev.to_mesh()
+            V = [ev.matrix_world @ v.co for v in m2.vertices]
+            bvh = BVHTree.FromPolygons(V, [tuple(m2.polygons[i].vertices) for i in env_f])
+            for vi in face_v:
+                loc, nor, _i, _d = bvh.find_nearest(V[vi])
+                if loc is not None:
+                    w = min(w, (V[vi] - loc).dot(nor))
+            ev.to_mesh_clear()
+        worst[name] = w
+    return worst
+
+
 def check(fbx):
     rel = os.path.relpath(fbx, os.path.join(OUT, "FBX"))
     blend = os.path.join(OUT, "Blender", os.path.splitext(rel)[0] + ".blend")
@@ -81,6 +117,13 @@ def check(fbx):
                      f"déplacement max {moves:.2f} m, taille fin/début {d[-1][2].length / size0:.2f}")
         if n_src != n_dst or err > 0.01 * size0 + 0.002:
             ok = False
+    depth = eye_depth(arm2, mesh2, acts)
+    if depth:
+        bad = {k: v for k, v in depth.items() if v < -0.001}
+        if bad:
+            ok = False
+        lines.insert(0, "  Yeux : toujours au-dessus de l'enveloppe" if not bad else "  Yeux : SOUS l'enveloppe")
+        lines.insert(1, "  Yeux (marge minimale, mm) : " + ", ".join(f"{k} {v * 1000:+.1f}" for k, v in depth.items()))
     tex = [i for i in bpy.data.images if i.name.endswith("_Palette") and i.size[0] > 0]
     uv, vcol = len(mesh2.data.uv_layers), len(mesh2.data.color_attributes)
     linked = all(any(n.type == "TEX_IMAGE" and n.image in tex for n in m.node_tree.nodes) for m in mesh2.data.materials)
@@ -107,7 +150,8 @@ def main():
         with open(os.path.join(OUT, "FBX", "verification.md"), "w", encoding="utf-8") as fh:
             fh.write("# Vérification des FBX\n\nChaque FBX est réimporté dans Blender et comparé au .blend source "
                      "(boîte englobante du maillage déformé à 5 instants de chaque prise) ; on contrôle aussi que les couleurs "
-                     "sont portées par la texture palette incrustée, les UV et les couleurs de sommets.\n\n```\n")
+                     "sont portées par la texture palette incrustée, les UV et les couleurs de sommets, et que les yeux "
+                     "restent au-dessus de l'enveloppe à chaque image de chaque prise.\n\n```\n")
             fh.write("\n".join(report) + "\n```\n")
     print("TOUT OK" if all_ok else "DES ERREURS", flush=True)
     sys.exit(0 if all_ok else 1)

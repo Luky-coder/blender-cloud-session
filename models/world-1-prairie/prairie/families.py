@@ -39,7 +39,8 @@ class Frame:
         self.nacelle = None
         self.extra_bones = []
         self.followers = {}
-        self.eye_rig = []          # os des yeux (voir elements.face)        # os enfants de Motion qui suivent la déformation de l'enveloppe
+        self.eye_rig = []          # os des yeux (voir elements.face)
+        self.face_push = {}        # os du visage repoussés vers l'extérieur quand l'avant s'écrase        # os enfants de Motion qui suivent la déformation de l'enveloppe
 
 
 def _ray_pairs(surf, dirs, origins=None):

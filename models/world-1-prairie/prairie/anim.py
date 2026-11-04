@@ -131,7 +131,18 @@ def follow(P, F):
         rel = anchor - F.C
         moved = Vector((rel.x * k.x, rel.y * k.y, rel.z * k.z))
         P.loc(b, moved - rel)
-        P.scl(b, max(abs(k.x * k.y * k.z), 1e-9) ** (1 / 3))
+        if b not in F.face_push:
+            P.scl(b, max(abs(k.x * k.y * k.z), 1e-9) ** (1 / 3))
+            continue
+        # Visage : il suit la déformation locale axe par axe (et non en moyenne), et il est repoussé vers
+        # l'extérieur quand l'avant s'écrase (l'écrasement est plus fort au centre du visage qu'au bord des yeux).
+        n, sz, axes = F.face_push[b]
+        if axes is None:
+            P.scl(b, k)
+        else:
+            P.scl(b, [sum(a[i] * a[i] * k[i] for i in range(3)) for a in axes])
+        fy = body.y * K["Lobe_Avant"].y
+        P.loc(b, n * ((max(0.0, 1.0 - fy) * 0.6 + max(0.0, fy - 1.0) * 0.5) * sz))
 
 
 def _simplify(vals, tol):
@@ -243,7 +254,9 @@ def _eyes(P, F, blink=0.0, look=(0.0, 0.0), anger=0.0, raise_=0.0, wide=1.0):
     sourcils ; wide écarquille."""
     for e in F.eye_rig:
         sz = e["size"]
-        P.scl(e["eye"], (wide, 1.0, max(0.05, wide * (1 - 0.95 * min(max(blink, 0.0), 1.0)))))
+        kb = max(0.05, 1 - 0.95 * min(max(blink, 0.0), 1.0))
+        # axes locaux de l'os : X = droite, Y = haut, Z = normale ; la courbure (Z) s'aplatit comme kb²
+        P.scl(e["eye"], (wide, wide * kb, kb * kb))
         P.loc(e["pupil"], e["t"] * (look[0] * 0.32 * sz) + e["b"] * (look[1] * 0.3 * sz))
         P.rot_axis(e["brow"], e["n"], e["side"] * anger)
         P.loc(e["brow"], e["b"] * (raise_ * sz))

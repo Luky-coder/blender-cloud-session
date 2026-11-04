@@ -109,11 +109,13 @@ def build_armature(F, name):
     eb = data.edit_bones
     s = F.bone_size
 
-    def B(n, head, tail, parent=None, deform=False):
+    def B(n, head, tail, parent=None, deform=False, z_axis=None):
         b = eb.new(n)
         b.head = Vector(head)
         b.tail = Vector(tail)
         b.roll = 0.0
+        if z_axis is not None:
+            b.align_roll(Vector(z_axis))
         b.use_deform = deform
         if parent:
             b.parent = eb[parent]
@@ -130,8 +132,9 @@ def build_armature(F, name):
     F.followers["Orbite"] = C.copy()
     for x in F.extra_bones:
         head = Vector(x["head"])
-        B(x["name"], head, head + Vector((0, x.get("length", 0.3 * s), 0)), x.get("parent", "Motion"),
-          x.get("deform", True))
+        y_dir = Vector(x.get("y_axis", (0, 1, 0))).normalized()
+        B(x["name"], head, head + y_dir * x.get("length", 0.3 * s), x.get("parent", "Motion"),
+          x.get("deform", True), x.get("z_axis"))
         if x.get("parent", "Motion") == "Motion":
             F.followers[x["name"]] = head.copy()
     bpy.ops.object.mode_set(mode="OBJECT")
