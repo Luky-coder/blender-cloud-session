@@ -58,10 +58,10 @@ def build_montgolfiere(P):
     # Sangles (coutures porteuses) dorées entre les fuseaux
     for k in range(12):
         a = TAU * k / 12
-        thetas = [x for x in range(4, 150, 7) if not (k == 3 and 62 < x < 112)]  # visage dégagé
+        thetas = [x for x in range(4, 150, 9) if not (k == 3 and 62 < x < 112)]  # visage dégagé
         runs, cur = [], []
         for x in thetas:
-            if cur and x - cur[-1] > 7:
+            if cur and x - cur[-1] > 9:
                 runs.append(cur)
                 cur = []
             cur.append(x)
@@ -86,7 +86,8 @@ def build_montgolfiere(P):
         d = Vector((math.cos(a), math.sin(a), 0.6)).normalized()
         base = top + Vector((math.cos(a), math.sin(a), 0)) * 0.3 + Vector((0, 0, -0.02))
         L = 1.0 if k % 2 == 0 else 0.8
-        rig.add(_leaf_on("Couronne_Petale", base, d, Vector((0, 0, 1)), L, L * 0.42, petal, bend=-0.05, fold=0.1))
+        rig.add(_leaf_on("Couronne_Petale", base, d, Vector((0, 0, 1)), L, L * 0.42, petal, bend=-0.05, fold=0.1,
+                         nu=4, nv=1))
     rig.add(geo.torus("Couronne_Anneau", 0.44, 0.05, 32, 8, gold, Matrix.Translation(top + Vector((0, 0, -0.02)))))
 
     # Motifs de feuilles (décalcomanies) sur les fuseaux, sauf devant (visage)
@@ -95,7 +96,7 @@ def build_montgolfiere(P):
         a = math.radians(az + 90)
         p, n = F.surf.ray((math.cos(a), math.sin(a), 0.05 if k % 2 else -0.25))
         spots.append((p, n, -25 if k % 2 else 25))
-    for az in (0, 60, 120, 180, 240, 300):
+    for az in (60, 150, 210, 300):
         a = math.radians(az + 90 + 30)
         p, n = F.surf.ray((math.cos(a), math.sin(a), 0.95))
         spots.append((p, n, 0))
@@ -136,6 +137,10 @@ def build_montgolfiere(P):
         rig.add(geo.cylinder("Bruleur_Montant", c + Vector((0, 0, 0.02)), Vector((c.x * 0.3, c.y * 0.3, 1.18)), 0.02, 6,
                              P["metal"]), nac)
     rig.add(geo.cylinder("Bruleur", (0, 0, 1.08), (0, 0, 1.3), 0.13, 16, P["metal"]), nac)
+    for k in range(4):  # bras qui fixent le brûleur à son cadre
+        a = math.radians(45 + 90 * k)
+        rig.add(geo.cylinder("Bruleur_Bras", (0.1 * math.cos(a), 0.1 * math.sin(a), 1.18),
+                             (0.32 * math.cos(a), 0.32 * math.sin(a), 1.18), 0.018, 6, P["metal"]), nac)
     rig.add(geo.torus("Bruleur_Cadre", 0.3, 0.025, 4, 6, P["metal"], Matrix.Translation((0, 0, 1.18)) @ geo.rot((0, 0, 1), 45)), nac)
     fl = geo.flame("Bruleur_Flamme", 0.42, 0.11, P["glow"], bend=0.0)
     geo.transform(fl, Matrix.Translation((0, 0, 1.32)))
@@ -153,7 +158,8 @@ def build_montgolfiere(P):
                       math.copysign(min(abs(math.sin(a)) * 1.3, 1) * W / 2, math.sin(a)), Hb + 0.04))
         path = [top_p.lerp(bot, i / 10) for i in range(11)]
         rig.add(geo.tube("Cordage", path, 0.016, 6, P["rope"], caps=True), ("blend", "Nacelle", top_p, bot))
-    F.extra_bones.append(dict(name="Nacelle", head=Vector((0, 0, 1.56)), length=0.6))
+    F.extra_bones.append(dict(name="Nacelle", head=Vector((0, 0, 1.56)), length=0.6, parent="Lobe_Bas"))
+    F.patch("Lobe_Bas", (0, 0, 1.56), 0.55, 1.0)  # bouche de l'enveloppe : même os que la nacelle
     F.nacelle = "Nacelle"
 
     p, n = F.surf.ray((0, 1, 0.12))
@@ -196,7 +202,7 @@ def build_zeppelin(P):
         ys = [-4.3 + 8.4 * i / 30 for i in range(31)]
         rig.add(seam_line(F.surf, "Lisere_Or", [(side, 0, 0.12)] * len(ys), 0.05, gold,
                           origins=[C + Vector((0, y, 0)) for y in ys]))
-    for k, a in enumerate((45, 135, 225, 315)):
+    for k, a in enumerate((45, 135)):
         a = math.radians(a)
         ys = [-4.6 + 8.6 * i / 30 for i in range(31)]
         rig.add(seam_line(F.surf, f"Couture_{k}", [(math.cos(a), 0, math.sin(a))] * len(ys), 0.025, P["seam"],
@@ -246,11 +252,12 @@ def build_zeppelin(P):
             y = -3.0 + 6.6 * t
             a = math.radians(a0 + 720 * t)
             path.append(F.surf.ray((math.cos(a), 0, math.sin(a)), C + Vector((0, y, 0))))
-        vine(F, P, path, radius=0.012, leaf_every=0.14, flowers=(0.25, 0.6, 0.9), leaf_size=0.1, seed=30 + v)
+        vine(F, P, path, radius=0.012, leaf_every=0.16, flowers=(0.35, 0.8), leaf_size=0.1, seed=30 + v)
 
     # Nacelle (cabine en bois et or)
     gy, gl = 0.9, 3.4
     gz = zc - rad(gy) - 0.62
+    F.patch("Lobe_Bas", (0, gy, zc - rad(gy)), 1.4, 1.8)  # ventre : cabine et suspentes
     gprof = [(0.0, -gl / 2), (0.28, -gl / 2 + 0.08), (0.45, -gl / 2 + 0.35), (0.48, -0.6), (0.48, 0.8),
              (0.42, gl / 2 - 0.3), (0.25, gl / 2 - 0.06), (0.0, gl / 2)]
     cab = geo.lathe("Cabine", gprof, 20, "Y", P["wood"], (0, gy, gz))
@@ -260,8 +267,8 @@ def build_zeppelin(P):
         rig.add(geo.torus("Cabine_Cerclage", 0.49, 0.035, 20, 4, gold,
                           Matrix.Translation((0, gy + yy, gz)) @ geo.rot((1, 0, 0), 90) @ Matrix.Diagonal((1, 1.2, 1, 1))))
     for side in (-1, 1):
-        for k in range(6):
-            yy = gy - 1.25 + 0.5 * k
+        for k in range(4):
+            yy = gy - 1.05 + 0.7 * k
             rig.add(geo.sphere("Cabine_Hublot", (side * 0.455, yy, gz + 0.12), 0.13, 8, 4, (0.3, 1, 1.15), P["glass"]))
             rig.add(geo.torus("Cabine_Hublot_Cadre", 0.135, 0.022, 8, 3, gold,
                               Matrix.Translation((side * 0.475, yy, gz + 0.12)) @ geo.rot((0, 1, 0), 90) @ Matrix.Diagonal((1.15, 1, 1, 1))))
@@ -272,21 +279,29 @@ def build_zeppelin(P):
 
     # Hélices : 4 moteurs latéraux + hélice de queue
     props = []
+    parents = {}
     for name, side, y in (("Helice_AvG", -1, 1.6), ("Helice_AvD", 1, 1.6), ("Helice_ArG", -1, -1.9), ("Helice_ArD", 1, -1.9)):
+        lobe = "Lobe_Gauche" if side < 0 else "Lobe_Droite"
+        parents[name] = lobe
         px = side * (rad(y) + 0.75)
         pz = zc - 0.55
         pod = geo.lathe("Moteur", [(0.0, -0.55), (0.18, -0.5), (0.26, -0.2), (0.26, 0.25), (0.18, 0.5), (0.0, 0.6)],
                         16, "Y", gold, (px, y, pz))
-        rig.add(pod)
+        rig.add(pod, ("bone", lobe))
         sp, sn = F.surf.ray((side, 0, -0.35), C + Vector((0, y, 0)))
-        rig.add(geo.cylinder("Moteur_Bras", sp - sn * 0.1, Vector((px - side * 0.15, y, pz + 0.05)), 0.07, 8, P["metal"]))
+        rig.add(geo.cylinder("Moteur_Bras", sp - sn * 0.1, Vector((px - side * 0.15, y, pz + 0.05)), 0.07, 8, P["metal"]),
+                ("bone", lobe))
+        F.patch(lobe, sp, 0.45, 0.9)  # pied du bras moteur : même os que le moteur et son hélice
         hub = Vector((px, y - 0.62, pz))
         props.append((name, hub, 0.62))
     tail = Vector((0, -L / 2 - 0.25, zc))
-    rig.add(geo.cylinder("Queue_Moteur", tail + Vector((0, 0.45, 0)), tail, 0.18, 14, gold, r1=0.12))
+    rig.add(geo.cylinder("Queue_Moteur", tail + Vector((0, 0.45, 0)), tail, 0.18, 14, gold, r1=0.12), ("bone", "Lobe_Arriere"))
     props.append(("Helice_Queue", tail - Vector((0, 0.1, 0)), 0.9))
+    parents["Helice_Queue"] = "Lobe_Arriere"
+    F.patch("Lobe_Arriere", (0, -L / 2, zc), 1.0, 1.9)
     for name, hub, R in props:
-        parts = [geo.sphere(name + "_Moyeu", hub, R * 0.16, 14, 8, (1, 1.4, 1), P["metal_dark"])]
+        parts = [geo.sphere(name + "_Moyeu", hub, R * 0.16, 14, 8, (1, 1.4, 1), P["metal_dark"]),
+                 geo.cylinder(name + "_Axe", hub, hub + Vector((0, R * 0.35, 0)), R * 0.05, 8, P["metal"])]
         for k in range(3):
             a = TAU * k / 3
             radial = Vector((math.cos(a), 0, math.sin(a)))
@@ -295,7 +310,7 @@ def build_zeppelin(P):
             geo.transform(blade, M)
             parts.append(blade)
         rig.add(geo.join(parts, name), ("bone", name))
-        F.extra_bones.append(dict(name=name, head=hub, length=R * 0.5))
+        F.extra_bones.append(dict(name=name, head=hub, length=R * 0.5, parent=parents[name]))
         F.props.append(name)
 
     # Valves sur le dos

@@ -164,11 +164,14 @@ def main():
         blend, fbx, prev = paths(family, element)
         os.makedirs(os.path.dirname(blend), exist_ok=True)
         # Couleurs exportables : texture palette (PNG à côté du FBX et incrustée dedans) + UV + couleurs de sommets
-        img = palette.bake(mesh, enemy.enemy_id(family, element) + "_Palette",
-                           os.path.splitext(fbx)[0] + "_Palette.png")
+        arm["Enveloppe_Cases"] = ",".join(str(i) for i, m in enumerate(mesh.data.materials)
+                                          if any(k in m.name for k in ("Enveloppe", "Mylar", "Fuseau")))
+        imgs = palette.bake(mesh, enemy.enemy_id(family, element) + "_Palette",
+                            os.path.splitext(fbx)[0] + "_Palette.png")
         if "--no-fbx" not in opts:
             export_fbx(fbx)
-        img.pack()
+        for im in imgs:
+            im.pack()
         bpy.ops.wm.save_as_mainfile(filepath=blend, compress=True)
         info = dict(id=enemy.enemy_id(family, element), name=arm["Nom"], element=arm["Element"], pv=arm["PV"],
                     verts=len(mesh.data.vertices), tris=sum(len(p.vertices) - 2 for p in mesh.data.polygons),

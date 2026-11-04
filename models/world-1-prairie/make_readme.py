@@ -62,28 +62,40 @@ L += ["",
       "l'origine de l'objet est au sol sous le modèle.",
       "- **Pivots** : `Motion` et `Body` sont au centre de l'enveloppe (rotations et écrasements autour du centre "
       "du ballon) ; la nacelle de la montgolfière pivote sous la bouche de l'enveloppe ; chaque hélice sur son moyeu.",
-      "- **Os** : `Root` (sol, immobile) → `Motion` (déplacements, rotations) → `Body` (écrasement / étirement) → "
-      "14 `Lobe_*` (6 axes + 8 coins : déforment l'enveloppe, servent au dégonflement). Suiveurs enfants de `Motion` : "
-      "`Orbite` (éléments flottants : étoiles, bulles, braises…), `Ficelle_1..3`, `Helice*`, `Nacelle`, et pour le visage "
-      "`Oeil_G/D` (clignement, écarquillement), `Pupille_G/D` (regard) et `Sourcil_G/D` (expression).",
-      "- **Yeux animés** dans les 5 actions : clignement et coups d'oeil en `Idle`, regard concentré en `Move`, "
-      "plissement à l'anticipation puis yeux écarquillés et crispés à l'impact en `Attack`, yeux fermés de douleur en "
-      "`Hit`, regard étourdi (pupilles qui tournent) puis fermeture en `Death`. Ligne « YEUX » des planches d'animation.",
-      "- **Budget** : 20 000 triangles maximum par ennemi (vérifié à chaque génération, colonne « Triangles »).",
-      "- **Export propre pour les moteurs** : tous les os sont orientés comme le monde. Les échelles non uniformes "
-      "ne sont portées que par des os sans enfants tournés, donc sans cisaillement : le FBX se lit à l'identique "
-      "dans Unity, Unreal ou Godot. 4 influences maximum par sommet.",
-      "- **Couleurs** : chaque ennemi a une petite **texture palette** (`*_Palette.png`, 128 × 128, une case de couleur "
-      "par matériau) branchée sur la Base Color de tous ses matériaux, des **UV** qui placent chaque face sur sa case, et "
-      "un attribut de **couleurs de sommets** (`Couleur`). La texture est **incrustée dans le FBX** (et fournie à côté) : "
-      "les couleurs s'affichent même dans les moteurs qui ignorent la couleur « Diffuse » des matériaux FBX.",
-      "- **Matériaux** : Principled BSDF (rugosité, vernis, émission pour les lueurs : halos, flammes, coutures violettes…).",
+      "- **Animations sans échelle d'os** : tout est fait en position et rotation d'os. Le corps s'écrase, s'étire et "
+      "se dégonfle en déplaçant 14 os posés sur l'enveloppe. Seule exception : l'os `Body` passe à l'échelle 0 dans les "
+      "dernières images de `Death` (disparition) ; un moteur qui ignore l'échelle (Roblox) garde un petit tas dégonflé : "
+      "retirer l'ennemi à la fin de `Death`.",
+      "- **Os** : `Root` (sol, immobile) → `Motion` (déplacements, rotations) → `Body` → 14 `Lobe_*` (6 axes + 8 coins, "
+      "posés sur l'enveloppe). Tout ce qui est fixé au corps est **enfant de l'os qui porte la peau à son point "
+      "d'attache**, et cette zone de peau est pondérée à 100 % sur ce même os : visage → `Lobe_Avant` "
+      "(`Paupiere_H/B_G/D`, `Pupille_G/D` + `Pupille_H/B_G/D`, `Sourcil_G/D`) ; noeud et ficelle → `Lobe_Bas` "
+      "(`Ficelle_1..3`) ; hélice du mini-dirigeable → `Lobe_Arriere` ; nacelle de la montgolfière → `Lobe_Bas` ; "
+      "moteurs latéraux du zeppelin → `Lobe_Gauche/Droite`. Les autres décors prennent exactement les poids de "
+      "l'enveloppe sous eux. Rien ne peut se décoller, quel que soit le moteur ou sa compression d'animation.",
+      "- **Yeux animés** dans les 5 actions : clignement (les paupières haut/bas se rejoignent) et coups d'oeil en "
+      "`Idle`, regard concentré en `Move`, plissement à l'anticipation puis yeux écarquillés et crispés à l'impact en "
+      "`Attack`, yeux fermés de douleur en `Hit`, regard étourdi (pupilles qui tournent) puis fermeture en `Death`. "
+      "Ligne « YEUX » des planches d'animation.",
+      "- **Tout est fixé** : aucune pièce ne flotte (contrôlé au repos) ; les motifs imprimés sont des autocollants "
+      "épais dont la base s'enfonce dans l'enveloppe, le halo est tenu par une tige, les petits décors (étoiles, bulles, "
+      "éclats, braises, étincelles, volutes) sont posés sur le ballon.",
+      "- **Budget** : 20 000 triangles maximum par ennemi (vérifié à chaque génération, colonne « Triangles »). "
+      "4 influences maximum par sommet.",
+      "- **Un seul matériau par ennemi** (`<Ennemi>_Materiau`) : toutes les couleurs sont dans une petite **texture "
+      "palette** (`*_Palette.png`, 128 × 128, une case par couleur, **incrustée dans le FBX** et fournie à côté), avec "
+      "des **UV** qui placent chaque face sur sa case. Lueurs (`*_Palette_Emission.png`) et rugosité/métal "
+      "(`*_Palette_RM.png`) sont fournies pour les moteurs qui les utilisent. Attribut de **couleurs de sommets** "
+      "(`Couleur`) en plus.",
       "- **Propriétés personnalisées** sur l'armature (exportées dans le FBX) : `Nom`, `Famille`, `Element`, `PV`, `Avant`, `Animations`.",
       "", "## FBX", "",
       "Export Blender standard : `-Z` avant / `Y` haut (convention FBX), unités appliquées, pas d'os de bout (leaf bones), "
       "tous les os, une prise par Action (`<Rig>|Idle`, `<Rig>|Attack`…), toutes les images échantillonnées.",
       "Le résultat de la vérification automatique (réimport et comparaison au `.blend`) est dans "
       "[`FBX/verification.md`](FBX/verification.md).", "",
+      "- **Roblox Studio** : importer le FBX avec le *3D Importer* (un seul MeshPart skinné de moins de 20 000 "
+      "triangles). Appliquer `*_Palette.png` comme texture (`TextureID` ou `SurfaceAppearance.ColorMap`) si elle "
+      "n'est pas reprise automatiquement. Les 5 prises sont dans le FBX ; à la fin de `Death`, retirer l'ennemi.",
       "- **Unity** : importer le FBX en *Rig > Generic*. Les clips `Idle` et `Move` se mettent en *Loop Time*. "
       "Si les matériaux restent blancs : onglet *Materials* > *Extract Textures…* (la palette est alors extraite et reliée).",
       "- **Unreal** : importer avec *Import Animations* ; le squelette est propre à chaque ennemi.",

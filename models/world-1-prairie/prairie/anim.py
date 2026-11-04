@@ -81,6 +81,7 @@ class Pose:
     def __init__(self):
         self.d = {}
         self.spins = {}
+        self.vanish = None
 
     def _g(self, b):
         return self.d.setdefault(b, [Vector(), Quaternion(), Vector((1, 1, 1))])
@@ -105,44 +106,6 @@ class Pose:
     def spin(self, b, angle):
         """Rotation locale autour de l'axe de l'os (hélices), en radians, sans limite de tours."""
         self.spins[b] = self.spins.get(b, 0.0) + angle
-
-
-def _diag(P, b):
-    g = P.d.get(b)
-    return Vector((1, 1, 1)) if g is None else g[2]
-
-
-def follow(P, F):
-    """Os suiveurs (ficelle, orbite, hélices, nacelle) : ils sont enfants de Motion (échelle uniforme, pas de
-    cisaillement) et recopient le déplacement et le volume de l'enveloppe à leur point d'attache."""
-    body = _diag(P, "Body")
-    K = {name: _diag(P, name) for name, _e in LOBES}
-    for b, anchor in F.followers.items():
-        if b == "Orbite":
-            w = {name: 1.0 / len(LOBES) for name, _e in LOBES}
-        else:
-            w = lobe_weights(F, anchor)
-            tot = sum(w.values())
-            w = {k: v / tot for k, v in w.items()}
-        k = Vector((0, 0, 0))
-        for name, v in w.items():
-            k += Vector((K[name].x * v, K[name].y * v, K[name].z * v))
-        k = Vector((k.x * body.x, k.y * body.y, k.z * body.z))
-        rel = anchor - F.C
-        moved = Vector((rel.x * k.x, rel.y * k.y, rel.z * k.z))
-        P.loc(b, moved - rel)
-        if b not in F.face_push:
-            P.scl(b, max(abs(k.x * k.y * k.z), 1e-9) ** (1 / 3))
-            continue
-        # Visage : il suit la déformation locale axe par axe (et non en moyenne), et il est repoussé vers
-        # l'extérieur quand l'avant s'écrase (l'écrasement est plus fort au centre du visage qu'au bord des yeux).
-        n, sz, axes = F.face_push[b]
-        if axes is None:
-            P.scl(b, k)
-        else:
-            P.scl(b, [sum(a[i] * a[i] * k[i] for i in range(3)) for a in axes])
-        fy = body.y * K["Lobe_Avant"].y
-        P.loc(b, n * ((max(0.0, 1.0 - fy) * 0.6 + max(0.0, fy - 1.0) * 0.5) * sz))
 
 
 def _simplify(vals, tol):
@@ -182,7 +145,7 @@ def write_action(arm, F, name, n, fn, loop):
     prev = {}
     for f in range(n + 1):
         P = fn(f)
-        follow(P, F)
+        to_translations(P, F)
         for b in bones:
             l, q, s = P.d.get(b, (Vector(), Quaternion(), Vector((1, 1, 1))))
             R = rest[b]
@@ -226,13 +189,12 @@ def _lobes_dir(P, k_fn):
 
 
 def _front_squash(P, k, D=1.0):
-    """Aplatit l'avant (k < 1) en le gonflant sur les côtés : os de lobe mis à l'échelle le long de leur axe."""
+    """Écrase l'avant (k < 1) : les lobes avant rétrécissent vers le centre (échelle uniforme). Les yeux, enfants
+    de Lobe_Avant, suivent exactement la même transformation que la peau du visage."""
     for name, e in LOBES:
         w = max(0.0, e.y)
         if w > 0:
-            kk = 1 + (k - 1) * w
-            side = 1 + (1 - kk) * 0.45
-            P.scl(name, (side, kk, side))
+            P.scl(name, 1 + (k - 1) * 0.6 * w)
 
 
 def _chain(P, F, angles_x, angles_y=None):
@@ -249,17 +211,42 @@ def bump(f, center, half):
 
 
 def _eyes(P, F, blink=0.0, look=(0.0, 0.0), anger=0.0, raise_=0.0, wide=1.0):
-    """Yeux : blink 0 = ouverts, 1 = fermés ; look en fraction de la taille de l'oeil (x vers la droite de
-    l'observateur, y vers le haut) ; anger en degrés (sourcils froncés si > 0, inquiets si < 0) ; raise_ lève les
-    sourcils ; wide écarquille."""
+    """Yeux, uniquement par déplacements d'os : blink 0 = ouverts, 1 = fermés (les paupières haut/bas se
+    rejoignent et ressortent du creux de la surface) ; look en fraction de la taille de l'oeil (x vers la droite
+    de l'observateur, y vers le haut) ; anger en degrés (froncés si > 0, inquiets si < 0) ; raise_ lève les
+    sourcils ; wide > 1 écarquille."""
     for e in F.eye_rig:
-        sz = e["size"]
-        kb = max(0.05, 1 - 0.95 * min(max(blink, 0.0), 1.0))
-        # axes locaux de l'os : X = droite, Y = haut, Z = normale ; la courbure (Z) s'aplatit comme kb²
-        P.scl(e["eye"], (wide, wide * kb, kb * kb))
-        P.loc(e["pupil"], e["t"] * (look[0] * 0.32 * sz) + e["b"] * (look[1] * 0.3 * sz))
-        P.rot_axis(e["brow"], e["n"], e["side"] * anger)
-        P.loc(e["brow"], e["b"] * (raise_ * sz))
+        hh, be, ne = e["size"], e["b"], e["n"]
+        bl = min(max(blink, 0.0), 0.97)
+        extra = (wide - 1.0) * (1.0 - bl)
+        top = be * (hh * (extra - bl)) + ne * (e["sag"] * bl)
+        bot = be * (hh * (bl - extra)) + ne * (e["sag"] * bl)
+        P.loc(e["lid_h"], top)
+        P.loc(e["lid_b"], bot)
+        P.loc(e["pupil"], e["t"] * (look[0] * 0.32 * hh) + be * (look[1] * 0.3 * hh))
+        P.loc(e["pup_h"], top)
+        P.loc(e["pup_l"], bot)
+        P.rot_axis(e["brow"], ne, e["side"] * anger)
+        P.loc(e["brow"], be * (raise_ * hh))
+
+
+def to_translations(P, F):
+    """Convertit l'écrasement / gonflement (échelles virtuelles de Body et des lobes) en DÉPLACEMENTS des os de
+    l'enveloppe, posés sur la surface : aucune échelle d'os n'est exportée (Roblox et certains moteurs les
+    ignorent). Les pièces attachées sont des enfants de ces os : elles suivent exactement."""
+    one = Vector((1, 1, 1))
+    body = P.d["Body"][2].copy() if "Body" in P.d else one.copy()
+    for name, _e in LOBES:
+        k = P.d[name][2].copy() if name in P.d else one.copy()
+        tot = Vector((body.x * k.x, body.y * k.y, body.z * k.z))
+        rel = F.lobe_heads[name] - F.C
+        if name in P.d:
+            P.d[name][2] = one.copy()
+        P.loc(name, Vector(((tot.x - 1) * rel.x, (tot.y - 1) * rel.y, (tot.z - 1) * rel.z)))
+    if "Body" in P.d:
+        P.d["Body"][2] = one.copy()
+    if getattr(P, "vanish", None) is not None:
+        P.scl("Body", P.vanish)  # seule échelle réelle : disparition finale de Death (ignorée par Roblox)
 
 
 def _body_vol(P, sy, extra=(1, 1, 1)):
@@ -401,7 +388,10 @@ def death(F, A, f, n):
     P.rot("Motion", (track(f, [(0, 0), (j, 0.6 * max(A["att_lean"], 6), "out"), (n, 0)]) + 16 * env * math.sin(TAU * f / (n * 0.17)),
                      11 * env * math.sin(TAU * f / (n * 0.13) + 1), spin))
     # volume global : choc, puis le ballon se vide et s'aplatit, puis disparaît
-    shrink = track(f, [(0, 1), (j, 1, "lin"), (e_end, 0.8, "inout"), (n, 0.001, "in")])
+    shrink = track(f, [(0, 1), (j, 1, "lin"), (e_end, 0.82, "inout"), (n, 0.65, "in")])
+    # disparition finale : seule échelle réelle exportée (dans un moteur sans échelle d'os, il reste un petit tas
+    # dégonflé : retirer l'ennemi à la fin de l'animation)
+    P.vanish = track(f, [(0, 1.0), (round(n * 0.85), 1.0), (n, 0.001, "in")])
     flat = track(f, [(0, 1), (j, 1, "lin"), (e_end, 0.68, "inout"), (n, 0.68)])
     sy = track(f, [(0, 1), (j, 1 - 0.2 * D, "out"), (2 * j, 1, "inout"), (n, 1)])
     sxz = 1 / math.sqrt(sy)
@@ -413,7 +403,7 @@ def death(F, A, f, n):
         k = track(f, [(0, 1), (j + delay, 1, "lin"), (e_end, tgt, "inout"), (n, tgt)])
         k += 0.07 * env * math.sin(TAU * f / (n * rnd.uniform(0.07, 0.11)) + i * 1.7)
         tw = rnd.uniform(-1, 1)
-        P.scl(name, (k * (1 + 0.18 * env * tw), k * (1 - 0.1 * env * tw), k * (1 - 0.18 * env * tw)))
+        P.scl(name, k * (1 + 0.12 * env * tw))
     _chain(P, F, [track(f, [(0, 0), (j, 15), (n, -25)]) + 12 * env * math.sin(TAU * f / (n * 0.2) - 0.8 * i)
                   for i in range(len(F.chain))])
     P.rot_axis("Orbite", F.orbit[2], track(f, [(0, 0), (n, 90)]))

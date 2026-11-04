@@ -55,7 +55,7 @@ def frame_at(p, n, up=(0, 0, 1)):
     return t, b, n
 
 
-def decal(surf, name, polys, anchor, normal, up, scale, offset, material, subdiv=2):
+def decal(surf, name, polys, anchor, normal, up, scale, offset, material, subdiv=2, bury=True):
     """Décalcomanie en relief : polygones 2D (u, v) posés sur la surface autour d'un ancrage.
 
     u va vers la droite (vu de face), v vers le haut. Les sommets sont densifiés puis projetés.
@@ -82,6 +82,14 @@ def decal(surf, name, polys, anchor, normal, up, scale, offset, material, subdiv
     flip = sum(1 for p in me.polygons if p.normal.dot(n) < 0) > len(me.polygons) / 2
     if flip:
         me.flip_normals()
+    if bury:
+        # autocollant épais : sa base s'enfonce dans l'enveloppe (aucun jour visible, même de profil)
+        mod = ob.modifiers.new("Epaisseur", "SOLIDIFY")
+        mod.thickness = offset + max(0.002, 0.5 * offset)
+        mod.offset = -1.0
+        mod.use_rim = True
+        geo.apply_modifiers(ob)
+        ob.data.shade_smooth()
     return ob
 
 

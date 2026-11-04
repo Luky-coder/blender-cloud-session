@@ -37,10 +37,13 @@ class Frame:
         self.string_path = []
         self.props = []            # os d'hélices
         self.nacelle = None
-        self.extra_bones = []
-        self.followers = {}
+        self.extra_bones = []      # dict(name, head, parent, length, y_axis, z_axis)
         self.eye_rig = []          # os des yeux (voir elements.face)
-        self.face_push = {}        # os du visage repoussés vers l'extérieur quand l'avant s'écrase        # os enfants de Motion qui suivent la déformation de l'enveloppe
+        self.patches = []          # zones d'attache : enveloppe pondérée à 100 % sur l'os porteur
+
+    def patch(self, bone, center, r0, r1):
+        """Autour de `center`, l'enveloppe suit uniquement `bone` (r0 : 100 %, fondu jusqu'à r1)."""
+        self.patches.append(dict(bone=bone, center=Vector(center), r0=r0, r1=r1))
 
 
 def _ray_pairs(surf, dirs, origins=None):
@@ -63,7 +66,8 @@ def _string(F, P, top, length, wiggle=0.02, nb=3, radius=0.0055):
     F.string_path = path
     for i in range(nb):
         F.extra_bones.append(dict(name=F.chain[i], head=joints[i], length=(joints[i + 1] - joints[i]).length,
-                                  parent="Motion" if i == 0 else F.chain[i - 1]))
+                                  parent="Lobe_Bas" if i == 0 else F.chain[i - 1]))
+    F.patch("Lobe_Bas", top, 0.11, 0.2)  # noeud / valve : l'enveloppe y suit le même os que la ficelle
     rig.add(s, ("chain", F.chain, joints))
     return s
 
@@ -150,9 +154,11 @@ def build_etoile(P):
     # Valve plate en bas (creux entre les deux pointes basses) + noeud
     vz = zc - Ri + 0.012
     valve = geo.sphere("Valve", (0, 0, vz - 0.04), 0.045, 12, 8, (0.42, 0.16, 1.0), P["seam"])
-    rig.add(valve)
-    rig.add(geo.torus("Valve_Bague", 0.016, 0.007, 16, 6, P["seam"], Matrix.Translation((0, 0, vz - 0.085))))
-    _string(F, P, (0, 0, vz - 0.092), vz - 0.092)
+    # valve, bague et ficelle sur le même os (Lobe_Bas) : la ficelle reste plantée dans la valve
+    rig.add(valve, ("bone", "Lobe_Bas"))
+    rig.add(geo.torus("Valve_Bague", 0.0115, 0.0065, 16, 6, P["seam"], Matrix.Translation((0, 0, vz - 0.079))),
+            ("bone", "Lobe_Bas"))
+    _string(F, P, (0, 0, vz - 0.078), vz - 0.078)
 
     p, n = F.surf.project(C + Vector((0, 0, 0.02)), (0, 1, 0))
     F.eyes = dict(p=p, n=Vector((0, 1, 0.05)).normalized(), spacing=0.082, size=0.064, up=(0, 0, 1))
@@ -227,10 +233,11 @@ def build_dirigeable(P):
         # couture du bord de l'aileron
     # Hélice arrière + moteur
     ty = -L / 2
-    rig.add(geo.cylinder("Moteur", C + Vector((0, ty + 0.05, 0)), C + Vector((0, ty - 0.07, 0)), 0.04, 14,
-                         P["metal"], r1=0.03))
+    rig.add(geo.cylinder("Moteur", C + Vector((0, ty + 0.06, 0)), C + Vector((0, ty - 0.075, 0)), 0.04, 14,
+                         P["metal"], r1=0.03), ("bone", "Lobe_Arriere"))
     hub_c = C + Vector((0, ty - 0.09, 0))
-    props = [geo.sphere("Helice_Moyeu", hub_c, 0.032, 14, 8, (1, 1.3, 1), P["metal_dark"])]
+    props = [geo.sphere("Helice_Moyeu", hub_c, 0.032, 14, 8, (1, 1.3, 1), P["metal_dark"]),
+             geo.cylinder("Helice_Axe", hub_c, hub_c + Vector((0, 0.07, 0)), 0.013, 8, P["metal"])]
     for k in range(3):
         a = TAU * k / 3
         radial = Vector((math.cos(a), 0, math.sin(a)))
@@ -240,12 +247,14 @@ def build_dirigeable(P):
         props.append(blade)
     prop = geo.join(props, "Helice")
     rig.add(prop, ("bone", "Helice"))
-    F.extra_bones.append(dict(name="Helice", head=hub_c, length=0.1))
+    F.extra_bones.append(dict(name="Helice", head=hub_c, length=0.1, parent="Lobe_Arriere"))
+    F.patch("Lobe_Arriere", C + Vector((0, ty, 0)), 0.15, 0.3)  # queue : même os que le moteur et l'hélice
     F.props = ["Helice"]
 
     # Nacelle mécanique
     gy, gr = 0.06, 0.068
     gz = zc - rad(gy) - 0.075
+    F.patch("Lobe_Bas", (0, gy + 0.05, zc - rad(gy + 0.05)), 0.22, 0.38)  # ventre : nacelle et suspentes
     gprof = [(0.0, -0.2), (0.035, -0.19), (0.058, -0.155), (0.068, -0.09), (0.068, 0.07), (0.06, 0.14),
              (0.04, 0.18), (0.0, 0.195)]
     gond = geo.lathe("Nacelle", gprof, 18, "Y", P["body2"], (0, gy, gz))

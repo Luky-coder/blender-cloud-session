@@ -51,6 +51,22 @@ def lobe_weights(F, co):
     return w
 
 
+def surface_weights(F, s):
+    """Poids de l'enveloppe au point de surface s, avec les zones d'attache (patches) : autour d'un point
+    d'attache (visage, queue, noeud, bouche de la montgolfière...), l'enveloppe est pondérée à 100 % sur l'os
+    porteur, celui dont les pièces attachées (yeux, hélice, ficelle, nacelle) sont les enfants."""
+    w = dict(_limit(lobe_weights(F, s)))
+    for p in F.patches:
+        d = (s - p["center"]).length
+        if d >= p["r1"]:
+            continue
+        a = 1.0 if d <= p["r0"] else 1.0 - (d - p["r0"]) / (p["r1"] - p["r0"])
+        a = a * a * (3 - 2 * a)
+        w = {k: v * (1 - a) for k, v in w.items()}
+        w[p["bone"]] = w.get(p["bone"], 0.0) + a
+    return w
+
+
 def _chain_weights(bones, pts, co):
     # paramètre le long de la polyligne
     best, best_s = 1e9, 0.0
@@ -73,10 +89,17 @@ def _chain_weights(bones, pts, co):
 
 def weights_for(F, rule, co):
     if rule == "lobes":
-        return lobe_weights(F, co)
+        # collé à l'enveloppe : mêmes poids que le point de surface le plus proche
+        s, _n = F.surf.nearest(co)
+        return surface_weights(F, s)
     kind = rule[0]
     if kind == "bone":
         return {rule[1]: 1.0}
+    if kind == "lid":
+        # paupières : le haut de l'oeil suit l'os du haut, le bas suit l'os du bas, fondu linéaire entre les deux
+        _k, top, bot, center, up, half = rule
+        a = max(0.0, min(1.0, 0.5 + 0.5 * (co - center).dot(up) / half))
+        return {top: a, bot: 1.0 - a} if 0.0 < a < 1.0 else ({top: 1.0} if a >= 1.0 else {bot: 1.0})
     if kind == "chain":
         return _chain_weights(rule[1], rule[2], co)
     if kind == "blend":
@@ -84,7 +107,7 @@ def weights_for(F, rule, co):
         ab = bot - top
         t = max(0.0, min(1.0, (co - top).dot(ab) / max(ab.dot(ab), 1e-12)))
         t = t * t * (3 - 2 * t)
-        w = {k: v * (1 - t) for k, v in lobe_weights(F, top).items()}
+        w = {k: v * (1 - t) for k, v in surface_weights(F, F.surf.nearest(top)[0]).items()}
         w[bone] = w.get(bone, 0.0) + t
         return w
     raise ValueError(rule)
@@ -125,18 +148,19 @@ def build_armature(F, name):
     B("Root", (0, 0, 0), (0, s, 0))
     B("Motion", C, C + Vector((0, s, 0)), "Root")
     B("Body", C, C + Vector((0, 0.8 * s, 0)), "Motion")
-    # Tous les os sont orientés comme le monde (axe +Y) : échelles non uniformes sans cisaillement à l'export.
-    for n, _e in LOBES:
-        B(n, C, C + Vector((0, 0.5 * s, 0)), "Body", True)
-    B("Orbite", C, C + Vector((0, 0.45 * s, 0)), "Motion", True)
-    F.followers["Orbite"] = C.copy()
+    # Les pièces attachées sont des ENFANTS de l'os qui porte l'enveloppe à leur point d'attache : elles suivent
+    # le corps par la hiérarchie du squelette, sans aucune clé de compensation (robuste dans tous les moteurs).
+    # Os de l'enveloppe posés SUR la surface : le corps se déforme en les déplaçant (aucune échelle d'os).
+    F.lobe_heads = {}
+    for n, e in LOBES:
+        d = Vector((e.x * F.half.x, e.y * F.half.y, e.z * F.half.z))
+        h, _nor = F.surf.ray(d)
+        F.lobe_heads[n] = h.copy()
+        B(n, h, h + Vector((0, 0.3 * s, 0)), "Body", True)
     for x in F.extra_bones:
         head = Vector(x["head"])
         y_dir = Vector(x.get("y_axis", (0, 1, 0))).normalized()
-        B(x["name"], head, head + y_dir * x.get("length", 0.3 * s), x.get("parent", "Motion"),
-          x.get("deform", True), x.get("z_axis"))
-        if x.get("parent", "Motion") == "Motion":
-            F.followers[x["name"]] = head.copy()
+        B(x["name"], head, head + y_dir * x.get("length", 0.3 * s), x["parent"], x.get("deform", True), x.get("z_axis"))
     bpy.ops.object.mode_set(mode="OBJECT")
     for pb in arm.pose.bones:
         pb.rotation_mode = "XYZ"

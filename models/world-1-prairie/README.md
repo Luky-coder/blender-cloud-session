@@ -15,4 +15,4 @@ Vues : [iso_back](screenshots/iso_back.jpg) · [back](screenshots/back.jpg) · [
 | [`world-1-prairie.blend`](world-1-prairie.blend) | Fichier Blender 5.2.3 LTS |
 | [`build.py`](build.py) | Script qui génère le modèle |
 
-**Dimensions** : 14.255 × 17.251 × 6.362 m (X × Y × Z) · **Objets** : 23 · **Sommets** : 136 729 · **Faces** : 146 293
+**Dimensions** : 14.255 × 17.105 × 6.362 m (X × Y × Z) · **Objets** : 23 · **Sommets** : 159 789 · **Faces** : 194 237

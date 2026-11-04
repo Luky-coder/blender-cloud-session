@@ -4,10 +4,10 @@
   "name": "Ballon Classique Lumière",
   "element": "Lumière",
   "pv": 15,
-  "verts": 3383,
-  "tris": 5918,
-  "bones": 27,
-  "materials": 10,
+  "verts": 4707,
+  "tris": 9254,
+  "bones": 32,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -38,10 +38,10 @@
   "name": "Ballon Classique Ténèbres",
   "element": "Ténèbres",
   "pv": 15,
-  "verts": 5003,
-  "tris": 9154,
-  "bones": 27,
-  "materials": 12,
+  "verts": 6103,
+  "tris": 11926,
+  "bones": 32,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -72,10 +72,10 @@
   "name": "Ballon Classique Glace",
   "element": "Glace",
   "pv": 15,
-  "verts": 4507,
-  "tris": 7184,
-  "bones": 27,
-  "materials": 11,
+  "verts": 6655,
+  "tris": 12760,
+  "bones": 32,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -106,10 +106,10 @@
   "name": "Ballon Classique Feu",
   "element": "Feu",
   "pv": 15,
-  "verts": 4423,
-  "tris": 8130,
-  "bones": 27,
-  "materials": 11,
+  "verts": 5305,
+  "tris": 10442,
+  "bones": 32,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -140,10 +140,10 @@
   "name": "Ballon Classique Eau",
   "element": "Eau",
   "pv": 15,
-  "verts": 5105,
-  "tris": 9460,
-  "bones": 27,
-  "materials": 11,
+  "verts": 5883,
+  "tris": 11570,
+  "bones": 32,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -174,10 +174,10 @@
   "name": "Ballon Classique Plante",
   "element": "Plante",
   "pv": 15,
-  "verts": 4389,
-  "tris": 7022,
-  "bones": 27,
-  "materials": 13,
+  "verts": 5397,
+  "tris": 9574,
+  "bones": 32,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -208,10 +208,10 @@
   "name": "Ballon Classique Éclair",
   "element": "Éclair",
   "pv": 15,
-  "verts": 2811,
-  "tris": 5109,
-  "bones": 27,
-  "materials": 11,
+  "verts": 3537,
+  "tris": 6950,
+  "bones": 32,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -242,10 +242,10 @@
   "name": "Ballon Étoile Lumière",
   "element": "Lumière",
   "pv": 20,
-  "verts": 5046,
-  "tris": 9274,
-  "bones": 27,
-  "materials": 10,
+  "verts": 6330,
+  "tris": 12508,
+  "bones": 32,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -276,10 +276,10 @@
   "name": "Ballon Étoile Ténèbres",
   "element": "Ténèbres",
   "pv": 20,
-  "verts": 6184,
-  "tris": 11580,
-  "bones": 27,
-  "materials": 12,
+  "verts": 7284,
+  "tris": 14352,
+  "bones": 32,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -310,10 +310,10 @@
   "name": "Ballon Étoile Glace",
   "element": "Glace",
   "pv": 20,
-  "verts": 6135,
-  "tris": 10456,
-  "bones": 27,
-  "materials": 11,
+  "verts": 8283,
+  "tris": 16032,
+  "bones": 32,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -344,10 +344,10 @@
   "name": "Ballon Étoile Feu",
   "element": "Feu",
   "pv": 20,
-  "verts": 6318,
-  "tris": 11924,
-  "bones": 27,
-  "materials": 11,
+  "verts": 7200,
+  "tris": 14236,
+  "bones": 32,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -378,10 +378,10 @@
   "name": "Ballon Étoile Eau",
   "element": "Eau",
   "pv": 20,
-  "verts": 6808,
-  "tris": 12882,
-  "bones": 27,
-  "materials": 11,
+  "verts": 7586,
+  "tris": 14992,
+  "bones": 32,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -412,10 +412,10 @@
   "name": "Ballon Étoile Plante",
   "element": "Plante",
   "pv": 20,
-  "verts": 6357,
-  "tris": 10738,
-  "bones": 27,
-  "materials": 13,
+  "verts": 7365,
+  "tris": 13290,
+  "bones": 32,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -446,10 +446,10 @@
   "name": "Ballon Étoile Éclair",
   "element": "Éclair",
   "pv": 20,
-  "verts": 4466,
-  "tris": 8423,
-  "bones": 27,
-  "materials": 11,
+  "verts": 5192,
+  "tris": 10264,
+  "bones": 32,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -480,10 +480,10 @@
   "name": "Mini-dirigeable Lumière",
   "element": "Lumière",
   "pv": 30,
-  "verts": 5326,
-  "tris": 9826,
-  "bones": 25,
-  "materials": 13,
+  "verts": 6478,
+  "tris": 12716,
+  "bones": 30,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -514,10 +514,10 @@
   "name": "Mini-dirigeable Ténèbres",
   "element": "Ténèbres",
   "pv": 30,
-  "verts": 7136,
-  "tris": 13408,
-  "bones": 25,
-  "materials": 15,
+  "verts": 8080,
+  "tris": 15776,
+  "bones": 30,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -548,10 +548,10 @@
   "name": "Mini-dirigeable Glace",
   "element": "Glace",
   "pv": 30,
-  "verts": 6155,
-  "tris": 10832,
-  "bones": 25,
-  "materials": 13,
+  "verts": 7811,
+  "tris": 15104,
+  "bones": 30,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -582,10 +582,10 @@
   "name": "Mini-dirigeable Feu",
   "element": "Feu",
   "pv": 30,
-  "verts": 6654,
-  "tris": 12572,
-  "bones": 25,
-  "materials": 13,
+  "verts": 7424,
+  "tris": 14588,
+  "bones": 30,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -616,10 +616,10 @@
   "name": "Mini-dirigeable Eau",
   "element": "Eau",
   "pv": 30,
-  "verts": 7256,
-  "tris": 13752,
-  "bones": 25,
-  "materials": 13,
+  "verts": 7910,
+  "tris": 15536,
+  "bones": 30,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -650,10 +650,10 @@
   "name": "Mini-dirigeable Plante",
   "element": "Plante",
   "pv": 30,
-  "verts": 6712,
-  "tris": 11408,
-  "bones": 25,
-  "materials": 15,
+  "verts": 7608,
+  "tris": 13664,
+  "bones": 30,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -684,10 +684,10 @@
   "name": "Mini-dirigeable Éclair",
   "element": "Éclair",
   "pv": 30,
-  "verts": 4982,
-  "tris": 9386,
-  "bones": 25,
-  "materials": 13,
+  "verts": 5690,
+  "tris": 11168,
+  "bones": 30,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -718,10 +718,10 @@
   "name": "Montgolfière Solaire",
   "element": "Plante",
   "pv": 250,
-  "verts": 10734,
-  "tris": 17472,
-  "bones": 25,
-  "materials": 18,
+  "verts": 11166,
+  "tris": 19500,
+  "bones": 30,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,
@@ -752,10 +752,10 @@
   "name": "Grand Zeppelin des Prairies",
   "element": "Plante",
   "pv": 1000,
-  "verts": 10839,
-  "tris": 18330,
-  "bones": 29,
-  "materials": 18,
+  "verts": 10795,
+  "tris": 19298,
+  "bones": 34,
+  "materials": 1,
   "actions": {
    "Attack": [
     1,

@@ -76,8 +76,11 @@ def poly_snowflake():
 def face(F, P, angry=1.0):
     """Yeux imprimés sur l'enveloppe (comme un ballon de fête), regard en colère : ils marquent l'avant (+Y).
 
-    Chaque côté a 3 os (animés) : Oeil_X (blanc de l'oeil : clignement, écarquillement), Pupille_X (enfant de
-    l'oeil : direction du regard) et Sourcil_X (expression). X = G/D, gauche/droite du modèle (G = -X).
+    Os par côté (X = G/D, gauche/droite du modèle, G = -X), tous enfants de Lobe_Avant (l'os qui porte la peau du
+    visage, pondérée à 100 % sur lui) et animés UNIQUEMENT en position/rotation (aucune échelle d'os) :
+      Paupiere_H_X / Paupiere_B_X   haut et bas du blanc de l'oeil : ils se rejoignent pour cligner
+      Pupille_X                     direction du regard ; Pupille_H_X / Pupille_B_X (enfants) : clignement
+      Sourcil_X                     expression
     """
     e = F.eyes
     p, n, sp, sz, up = e["p"], e["n"], e["spacing"], e["size"], e.get("up", (0, 0, 1))
@@ -85,37 +88,51 @@ def face(F, P, angry=1.0):
     k = F.s
     white = P["iris"] if P.get("iris") else P["eye_white"]
     F.eye_rig = []
+    face_objs = []
     for side, tag in ((-1, "D"), (1, "G")):
         cx = side * sp
-        eye_b, pup_b, brow_b = f"Oeil_{tag}", f"Pupille_{tag}", f"Sourcil_{tag}"
-        rig.add(decal(F.surf, eye_b, [ellipse(cx, 0, sz * 0.78, sz, 22)], p, n, up, 1.0, 0.0035 * k, white),
-                ("bone", eye_b))
+        lid_h, lid_b = f"Paupiere_H_{tag}", f"Paupiere_B_{tag}"
+        pup_b, pup_h, pup_l, brow_b = f"Pupille_{tag}", f"Pupille_H_{tag}", f"Pupille_B_{tag}", f"Sourcil_{tag}"
+        ce, ne = F.surf.project(Vector(p) + t * cx, nn)
+        te, be, ne = frame_at(ce, ne, b)  # repère propre à chaque oeil (sa normale à lui)
+        lids = ("lid", lid_h, lid_b, ce.copy(), be.copy(), sz)
+        plids = ("lid", pup_h, pup_l, ce.copy(), be.copy(), sz)
+        face_objs.append(rig.add(decal(F.surf, f"Oeil_{tag}", [ellipse(cx, 0, sz * 0.78, sz, 22)], p, n, up, 1.0,
+                                       0.0035 * k, white), lids))
         if P.get("iris"):
             pupil = ellipse(cx - side * 0.1 * sz, -0.08 * sz, sz * 0.16, sz * 0.62, 14)
         else:
             pupil = ellipse(cx - side * 0.13 * sz, -0.12 * sz, sz * 0.4, sz * 0.5, 16)
             rig.add(decal(F.surf, pup_b + "_Reflet", [ellipse(cx - side * 0.02 * sz, 0.12 * sz, sz * 0.13, sz * 0.13, 8)],
-                          p, n, up, 1.0, 0.009 * k, P["shine"], subdiv=0), ("bone", pup_b))
-        rig.add(decal(F.surf, pup_b, [pupil], p, n, up, 1.0, 0.0065 * k, P["pupil"]), ("bone", pup_b))
+                          p, n, up, 1.0, 0.009 * k, P["shine"], subdiv=0), plids)
+        rig.add(decal(F.surf, pup_b, [pupil], p, n, up, 1.0, 0.0065 * k, P["pupil"]), plids)
         th = 0.3 * sz
         x_in, x_out = cx - side * 0.95 * sz, cx + side * 0.95 * sz
         y_in, y_out = 0.78 * sz, (0.78 + 0.5 * angry) * sz
         quad = [(x_in, y_in - th / 2), (x_out, y_out - th / 2), (x_out, y_out + th / 2), (x_in, y_in + th / 2)]
-        rig.add(decal(F.surf, brow_b, [quad if side > 0 else list(reversed(quad))], p, n, up, 1.0, 0.0085 * k, P["brow"]),
-                ("bone", brow_b))
-        ce, ne = F.surf.project(Vector(p) + t * cx, nn)
-        te, be, ne = frame_at(ce, ne, b)  # repère propre à chaque oeil (sa normale à lui)
+        face_objs.append(rig.add(decal(F.surf, brow_b, [quad if side > 0 else list(reversed(quad))], p, n, up, 1.0,
+                                       0.0085 * k, P["brow"]), ("bone", brow_b)))
         cb, _n = F.surf.project(Vector(p) + t * cx + b * (0.78 + 0.25 * angry) * sz, nn)
-        # Os de l'oeil orienté sur la surface (X = droite, Y = haut, Z = normale), pivot sur le blanc de l'oeil :
-        # le clignement écrase l'oeil en hauteur ET aplatit sa courbure, il reste au-dessus de l'enveloppe.
-        piv = ce + ne * 0.0035 * k
-        F.extra_bones += [dict(name=eye_b, head=piv, length=sz * 0.8, y_axis=be, z_axis=ne),
-                          dict(name=pup_b, head=piv, length=sz * 0.5, parent=eye_b, y_axis=be, z_axis=ne),
-                          dict(name=brow_b, head=cb, length=sz * 0.8)]
-        F.face_push[eye_b] = (ne.copy(), sz, (te.copy(), be.copy(), ne.copy()))
-        F.face_push[brow_b] = (ne.copy(), sz, None)
-        F.eye_rig.append(dict(side=side, eye=eye_b, pupil=pup_b, brow=brow_b, t=te.copy(), b=be.copy(), n=ne.copy(),
-                              size=sz))
+        # creux de la surface au bord haut/bas de l'oeil (sous le plan tangent) : en clignant, les paupières
+        # ressortent d'autant pour ne jamais passer sous l'enveloppe
+        sag = 0.0
+        for sgn in (1, -1):
+            q, _qn = F.surf.project(ce + be * sz * sgn, ne)
+            sag = max(sag, (ce - q).dot(ne))
+        L = sz * 0.6
+        F.extra_bones += [dict(name=lid_h, head=ce + be * sz * 0.5, length=L, parent="Lobe_Avant"),
+                          dict(name=lid_b, head=ce - be * sz * 0.5, length=L, parent="Lobe_Avant"),
+                          dict(name=pup_b, head=ce, length=L, parent="Lobe_Avant"),
+                          dict(name=pup_h, head=ce + be * sz * 0.3, length=L * 0.6, parent=pup_b),
+                          dict(name=pup_l, head=ce - be * sz * 0.3, length=L * 0.6, parent=pup_b),
+                          dict(name=brow_b, head=cb, length=sz * 0.8, parent="Lobe_Avant")]
+        F.eye_rig.append(dict(side=side, eye=pup_b, pupil=pup_b, lid_h=lid_h, lid_b=lid_b, pup_h=pup_h, pup_l=pup_l,
+                              brow=brow_b, t=te.copy(), b=be.copy(), n=ne.copy(), size=sz, sag=max(sag, 0.0)))
+    # Zone du visage : l'enveloppe y suit UNIQUEMENT Lobe_Avant, l'os parent des yeux et des sourcils. Elle couvre
+    # tout le visage (blancs + sourcils écarquillés/levés) avec une marge, puis un large fondu.
+    reach = max((v.co - Vector(p)).length for ob in face_objs for v in ob.data.vertices)
+    r0 = reach + 0.6 * sz
+    F.patch("Lobe_Avant", p, r0, r0 + max(r0, 3.0 * sz))
 
 
 def shine(F, P):
@@ -145,6 +162,21 @@ def _orbit_points(F, count, phase=0.3, wobble=0.06):
         r = orad * (1 + 0.08 * math.sin(3 * a))
         pts.append(oc + (t * math.cos(a) + b * math.sin(a)) * r + oax * wobble * F.s * math.sin(2 * a + 1))
     return pts
+
+
+def _surface_spots(F, count, phase=0.3):
+    """Points posés SUR l'enveloppe (et leur normale) répartis autour de l'orbite, en évitant le visage."""
+    cand = _orbit_points(F, count * 3, phase, 0.0)
+    face = Vector(F.eyes["p"]) if F.eyes else None
+    keep = abs(F.eyes["spacing"]) + F.eyes["size"] if F.eyes else 0.0
+    spots = []
+    for q in cand:
+        sp_, n_ = F.surf.ray(q - F.surf.center)
+        if face is not None and (sp_ - face).length < 2.4 * keep:
+            continue
+        spots.append((sp_, n_))
+    step = max(1, len(spots) // count)
+    return spots[::step][:count]
 
 
 def _emblems(F, P, name, polys, mat, scale=1.0, offset=0.004, rot_deg=0.0, inner=None):
@@ -213,20 +245,25 @@ def deco_lumiere(F, P):
     p, n = F.crest[0]
     hc = p + n * 0.13 * s
     hn = _tilted(n, 34, 0, (0, 1, 0))
-    rig.add(geo.torus("Halo", 0.15 * s, 0.02 * s, 36, 8, P["glow"], geo.basis_z(hc, hn)))
-    # rayons dorés autour du halo
+    R = 0.15 * s
+    rig.add(geo.torus("Halo", R, 0.02 * s, 36, 8, P["glow"], geo.basis_z(hc, hn)))
+    t, b, _ = frame_at(Vector(), hn)
+    ring = [hc + (t * math.cos(a) + b * math.sin(a)) * R for a in (TAU * i / 72 for i in range(72))]
+    low = min(ring, key=lambda q: (q - p).length)
+    # tige dorée : le halo est fixé au sommet du ballon
+    rig.add(geo.cylinder("Halo_Tige", p - n * 0.015 * s, low, 0.009 * s, 8, P["accent"]))
+    # rayons dorés qui partent de l'anneau
     for k in range(8):
         a = TAU * k / 8
-        t, b, _ = frame_at(Vector(), hn)
         d = t * math.cos(a) + b * math.sin(a)
-        rig.add(geo.cylinder("Halo_Rayon", hc + d * 0.19 * s, hc + d * 0.245 * s, 0.009 * s, 6, P["accent2"], r1=0.002 * s))
-    for k, q in enumerate(_orbit_points(F, 5)):
+        rig.add(geo.cylinder("Halo_Rayon", hc + d * (R - 0.005 * s), hc + d * 0.245 * s, 0.009 * s, 6, P["accent2"],
+                             r1=0.002 * s))
+    for k, (q, qn) in enumerate(_surface_spots(F, 5)):
         big = k % 2 == 0
-        st = geo.star3d(f"Etoile_Orbite_{k}", (0.06 if big else 0.045) * s, 0.024 * s, 0.02 * s,
+        st = geo.star3d(f"Etoile_{k}", (0.06 if big else 0.045) * s, 0.024 * s, 0.02 * s,
                         P["glow"] if big else P["accent"])
-        face_dir = ((q - F.orbit[0]).normalized() + Vector((0, 0.8, 0))).normalized()
-        geo.transform(st, geo.basis_z(q, face_dir, (0, 0, 1)) @ geo.rot((0, 0, 1), 15 * k))
-        rig.add(st, ("bone", "Orbite"))
+        geo.transform(st, geo.basis_z(q + qn * 0.008 * s, qn, (0, 0, 1)) @ geo.rot((0, 0, 1), 15 * k))
+        rig.add(st)
     _emblems(F, P, "Soleil", [poly_star(8, 1.0, 0.55)], P["accent"], 0.85, inner=([ellipse(0, 0, 0.5, 0.5, 18)], P["accent2"], 1.0))
     # petites étoiles scintillantes sur l'enveloppe
     for k, (p2, n2) in enumerate(F.under[:3]):
@@ -247,13 +284,12 @@ def deco_tenebres(F, P):
     # fumée sombre : volutes sous le ballon et autour
     rnd = random.Random(7)
     for k, (p, n) in enumerate(F.under):
-        c = p + Vector(n) * 0.04 * s + Vector((0, 0, -0.03 * s))
+        c = p + Vector(n) * 0.02 * s
         rig.add(geo.puff_cluster("Fumee", c, 0.075 * s * rnd.uniform(0.85, 1.15),
                                  P["smoke"] if k % 2 else P["smoke2"], count=4, seed=k))
-    for k, q in enumerate(_orbit_points(F, 5, phase=1.0, wobble=0.1)):
-        rig.add(geo.puff_cluster("Fumee_Volute", q, 0.055 * s, P["smoke2"], count=3, seed=20 + k), ("bone", "Orbite"))
-        rig.add(geo.sphere("Etincelle_Sombre", q + Vector((0, 0, 0.06 * s)), 0.012 * s, 8, 4, (1, 1, 1), P["glow"]),
-                ("bone", "Orbite"))
+    for k, (q, qn) in enumerate(_surface_spots(F, 5, phase=1.0)):
+        rig.add(geo.puff_cluster("Fumee_Volute", q + qn * 0.015 * s, 0.05 * s, P["smoke2"], count=3, seed=20 + k))
+        rig.add(geo.sphere("Etincelle_Sombre", q + qn * 0.045 * s, 0.014 * s, 8, 4, (1, 1, 1), P["glow"]))
     _emblems(F, P, "Croissant", [poly_crescent()], P["accent2"], 0.8, rot_deg=-25)
 
 
@@ -279,10 +315,10 @@ def deco_glace(F, P):
                        8, "Z", P["accent"])
         geo.transform(ic, geo.basis_z(p2 + Vector(n2) * 0.005 * s, -down))
         rig.add(ic)
-    for k, q in enumerate(_orbit_points(F, 5, phase=0.7)):
-        sh = geo.crystal("Eclat_Glace", 0.06 * s, 0.018 * s, P["accent"], sides=4)
-        geo.transform(sh, geo.basis_z(q, _tilted(Vector((0, 0, 1)), 35, 70 * k)))
-        rig.add(sh, ("bone", "Orbite"))
+    for k, (q, qn) in enumerate(_surface_spots(F, 5, phase=0.7)):
+        sh = geo.crystal("Eclat_Glace", 0.07 * s, 0.02 * s, P["accent"], sides=4)
+        geo.transform(sh, geo.basis_z(q - qn * 0.012 * s, _tilted(qn, 25, 70 * k)))
+        rig.add(sh)
     _emblems(F, P, "Flocon", poly_snowflake(), P["body2"], 0.9, offset=0.004, inner=None)
 
 
@@ -309,12 +345,13 @@ def deco_feu(F, P):
             fl = geo.flame("Flamme_Dos", h * s, 0.045 * s, P["accent"] if k == 0 else P["accent2"], bend=-0.2)
             geo.transform(fl, geo.basis_z(p2 - Vector(n2) * 0.02 * s + Vector((0, off * s, 0)), _tilted(n2, 20 * (k != 0), 0)))
             rig.add(fl)
-    for k, q in enumerate(_orbit_points(F, 6, phase=0.2, wobble=0.09)):
-        rig.add(geo.sphere("Braise", q, (0.022 if k % 2 else 0.015) * s, 10, 5, (1, 1, 1.2), P["glow"]), ("bone", "Orbite"))
-        if k % 2 == 0:
-            fl = geo.flame("Flammeche", 0.07 * s, 0.022 * s, P["accent"], seg=8, bend=0.3)
-            geo.transform(fl, geo.basis_z(q + Vector((0, 0, 0.02 * s)), (0, 0, 1)))
-            rig.add(fl, ("bone", "Orbite"))
+    for k, (q, qn) in enumerate(_surface_spots(F, 6, phase=0.2)):
+        if k % 2:
+            rig.add(geo.sphere("Braise", q + qn * 0.008 * s, 0.02 * s, 10, 5, (1, 1, 1), P["glow"]))
+        else:
+            fl = geo.flame("Flammeche", 0.08 * s, 0.025 * s, P["accent"], seg=8, bend=0.3)
+            geo.transform(fl, geo.basis_z(q - qn * 0.006 * s, qn))
+            rig.add(fl)
     _emblems(F, P, "Flamme_Motif", [poly_flame()], P["accent"], 0.95, inner=([poly_flame()], P["accent2"], 0.55))
     # chaleur : bandeau orange sous l'équateur
     pts = _path_offset(F.band, lambda u: 0.0, 0.004 * s)
@@ -336,15 +373,17 @@ def deco_eau(F, P):
         pts = _path_offset(F.band, lambda u, o=off: (0.028 * math.sin(TAU * 9 * u) - o) * s, 0.006 * s)
         rig.add(geo.tube("Vague", pts + [pts[0]], rad * s, 6, mat, caps=False))
     rnd = random.Random(5)
-    for k, q in enumerate(_orbit_points(F, 7, phase=0.5, wobble=0.12)):
-        r = rnd.uniform(0.03, 0.06) * s
-        rig.add(geo.sphere("Bulle", q, r, 14, 8, (1, 1, 1), P["glow"]), ("bone", "Orbite"))
-        rig.add(geo.sphere("Bulle_Reflet", q + Vector((-0.4, 0.5, 0.55)).normalized() * r * 0.72, r * 0.22, 8, 4,
-                           (1, 1, 1), P["shine"]), ("bone", "Orbite"))
+    for k, (q, qn) in enumerate(_surface_spots(F, 7, phase=0.5)):
+        r = rnd.uniform(0.025, 0.045) * s
+        c = q + qn * (r * 0.45)
+        rig.add(geo.sphere("Bulle", c, r, 12, 6, (1, 1, 1), P["glow"]))
+        rig.add(geo.sphere("Bulle_Reflet", c + (qn + Vector((-0.4, 0.3, 0.6))).normalized() * r * 0.9, r * 0.22, 8, 4,
+                           (1, 1, 1), P["shine"]))
     for k, (p2, n2) in enumerate(F.under):
-        q = p2 + Vector(n2) * 0.02 * s + Vector((0, 0, -0.07 if k % 2 == 0 else -0.04)) * s
-        d = geo.teardrop("Gouttelette", 0.022 * s, P["accent"])
-        geo.transform(d, Matrix.Translation(q))
+        R = (0.024 if k % 2 == 0 else 0.018) * s
+        # goutte qui perle sous le ballon : sa pointe reste plantée dans l'enveloppe
+        d = geo.teardrop("Gouttelette", R, P["accent"])
+        geo.transform(d, Matrix.Translation(Vector(p2) - Vector((0, 0, R * 1.2))))
         rig.add(d)
     _emblems(F, P, "Goutte_Motif", [poly_drop()], P["body2"], 0.85, inner=([ellipse(-0.18, -0.2, 0.18, 0.28, 10, 0.4)], P["shine"], 1.0))
 
@@ -410,11 +449,10 @@ def deco_eclair(F, P):
     for i in range(0, len(pts), max(1, len(pts) // 24)):
         zig.append(pts[i])
     rig.add(geo.tube("Zigzag", zig + [zig[0]], 0.012 * s, 6, P["body2"], caps=False, smooth=False))
-    for k, q in enumerate(_orbit_points(F, 6, phase=0.1, wobble=0.1)):
+    for k, (q, qn) in enumerate(_surface_spots(F, 6, phase=0.1)):
         sp = geo.star3d("Etincelle", (0.05 if k % 2 == 0 else 0.035) * s, 0.012 * s, 0.012 * s, P["glow"], n=4)
-        face_dir = ((q - F.orbit[0]).normalized() + Vector((0, 0.8, 0))).normalized()
-        geo.transform(sp, geo.basis_z(q, face_dir) @ geo.rot((0, 0, 1), 30 * k))
-        rig.add(sp, ("bone", "Orbite"))
+        geo.transform(sp, geo.basis_z(q + qn * 0.006 * s, qn) @ geo.rot((0, 0, 1), 30 * k))
+        rig.add(sp)
     _emblems(F, P, "Eclair_Motif", [poly_bolt()], P["body2"], 0.9)
 
 
