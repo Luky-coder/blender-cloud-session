@@ -15,7 +15,7 @@ OUT = os.path.join(HERE, "World_2_Desert")
 from desert import core  # noqa: E402
 from desert.elements import ELEMENTS, ORDER  # noqa: E402
 
-FAMS = [("cactus", ORDER), ("pyramid", ORDER), ("airship", ORDER), ("scarab", ["Plante"]), ("oasis", ["Plante"])]
+FAMS = [("cactus", ORDER), ("pyramid", ORDER), ("airship", ORDER), ("scarab", ["Plante", "Feu"]), ("oasis", ["Plante", "Feu"])]
 ROLES = list(core.ELEMENT_ROLES) + ["or", "sable", "ocre", "cuir", "turquoise", "terre"]
 
 
@@ -61,12 +61,12 @@ def main():
                         f"\n\nActions : {act_txt}.\n")
         for e in elems:
             if fam.boss_file:
-                stem = fam.boss_file
+                stem = fam.boss_file.format(elem=e)
                 blend, fbx, prev = f"Blender/{stem}.blend", f"FBX/{stem}.fbx", f"Previews/{stem}"
             else:
                 blend, fbx = f"Blender/{fam.key}/{e}.blend", f"FBX/{fam.key}/{e}.fbx"
                 prev = f"Previews/{fam.key}/{e}"
-            rows.append(f"| {fam.label} {ELEMENTS[e]['label'] if not fam.boss_file else '(Plante)'} | "
+            rows.append(f"| {fam.label} {ELEMENTS[e]['label'] if not fam.boss_file else '(' + ELEMENTS[e]['label'] + ')'} | "
                         f"{ELEMENTS[e]['label']} | {fam.pv} | [`.blend`]({blend}) · [`.fbx`]({fbx}) | "
                         f"[vues]({prev}.jpg) · [anim]({prev}_anim.jpg) |")
             sections.append(f"![{fam.short} {e}]({prev}.jpg)\n")
@@ -79,10 +79,10 @@ def main():
 
     text = f"""# Monde 2 — Le Désert des Ballons Perdus
 
-23 ennemis gonflables (cartoon 3D, plastique brillant, coutures, valves) : 3 familles × 7 types élémentaires,
+25 ennemis gonflables (cartoon 3D, plastique brillant, coutures, valves) : 3 familles × 7 types élémentaires,
 le mini-boss **Scaraballon** et le boss final **Grand Ballon Oasis**. Chaque ennemi est un modèle indépendant
 (1 armature + 1 maillage skinné à matériau unique), avec 2 animations : **Fly** (vol, en boucle) et **Attack**
-(coup physique vers l'avant). Le contrôle automatique des 23 FBX est dans [VERIFICATION.md](VERIFICATION.md).
+(coup physique vers l'avant). Le contrôle automatique des 25 FBX est dans [VERIFICATION.md](VERIFICATION.md).
 
 ## Fichiers
 

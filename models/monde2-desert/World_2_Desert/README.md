@@ -1,9 +1,9 @@
 # Monde 2 — Le Désert des Ballons Perdus
 
-23 ennemis gonflables (cartoon 3D, plastique brillant, coutures, valves) : 3 familles × 7 types élémentaires,
+25 ennemis gonflables (cartoon 3D, plastique brillant, coutures, valves) : 3 familles × 7 types élémentaires,
 le mini-boss **Scaraballon** et le boss final **Grand Ballon Oasis**. Chaque ennemi est un modèle indépendant
 (1 armature + 1 maillage skinné à matériau unique), avec 2 animations : **Fly** (vol, en boucle) et **Attack**
-(coup physique vers l'avant). Le contrôle automatique des 23 FBX est dans [VERIFICATION.md](VERIFICATION.md).
+(coup physique vers l'avant). Le contrôle automatique des 25 FBX est dans [VERIFICATION.md](VERIFICATION.md).
 
 ## Fichiers
 
@@ -45,7 +45,9 @@ World_2_Desert/
 | Dirigeable du Désert Plante | Plante | 55 | [`.blend`](Blender/Dirigeable_Desert/Plante.blend) · [`.fbx`](FBX/Dirigeable_Desert/Plante.fbx) | [vues](Previews/Dirigeable_Desert/Plante.jpg) · [anim](Previews/Dirigeable_Desert/Plante_anim.jpg) |
 | Dirigeable du Désert Éclair | Éclair | 55 | [`.blend`](Blender/Dirigeable_Desert/Eclair.blend) · [`.fbx`](FBX/Dirigeable_Desert/Eclair.fbx) | [vues](Previews/Dirigeable_Desert/Eclair.jpg) · [anim](Previews/Dirigeable_Desert/Eclair_anim.jpg) |
 | Le Scaraballon (mini-boss) (Plante) | Plante | 450 | [`.blend`](Blender/MiniBoss_Scaraballon_Plante.blend) · [`.fbx`](FBX/MiniBoss_Scaraballon_Plante.fbx) | [vues](Previews/MiniBoss_Scaraballon_Plante.jpg) · [anim](Previews/MiniBoss_Scaraballon_Plante_anim.jpg) |
+| Le Scaraballon (mini-boss) (Feu) | Feu | 450 | [`.blend`](Blender/MiniBoss_Scaraballon_Feu.blend) · [`.fbx`](FBX/MiniBoss_Scaraballon_Feu.fbx) | [vues](Previews/MiniBoss_Scaraballon_Feu.jpg) · [anim](Previews/MiniBoss_Scaraballon_Feu_anim.jpg) |
 | Le Grand Ballon Oasis (boss final) (Plante) | Plante | 1800 | [`.blend`](Blender/Boss_Grand_Ballon_Oasis_Plante.blend) · [`.fbx`](FBX/Boss_Grand_Ballon_Oasis_Plante.fbx) | [vues](Previews/Boss_Grand_Ballon_Oasis_Plante.jpg) · [anim](Previews/Boss_Grand_Ballon_Oasis_Plante_anim.jpg) |
+| Le Grand Ballon Oasis (boss final) (Feu) | Feu | 1800 | [`.blend`](Blender/Boss_Grand_Ballon_Oasis_Feu.blend) · [`.fbx`](FBX/Boss_Grand_Ballon_Oasis_Feu.fbx) | [vues](Previews/Boss_Grand_Ballon_Oasis_Feu.jpg) · [anim](Previews/Boss_Grand_Ballon_Oasis_Feu_anim.jpg) |
 
 ## Conventions techniques
 
@@ -180,6 +182,8 @@ Actions : `Fly` (60 im., boucle), `Attack` (50 im.).
 
 ![Scaraballon Plante](Previews/MiniBoss_Scaraballon_Plante.jpg)
 
+![Scaraballon Feu](Previews/MiniBoss_Scaraballon_Feu.jpg)
+
 
 ### Le Grand Ballon Oasis (boss final) — PV 1800
 
@@ -188,4 +192,6 @@ Immense dirigeable gonflable portant une oasis volante : enveloppe verte à 12 f
 Actions : `Fly` (60 im., boucle), `Attack` (60 im.).
 
 ![Oasis Plante](Previews/Boss_Grand_Ballon_Oasis_Plante.jpg)
+
+![Oasis Feu](Previews/Boss_Grand_Ballon_Oasis_Feu.jpg)
 

@@ -1,4 +1,4 @@
-"""Vérifie les 23 ennemis : .blend et FBX ré-importés.
+"""Vérifie les 25 ennemis : .blend et FBX ré-importés.
 
     blender -b --factory-startup --python-exit-code 1 -P models/monde2-desert/verify_fbx.py
 

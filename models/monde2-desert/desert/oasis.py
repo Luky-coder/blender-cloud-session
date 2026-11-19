@@ -1,4 +1,4 @@
-"""BOSS FINAL - LE GRAND BALLON OASIS (type Plante, PV 1800).
+"""BOSS FINAL - LE GRAND BALLON OASIS (types Plante et Feu, PV 1800).
 
 Immense dirigeable gonflable portant une oasis volante : enveloppe verte à 12 fuseaux, bandes dorées et
 turquoise à losanges berbères, frise de hiéroglyphes dorés, visage de boss sur le nez ; sur le dos, une
@@ -57,7 +57,7 @@ class Oasis(Family):
     key = "Grand_Ballon_Oasis"
     short = "Oasis"
     label = "Le Grand Ballon Oasis (boss final)"
-    boss_file = "Boss_Grand_Ballon_Oasis_Plante"
+    boss_file = "Boss_Grand_Ballon_Oasis_{elem}"
     pv = 1800
     surface_parts = ("Enveloppe",)
     crown = dict(loc=(1.05, 2.55, ZC + 2.4), size=0.95)
@@ -96,6 +96,16 @@ class Oasis(Family):
             b.append((f"Cactus_{k + 1}", (x, y, 0), "Root"))
         self.BONES = b
         self.HEAD = {n: Vector(h) for n, h, _ in b}
+
+    def restyle(self, parts, mats, elem):
+        """Version Feu : le bassin et la réserve d'eau deviennent de la lave."""
+        if elem != "Feu":
+            return
+        for o in parts:
+            if o.name.startswith(("Bassin_Eau", "Bassin_Lis", "Reserve_Eau", "Reserve_Goutte")):
+                for i, m in enumerate(o.data.materials):
+                    if m and m.name.endswith("_turquoise"):
+                        o.data.materials[i] = mats["fx"]
 
     def body_weight(self, co):
         return core.gradient("y", [(-4.5, "Env_Back"), (-1.0, "Envelope"), (1.5, "Envelope"), (4.6, "Env_Front")])(co)

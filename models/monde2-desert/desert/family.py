@@ -32,7 +32,7 @@ class Family:
     face_frame = dict(center=(0, 0, 1))
     face_params = {}
     face_bone = "Body_Top"
-    boss_file = None       # boss : nom de fichier unique (sinon <famille>/<type>)
+    boss_file = None       # boss : modèle de nom de fichier, ex. "MiniBoss_X_{elem}" (sinon <famille>/<type>)
     # images montrées dans la planche d'animation des aperçus
     anim_frames = {"Fly": (1, 31), "Attack": (10, 15, 18)}
     anim_cols = 5
@@ -54,6 +54,9 @@ class Family:
 
     def body_weight(self, co):
         return {"Body": 1.0}
+
+    def restyle(self, parts, mats, elem):
+        """Ajustements de matériaux propres à un type (avant fusion des pièces)."""
 
     def deflate(self, co):
         return co
@@ -294,6 +297,7 @@ def assemble(fam, elem, ref_path, extra_parts=None, animate=True):
     bvh = core.bvh_of([o for o in parts if o.name in fam.surface_parts])
     fam.face(B, bvh, E["face"])
     fam.add_element(B, elem, bvh)
+    fam.restyle(parts + B.parts, mats, elem)
     if extra_parts:
         extra_parts(B, bvh)
     mesh = core.join(parts + B.parts, name + "_Mesh")

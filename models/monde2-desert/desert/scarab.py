@@ -1,4 +1,4 @@
-"""MINI-BOSS - LE SCARABALLON (type Plante, PV 450).
+"""MINI-BOSS - LE SCARABALLON (types Plante et Feu, PV 450).
 
 Énorme scarabée entièrement gonflable : grande carapace verte à élytres côtelés et bordure dorée,
 pronotum doré, tête expressive, deux antennes à bourgeons, deux ailes-feuilles décoratives, six pattes
@@ -45,7 +45,7 @@ class Scarab(Family):
     key = "Scaraballon"
     short = "Scaraballon"
     label = "Le Scaraballon (mini-boss)"
-    boss_file = "MiniBoss_Scaraballon_Plante"
+    boss_file = "MiniBoss_Scaraballon_{elem}"
     pv = 450
     surface_parts = ("Carapace", "Pronotum", "Tete")
     crown = dict(loc=(0, -0.3, SZ + 0.83), size=0.5)

@@ -1,4 +1,4 @@
-"""Export Roblox des 23 ennemis du Monde 2, à partir des .blend de World_2_Desert/Blender.
+"""Export Roblox des 25 ennemis du Monde 2, à partir des .blend de World_2_Desert/Blender.
 
     blender -b --factory-startup --python-exit-code 1 -P models/monde2-desert/export_roblox.py
 

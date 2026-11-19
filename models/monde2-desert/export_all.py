@@ -35,8 +35,8 @@ FAMILIES = {  # clé : (module, types)
     "cactus": ("cactus", ORDER),
     "pyramide": ("pyramid", ORDER),
     "dirigeable": ("airship", ORDER),
-    "scaraballon": ("scarab", ["Plante"]),
-    "oasis": ("oasis", ["Plante"]),
+    "scaraballon": ("scarab", ["Plante", "Feu"]),
+    "oasis": ("oasis", ["Plante", "Feu"]),
 }
 
 
@@ -48,7 +48,7 @@ def load_family(key):
 
 def paths(fam, elem):
     if getattr(fam, "boss_file", None):
-        stem = fam.boss_file
+        stem = fam.boss_file.format(elem=elem)
         return (os.path.join(OUT, "Blender", stem + ".blend"), os.path.join(OUT, "FBX", stem + ".fbx"),
                 os.path.join(OUT, "Previews", stem))
     return (os.path.join(OUT, "Blender", fam.key, elem + ".blend"),
@@ -129,7 +129,7 @@ def main():
         for e in elems:
             t1 = time.time()
             blend, fbx, stem = paths(fam, e)
-            tex = os.path.join(OUT, "Textures", fam.boss_file or fam.key)
+            tex = os.path.join(OUT, "Textures", fam.boss_file.format(elem=e) if fam.boss_file else fam.key)
             rig, mesh, key, acts = family.build_variant(fam, e, ref, blend, fbx, tex)
             nv, nf = len(mesh.data.vertices), sum(len(pp.vertices) - 2 for pp in mesh.data.polygons)
             print(f"[monde2] {fam.key}/{e} : {nv} sommets, {nf} triangles, {len(acts)} actions, "

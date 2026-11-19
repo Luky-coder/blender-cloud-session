@@ -1,6 +1,6 @@
 # Vérification de l'export Roblox (FBX ré-importés)
 
-Généré par `verify_roblox.py`. 23 ennemis, 0 erreur(s).
+Généré par `verify_roblox.py`. 25 ennemis, 0 erreur(s).
 
 | Ennemi | Statut |
 |---|---|
@@ -18,6 +18,7 @@ Généré par `verify_roblox.py`. 23 ennemis, 0 erreur(s).
 | Ballon_Pyramide/Lumiere | OK |
 | Ballon_Pyramide/Plante | OK |
 | Ballon_Pyramide/Tenebres | OK |
+| Boss_Grand_Ballon_Oasis_Feu | OK |
 | Boss_Grand_Ballon_Oasis_Plante | OK |
 | Dirigeable_Desert/Eau | OK |
 | Dirigeable_Desert/Eclair | OK |
@@ -26,6 +27,7 @@ Généré par `verify_roblox.py`. 23 ennemis, 0 erreur(s).
 | Dirigeable_Desert/Lumiere | OK |
 | Dirigeable_Desert/Plante | OK |
 | Dirigeable_Desert/Tenebres | OK |
+| MiniBoss_Scaraballon_Feu | OK |
 | MiniBoss_Scaraballon_Plante | OK |
 
 ### Ballon_Cactus/Eau
@@ -112,6 +114,12 @@ Généré par `verify_roblox.py`. 23 ennemis, 0 erreur(s).
 - Pyramide_Tenebres_Attack [2-41] : déplacement max 0.73 m, échelle max 0.0000, avancée 0.72 m
 - Pyramide_Tenebres_Fly [2-61] : déplacement max 0.13 m, échelle max 0.0000
 
+### Boss_Grand_Ballon_Oasis_Feu
+
+- modèle : 14744 triangles, 32 os, 1 matériau, 2 os max par sommet, taille 7.80 × 13.53 × 11.48 m (≈ 41.0 studs de haut)
+- Oasis_Feu_Attack [2-61] : déplacement max 3.29 m, échelle max 0.0000, avancée 3.24 m
+- Oasis_Feu_Fly [2-61] : déplacement max 0.26 m, échelle max 0.0000
+
 ### Boss_Grand_Ballon_Oasis_Plante
 
 - modèle : 15312 triangles, 32 os, 1 matériau, 2 os max par sommet, taille 7.80 × 13.53 × 11.48 m (≈ 41.0 studs de haut)
@@ -159,6 +167,12 @@ Généré par `verify_roblox.py`. 23 ennemis, 0 erreur(s).
 - modèle : 12076 triangles, 11 os, 1 matériau, 2 os max par sommet, taille 1.72 × 2.77 × 2.36 m (≈ 8.4 studs de haut)
 - Dirigeable_Tenebres_Attack [2-41] : déplacement max 0.93 m, échelle max 0.0000, avancée 0.92 m
 - Dirigeable_Tenebres_Fly [2-31] : déplacement max 0.11 m, échelle max 0.0000
+
+### MiniBoss_Scaraballon_Feu
+
+- modèle : 13612 triangles, 20 os, 1 matériau, 2 os max par sommet, taille 2.81 × 4.46 × 2.34 m (≈ 8.4 studs de haut)
+- Scaraballon_Feu_Attack [2-51] : déplacement max 1.98 m, échelle max 0.0000, avancée 1.98 m
+- Scaraballon_Feu_Fly [2-61] : déplacement max 0.09 m, échelle max 0.0000
 
 ### MiniBoss_Scaraballon_Plante
 

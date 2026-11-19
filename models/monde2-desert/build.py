@@ -1,5 +1,5 @@
-"""Monde 2 « Le Désert des Ballons Perdus » : planche de présentation des 23 ennemis gonflables (21 mobs en
-7 types élémentaires, le mini-boss Scaraballon et le boss Grand Ballon Oasis), posés en rangs, avant vers +Y.
+"""Monde 2 « Le Désert des Ballons Perdus » : planche de présentation des 25 ennemis gonflables (21 mobs en
+7 types élémentaires, le mini-boss Scaraballon et le boss Grand Ballon Oasis, chacun en Plante et en Feu), posés en rangs, avant vers +Y.
 Les fichiers de jeu (23 .blend animés + 23 FBX) sont produits par export_all.py dans World_2_Desert/ :
 ce .blend-ci n'est qu'une vitrine sans animations.
 """
@@ -47,4 +47,11 @@ rig, *_ = family.assemble(oasis.FAMILY, "Plante", refs[oasis.FAMILY.key], animat
 idle_pose(oasis.FAMILY, rig)
 rig.location = (4.5, -15.0, -0.5)
 rig.rotation_euler = (0.0, 0.0, -math.pi / 2)  # le boss de profil, nez vers +X, derrière les rangs
+rig, *_ = family.assemble(scarab.FAMILY, "Feu", refs[scarab.FAMILY.key], animate=False)
+idle_pose(scarab.FAMILY, rig)
+rig.location = (-3.5, -11.0, 0.0)
+rig, *_ = family.assemble(oasis.FAMILY, "Feu", refs[oasis.FAMILY.key], animate=False)
+idle_pose(oasis.FAMILY, rig)
+rig.location = (4.5, -24.0, -0.5)
+rig.rotation_euler = (0.0, 0.0, -math.pi / 2)
 bpy.context.view_layer.update()

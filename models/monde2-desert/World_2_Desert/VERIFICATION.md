@@ -1,6 +1,6 @@
 # Vérification des 23 ennemis (.blend et FBX ré-importés)
 
-Généré par `verify_fbx.py` avec Blender 5.2.3 LTS. 23 modèles, 0 erreur(s).
+Généré par `verify_fbx.py` avec Blender 5.2.3 LTS. 25 modèles, 0 erreur(s).
 
 | Modèle | PV | Os | Sommets | Triangles | Animations | Statut |
 |---|---|---|---|---|---|---|
@@ -18,6 +18,7 @@ Généré par `verify_fbx.py` avec Blender 5.2.3 LTS. 23 modèles, 0 erreur(s).
 | Ballon_Pyramide/Lumiere | 45 | 13 | 6040 | 11528 | 2 (Fly, Attack) | OK |
 | Ballon_Pyramide/Plante | 45 | 13 | 6492 | 12460 | 2 (Fly, Attack) | OK |
 | Ballon_Pyramide/Tenebres | 45 | 13 | 6324 | 12144 | 2 (Fly, Attack) | OK |
+| Boss_Grand_Ballon_Oasis_Feu | 1800 | 32 | 7658 | 14744 | 2 (Fly, Attack) | OK |
 | Boss_Grand_Ballon_Oasis_Plante | 1800 | 32 | 7964 | 15312 | 2 (Fly, Attack) | OK |
 | Dirigeable_Desert/Eau | 55 | 11 | 5954 | 11680 | 2 (Fly, Attack) | OK |
 | Dirigeable_Desert/Eclair | 55 | 11 | 5644 | 11080 | 2 (Fly, Attack) | OK |
@@ -26,6 +27,7 @@ Généré par `verify_fbx.py` avec Blender 5.2.3 LTS. 23 modèles, 0 erreur(s).
 | Dirigeable_Desert/Lumiere | 55 | 11 | 5898 | 11524 | 2 (Fly, Attack) | OK |
 | Dirigeable_Desert/Plante | 55 | 11 | 6316 | 12368 | 2 (Fly, Attack) | OK |
 | Dirigeable_Desert/Tenebres | 55 | 11 | 6162 | 12076 | 2 (Fly, Attack) | OK |
+| MiniBoss_Scaraballon_Feu | 450 | 20 | 6988 | 13612 | 2 (Fly, Attack) | OK |
 | MiniBoss_Scaraballon_Plante | 450 | 20 | 7294 | 14180 | 2 (Fly, Attack) | OK |
 
 ## Détail
@@ -128,6 +130,13 @@ Généré par `verify_fbx.py` avec Blender 5.2.3 LTS. 23 modèles, 0 erreur(s).
 - Pyramide_Tenebres_Fly [1-60] : déplacement max 0.13 m
 - FBX : 1 matériau, texture-palette incluse (256×128 px), couleurs de sommets, taille 3.80 m (diagonale)
 
+### Boss_Grand_Ballon_Oasis_Feu
+
+- Oasis_Feu_Fly : boucle 1-60, écart image N+1 / image 1 = 0.0000
+- Oasis_Feu_Attack [1-60] : déplacement max 3.29 m, avancée 3.24 m
+- Oasis_Feu_Fly [1-60] : déplacement max 0.26 m
+- FBX : 1 matériau, texture-palette incluse (256×128 px), couleurs de sommets, taille 19.47 m (diagonale)
+
 ### Boss_Grand_Ballon_Oasis_Plante
 
 - Oasis_Plante_Fly : boucle 1-60, écart image N+1 / image 1 = 0.0000
@@ -183,6 +192,13 @@ Généré par `verify_fbx.py` avec Blender 5.2.3 LTS. 23 modèles, 0 erreur(s).
 - Dirigeable_Tenebres_Attack [1-40] : déplacement max 0.93 m, avancée 0.92 m
 - Dirigeable_Tenebres_Fly [1-30] : déplacement max 0.11 m
 - FBX : 1 matériau, texture-palette incluse (256×128 px), couleurs de sommets, taille 4.01 m (diagonale)
+
+### MiniBoss_Scaraballon_Feu
+
+- Scaraballon_Feu_Fly : boucle 1-60, écart image N+1 / image 1 = 0.0000
+- Scaraballon_Feu_Attack [1-50] : déplacement max 1.98 m, avancée 1.98 m
+- Scaraballon_Feu_Fly [1-60] : déplacement max 0.09 m
+- FBX : 1 matériau, texture-palette incluse (256×128 px), couleurs de sommets, taille 5.39 m (diagonale)
 
 ### MiniBoss_Scaraballon_Plante
 
