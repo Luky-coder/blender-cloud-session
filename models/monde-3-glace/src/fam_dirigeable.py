@@ -279,6 +279,11 @@ def build(elem):
             p.set("Cabine", rot=(8 + 2 * A.osc(t, 40, 0.6, 2), 2 * A.osc(t, 40, 1.0), 0))
             p.set("Ailerons", rot=(4 * A.osc(t, 40, 0.4, 2), 0, 3 * A.osc(t, 40, 0.2)))
             p.set("Queue", rot=(0, 0, 2.5 * A.osc(t, 40, 0.0)))
+        elif name == "FLY":
+            spin = 360 * 12 * t / 60
+            p.set("Cabine", rot=(10 + 3 * A.osc(t, 60, 0.6, 2), -8 * A.osc(t, 60, 0.3), 0))
+            p.set("Ailerons", rot=(5 * A.osc(t, 60, 0.4, 2), 0, -8 * A.osc(t, 60, 0.2)))
+            p.set("Queue", rot=(0, 0, -4 * A.osc(t, 60, 0.6)))
         elif name == "HIT":
             spin = A.track(t, [(0, 0), (3, -60), (18, 200)])
             p.set("Cabine", rot=(A.track(t, [(0, 0), (3, -18), (8, 12), (13, -5), (18, 0)]), A.decay(t, 2, 16, 2.5, 10), 0))

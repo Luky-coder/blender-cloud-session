@@ -1,0 +1,284 @@
+{
+ "name": "MiniBoss_Pin_Gonflable_Eau",
+ "title": "Le Pin Gonflable",
+ "family": "Mini-boss Pin Gonflable",
+ "element": "Eau",
+ "hp": 900,
+ "blend": "Blender/MiniBoss_Pin_Gonflable_Eau.blend",
+ "fbx": "FBX/MiniBoss_Pin_Gonflable_Eau.fbx",
+ "dims": [
+  4.033,
+  5.662,
+  5.008
+ ],
+ "bones": 31,
+ "deform_bones": 30,
+ "shape_keys": [
+  "Respiration",
+  "Impact",
+  "Degonfle"
+ ],
+ "actions": [
+  {
+   "name": "IDLE",
+   "frames": 61,
+   "loop": true,
+   "seconds": 2.0
+  },
+  {
+   "name": "MOVE",
+   "frames": 41,
+   "loop": true,
+   "seconds": 1.33
+  },
+  {
+   "name": "FLY",
+   "frames": 61,
+   "loop": true,
+   "seconds": 2.0
+  },
+  {
+   "name": "ATTACK",
+   "frames": 45,
+   "loop": false,
+   "seconds": 1.47
+  },
+  {
+   "name": "HIT",
+   "frames": 21,
+   "loop": false,
+   "seconds": 0.67
+  },
+  {
+   "name": "DEATH",
+   "frames": 81,
+   "loop": false,
+   "seconds": 2.67
+  },
+  {
+   "name": "ATTACK_PommesDePin",
+   "frames": 46,
+   "loop": false,
+   "seconds": 1.5
+  },
+  {
+   "name": "ATTACK_Racines",
+   "frames": 56,
+   "loop": false,
+   "seconds": 1.83
+  },
+  {
+   "name": "ATTACK_ChuteNeige",
+   "frames": 46,
+   "loop": false,
+   "seconds": 1.5
+  },
+  {
+   "name": "PHASE2_Deploiement",
+   "frames": 61,
+   "loop": false,
+   "seconds": 2.0
+  },
+  {
+   "name": "IDLE_Phase2",
+   "frames": 61,
+   "loop": true,
+   "seconds": 2.0
+  }
+ ],
+ "materials": {
+  "Tronc_Gonflable": {
+   "base_color": "#2E5E82",
+   "roughness": 0.3,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Sapin_Liseré": {
+   "base_color": "#0F3A6B",
+   "roughness": 0.25,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Neige": {
+   "base_color": "#F4FAFF",
+   "roughness": 0.35,
+   "metallic": 0.0,
+   "coat": 0.3,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Sapin_Abysse": {
+   "base_color": "#1B5EA8",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Or": {
+   "base_color": "#E8B43A",
+   "roughness": 0.22,
+   "metallic": 0.9,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Perle": {
+   "base_color": "#EAF8FF",
+   "roughness": 0.1,
+   "metallic": 0.3,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Sapin_Lagon": {
+   "base_color": "#38C3D3",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Lueur": {
+   "base_color": "#7FF1FF",
+   "roughness": 0.3,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": "#7FF1FF",
+   "emission_strength": 3.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Oeil": {
+   "base_color": "#FFFFFF",
+   "roughness": 0.15,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Pupille": {
+   "base_color": "#08223F",
+   "roughness": 0.1,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Blanc": {
+   "base_color": "#FFFFFF",
+   "roughness": 0.15,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Bouche": {
+   "base_color": "#0B2A4F",
+   "roughness": 0.4,
+   "metallic": 0.0,
+   "coat": 0.2,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Langue": {
+   "base_color": "#FF6F8E",
+   "roughness": 0.25,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Pomme_de_Pin": {
+   "base_color": "#8B5A2B",
+   "roughness": 0.35,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Valve_Argent": {
+   "base_color": "#C7D2DC",
+   "roughness": 0.22,
+   "metallic": 0.85,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Algue": {
+   "base_color": "#27B597",
+   "roughness": 0.22,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Déco": {
+   "base_color": "#8EE9FF",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Déco_2": {
+   "base_color": "#FFFFFF",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Bulle": {
+   "base_color": "#B5F4FF",
+   "roughness": 0.03,
+   "metallic": 0.0,
+   "coat": 1.0,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.7
+  }
+ },
+ "verts": 48150,
+ "tris": 95160,
+ "seconds": 159.5
+}

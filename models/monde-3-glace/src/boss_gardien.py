@@ -1,7 +1,7 @@
-"""Boss final — Le Grand Gardien des Glaciers (type Plante, PV 3000).
+"""Boss final — Le Grand Gardien des Glaciers (type Glace, PV 3000).
 
 Gigantesque dirigeable végétal gonflable inspiré d'un ancien arbre gelé : enveloppe-tronc de près
-de 10 m à écorce côtelée (vert-turquoise) cerclée de sangles dorées, visage ancien sur la proue,
+de 10 m à écorce côtelée bleu glacier, houppiers givrés hérissés de cristaux cerclée de sangles dorées, visage ancien sur la proue,
 cœur végétal lumineux dans une cage dorée sous le menton, trois grandes branches gonflables
 portant des houppiers enneigés, racines pendantes, lianes, cristaux de glace turquoise, givre et
 stalactites, quatre hélices latérales à pales-feuilles et une grande hélice de queue, ailerons-feuilles.
@@ -50,16 +50,17 @@ def env(t, ph, off=0.0, bark=True):
     return V((r * math.cos(ph), y, ZC + r * math.sin(ph))) + n * off, n
 
 
-def materials():
-    mats = E.materials("plante")
-    mats["main"] = L.mat("Ecorce_Gelee", "#2E8C76", 0.22)
-    mats["second"] = L.mat("Feuillage", "#5EC452", 0.2)
-    mats["leaf_dark"] = L.mat("Feuillage_Sombre", "#2F8A3E", 0.2)
-    mats["accent"] = L.mat("Ecorce_Liseré", "#1C5A48", 0.25)
-    mats["root"] = L.mat("Racine_Gonflable", "#6E5434", 0.3)
-    mats["turq"] = L.mat("Cristal_Turquoise", "#3FD8D0", 0.06, coat=1.0, transmission=0.4)
-    mats["heart"] = L.mat("Coeur_Vegetal", "#D6FF6E", 0.2, emit="#C8FF5A", strength=6.0)
-    mats["aura"] = L.mat("Aura_Coeur", "#B8FF7A", 0.3, emit="#B8FF7A", strength=3.0, alpha=0.35)
+def materials(elem="glace"):
+    """Palette Glace : écorce bleu glacier, feuillage givré blanc-bleu, cristaux cyan, cœur de glace lumineux."""
+    mats = E.materials("glace")
+    mats["main"] = L.mat("Ecorce_Gelee", "#6FB6D9", 0.2)
+    mats["second"] = L.mat("Feuillage_Givre", "#DDF3FF", 0.22)
+    mats["leaf_dark"] = L.mat("Feuillage_Glacier", "#8CCBE6", 0.2)
+    mats["accent"] = L.mat("Ecorce_Liseré", "#2D6E96", 0.25)
+    mats["root"] = L.mat("Racine_Gelee", "#7D93AE", 0.3)
+    mats["turq"] = L.mat("Cristal_Turquoise", "#3FD8E8", 0.06, coat=1.0, transmission=0.4)
+    mats["heart"] = L.mat("Coeur_de_Glace", "#BFF8FF", 0.2, emit="#7FEFFF", strength=6.0)
+    mats["aura"] = L.mat("Aura_Coeur", "#9FEFFF", 0.3, emit="#9FEFFF", strength=3.0, alpha=0.35)
     mats["deco"] = mats["second"]
     mats["deco_leaf"] = mats["second"]
     mats["eye"] = L.mat("Oeil_Ancien", "#FFFFFF", 0.15)
@@ -196,6 +197,8 @@ def build_geometry(m, mats):
               mats["main"], b)
         canopy(m, mats, tip, 0.85, b, i * 1.7)
         canopy(m, mats, ftip, 0.5, b, i * 2.3 + 1)
+        E.crystal_cluster(m, {"ice": mats["turq"], "deco": mats["ice"]}, tip + V((0, 0, 0.95)), V((0, 0, 1)),
+                          0.6, b, n=5, seed=i + 20)
         m.add(L.torus("bague_branche", base + V((0, 0, 0.35)), 0.5, 0.06, 32, 6), mats["gold"], b)
         E.crystal_cluster(m, mats, base + V((side.x * 0.55, 0.0, 0.25)), V((side.x, 0, 1)), 0.55, b, n=4, seed=i + 2)
         m.add(L.lumpy("neige_branche", pts[3] + V((0, 0, 0.3)), (0.32, 0.3, 0.12), amp=0.2, seed=i + 60, nu=12, nv=6),
@@ -358,6 +361,27 @@ def a_move(t):
     return p
 
 
+def a_fly(t):
+    """VOL : monte en altitude, hélices à plein régime, grands virages inclinés, branches et racines
+    rabattues par le vent."""
+    P = 60.0
+    p = base_pose(t, 360 * 14 * t / P, P=P)
+    p.set("Root", loc=(0.3 * osc(t, P, 0), 0, 1.4 + 0.2 * osc(t, P, 0.5, 2)))
+    p.set("Body", rot=(-7 + 2 * osc(t, P, 0.5, 2), 9 * osc(t, P, 0), 5 * osc(t, P, math.pi / 2)),
+          scl=(0.98, 1.05, 0.98))
+    p.set("Arriere", loc=(0, -0.12, 0), rot=(0, 0, -3 * osc(t, P, 0.4)))
+    p.set("Avant", scl=(1.02, 0.96, 1.02))
+    for i in range(3):
+        p.set(f"Branche_{i + 1}", rot=(16 + 4 * osc(t, P, i, 2), 5 * osc(t, P, i + 1), 0))
+    for i in range(5):
+        p.set(f"Racine_{i + 1}", rot=(30 + 6 * osc(t, P, i, 2), 5 * osc(t, P, i), 0))
+    for i in range(4):
+        p.add(f"Liane_{i + 1}", rot=(32, 0, 0))
+    p.set("Ailerons", rot=(6 * osc(t, P, 0.3, 2), 0, -7 * osc(t, P, 1.3)))
+    p.shapes(resp=0.25, impact=0.15)
+    return p
+
+
 def a_attack(t):
     """Éperonnage : recul, toutes hélices à fond, ruée de la proue, impact écrasé, rebond."""
     spin = track(t, [(0, 0, "lin"), (14, 900, "in"), (24, 2800, "lin"), (50, 4200, "out")])
@@ -517,6 +541,7 @@ def a_phase2(t):
 ACTIONS = {
     "IDLE": (61, True, lambda t: a_idle(t)),
     "MOVE": (41, True, a_move),
+    "FLY": (61, True, a_fly),
     "ATTACK": (51, False, a_attack),
     "HIT": (21, False, a_hit),
     "DEATH": (91, False, a_death),
@@ -529,9 +554,9 @@ ACTIONS = {
 }
 
 
-def build(elem="plante"):
-    m = L.Model("Boss_Gardien_Glaciers_Plante", "Le Grand Gardien des Glaciers")
-    mats = materials()
+def build(elem="glace"):
+    m = L.Model("Boss_Gardien_Glaciers_Glace", "Le Grand Gardien des Glaciers")
+    mats = materials(elem)
     build_geometry(m, mats)
     m.build(shape_amp=0.4, wrinkle=0.012)
     import anims

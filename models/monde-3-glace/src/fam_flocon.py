@@ -175,6 +175,8 @@ def build(elem):
                       scl=1 + 0.025 * A.osc(t, 60, ph, 2))
             elif name == "MOVE":
                 p.set(b, rot=_bend(k, 4 * A.osc(t, 40, ph, 2), -14 + 6 * A.osc(t, 40, ph, 2)))
+            elif name == "FLY":     # branches rabattues vers l'arrière, battement ample
+                p.set(b, rot=_bend(k, 6 * A.osc(t, 60, ph, 2), -20 + 9 * A.osc(t, 60, ph, 2)))
             elif name == "HIT":
                 p.set(b, rot=_bend(k, A.decay(t, 2, 15, 3.5, 12) * (1 if k % 2 else -1),
                                    A.track(t, [(0, 0), (2, -22), (6, 10), (11, -4), (18, 0)])))

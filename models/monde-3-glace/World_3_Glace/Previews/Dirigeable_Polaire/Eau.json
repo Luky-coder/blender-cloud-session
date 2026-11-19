@@ -32,6 +32,12 @@
    "seconds": 1.33
   },
   {
+   "name": "FLY",
+   "frames": 61,
+   "loop": true,
+   "seconds": 2.0
+  },
+  {
    "name": "ATTACK",
    "frames": 37,
    "loop": false,
@@ -214,5 +220,5 @@
  },
  "verts": 14616,
  "tris": 28764,
- "seconds": 108.9
+ "seconds": 90.4
 }

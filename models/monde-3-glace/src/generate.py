@@ -3,7 +3,7 @@
     blender -b --factory-startup -q --python-exit-code 1 -P src/generate.py -- <famille> <element> [options]
 
     famille : igloo | flocon | dirigeable | pin | gardien
-    element : lumiere | tenebres | glace | feu | eau | plante | eclair   (pin/gardien : plante)
+    element : lumiere | tenebres | glace | feu | eau | plante | eclair   (pin : eau, gardien : glace)
     options : --no-render   --no-sheet   --samples N   --out DOSSIER (défaut : World_3_Glace)
 """
 import argparse
@@ -30,7 +30,7 @@ import w3lib as L  # noqa: E402
 
 FAMILIES = {"igloo": "fam_igloo", "flocon": "fam_flocon", "dirigeable": "fam_dirigeable",
             "pin": "boss_pin", "gardien": "boss_gardien"}
-BOSS_FILES = {"pin": "MiniBoss_Pin_Gonflable_Plante", "gardien": "Boss_Gardien_Glaciers_Plante"}
+BOSS_FILES = {"pin": "MiniBoss_Pin_Gonflable_Eau", "gardien": "Boss_Gardien_Glaciers_Glace"}
 CORE_ACTIONS = ["IDLE", "MOVE", "ATTACK", "HIT", "DEATH"]
 
 

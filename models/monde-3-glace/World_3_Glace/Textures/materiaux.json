@@ -3091,172 +3091,10 @@
    "transmission": 0.0
   }
  },
- "MiniBoss_Pin_Gonflable_Plante": {
-  "Ecorce_Gonflable": {
-   "base_color": "#7A4A28",
-   "roughness": 0.3,
-   "metallic": 0.0,
-   "coat": 0.7,
-   "emission": null,
-   "emission_strength": 0.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Sapin_Liseré": {
-   "base_color": "#14472A",
-   "roughness": 0.25,
-   "metallic": 0.0,
-   "coat": 0.7,
-   "emission": null,
-   "emission_strength": 0.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Neige": {
-   "base_color": "#F4FAFF",
-   "roughness": 0.35,
-   "metallic": 0.0,
-   "coat": 0.3,
-   "emission": null,
-   "emission_strength": 0.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Sapin_Fonce": {
-   "base_color": "#1D6633",
-   "roughness": 0.2,
-   "metallic": 0.0,
-   "coat": 0.7,
-   "emission": null,
-   "emission_strength": 0.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Or": {
-   "base_color": "#E8B43A",
-   "roughness": 0.22,
-   "metallic": 0.9,
-   "coat": 0.7,
-   "emission": null,
-   "emission_strength": 0.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Boule_Turquoise": {
-   "base_color": "#2EC4C9",
-   "roughness": 0.12,
-   "metallic": 0.4,
-   "coat": 0.7,
-   "emission": null,
-   "emission_strength": 0.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Sapin_Clair": {
-   "base_color": "#58B24C",
-   "roughness": 0.2,
-   "metallic": 0.0,
-   "coat": 0.7,
-   "emission": null,
-   "emission_strength": 0.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Lueur": {
-   "base_color": "#D2FF8E",
-   "roughness": 0.3,
-   "metallic": 0.0,
-   "coat": 0.7,
-   "emission": "#D2FF8E",
-   "emission_strength": 3.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Oeil": {
-   "base_color": "#FFFFFF",
-   "roughness": 0.15,
-   "metallic": 0.0,
-   "coat": 0.7,
-   "emission": null,
-   "emission_strength": 0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Pupille": {
-   "base_color": "#10260F",
-   "roughness": 0.1,
-   "metallic": 0.0,
-   "coat": 0.7,
-   "emission": null,
-   "emission_strength": 0.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Blanc": {
-   "base_color": "#FFFFFF",
-   "roughness": 0.15,
-   "metallic": 0.0,
-   "coat": 0.7,
-   "emission": null,
-   "emission_strength": 0.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Bouche": {
-   "base_color": "#173A12",
-   "roughness": 0.4,
-   "metallic": 0.0,
-   "coat": 0.2,
-   "emission": null,
-   "emission_strength": 0.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Langue": {
-   "base_color": "#FF6F8E",
-   "roughness": 0.25,
-   "metallic": 0.0,
-   "coat": 0.7,
-   "emission": null,
-   "emission_strength": 0.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Pomme_de_Pin": {
-   "base_color": "#8B5A2B",
-   "roughness": 0.35,
-   "metallic": 0.0,
-   "coat": 0.7,
-   "emission": null,
-   "emission_strength": 0.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Valve_Argent": {
-   "base_color": "#C7D2DC",
-   "roughness": 0.22,
-   "metallic": 0.85,
-   "coat": 0.7,
-   "emission": null,
-   "emission_strength": 0.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  },
-  "Déco_2": {
-   "base_color": "#FFE15C",
-   "roughness": 0.18,
-   "metallic": 0.0,
-   "coat": 0.7,
-   "emission": null,
-   "emission_strength": 0.0,
-   "alpha": 1.0,
-   "transmission": 0.0
-  }
- },
- "Boss_Gardien_Glaciers_Plante": {
+ "Boss_Gardien_Glaciers_Glace": {
   "Ecorce_Gelee": {
-   "base_color": "#2E8C76",
-   "roughness": 0.22,
+   "base_color": "#6FB6D9",
+   "roughness": 0.2,
    "metallic": 0.0,
    "coat": 0.7,
    "emission": null,
@@ -3335,7 +3173,7 @@
    "transmission": 0.55
   },
   "Bouche": {
-   "base_color": "#173A12",
+   "base_color": "#123456",
    "roughness": 0.4,
    "metallic": 0.0,
    "coat": 0.2,
@@ -3354,8 +3192,8 @@
    "alpha": 1.0,
    "transmission": 0.0
   },
-  "Feuillage_Sombre": {
-   "base_color": "#2F8A3E",
+  "Feuillage_Glacier": {
+   "base_color": "#8CCBE6",
    "roughness": 0.2,
    "metallic": 0.0,
    "coat": 0.7,
@@ -3364,19 +3202,19 @@
    "alpha": 1.0,
    "transmission": 0.0
   },
-  "Coeur_Vegetal": {
-   "base_color": "#D6FF6E",
+  "Coeur_de_Glace": {
+   "base_color": "#BFF8FF",
    "roughness": 0.2,
    "metallic": 0.0,
    "coat": 0.7,
-   "emission": "#C8FF5A",
+   "emission": "#7FEFFF",
    "emission_strength": 6.0,
    "alpha": 1.0,
    "transmission": 0.0
   },
-  "Feuillage": {
-   "base_color": "#5EC452",
-   "roughness": 0.2,
+  "Feuillage_Givre": {
+   "base_color": "#DDF3FF",
+   "roughness": 0.22,
    "metallic": 0.0,
    "coat": 0.7,
    "emission": null,
@@ -3385,7 +3223,7 @@
    "transmission": 0.0
   },
   "Ecorce_Liseré": {
-   "base_color": "#1C5A48",
+   "base_color": "#2D6E96",
    "roughness": 0.25,
    "metallic": 0.0,
    "coat": 0.7,
@@ -3395,17 +3233,17 @@
    "transmission": 0.0
   },
   "Aura_Coeur": {
-   "base_color": "#B8FF7A",
+   "base_color": "#9FEFFF",
    "roughness": 0.3,
    "metallic": 0.0,
    "coat": 0.7,
-   "emission": "#B8FF7A",
+   "emission": "#9FEFFF",
    "emission_strength": 3.0,
    "alpha": 0.35,
    "transmission": 0.0
   },
   "Cristal_Turquoise": {
-   "base_color": "#3FD8D0",
+   "base_color": "#3FD8E8",
    "roughness": 0.06,
    "metallic": 0.0,
    "coat": 1.0,
@@ -3414,8 +3252,8 @@
    "alpha": 1.0,
    "transmission": 0.4
   },
-  "Racine_Gonflable": {
-   "base_color": "#6E5434",
+  "Racine_Gelee": {
+   "base_color": "#7D93AE",
    "roughness": 0.3,
    "metallic": 0.0,
    "coat": 0.7,
@@ -3425,7 +3263,7 @@
    "transmission": 0.0
   },
   "Déco_2": {
-   "base_color": "#FFE15C",
+   "base_color": "#E9FBFF",
    "roughness": 0.18,
    "metallic": 0.0,
    "coat": 0.7,
@@ -3433,6 +3271,198 @@
    "emission_strength": 0.0,
    "alpha": 1.0,
    "transmission": 0.0
+  }
+ },
+ "MiniBoss_Pin_Gonflable_Eau": {
+  "Tronc_Gonflable": {
+   "base_color": "#2E5E82",
+   "roughness": 0.3,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Sapin_Liseré": {
+   "base_color": "#0F3A6B",
+   "roughness": 0.25,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Neige": {
+   "base_color": "#F4FAFF",
+   "roughness": 0.35,
+   "metallic": 0.0,
+   "coat": 0.3,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Sapin_Abysse": {
+   "base_color": "#1B5EA8",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Or": {
+   "base_color": "#E8B43A",
+   "roughness": 0.22,
+   "metallic": 0.9,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Perle": {
+   "base_color": "#EAF8FF",
+   "roughness": 0.1,
+   "metallic": 0.3,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Sapin_Lagon": {
+   "base_color": "#38C3D3",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Lueur": {
+   "base_color": "#7FF1FF",
+   "roughness": 0.3,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": "#7FF1FF",
+   "emission_strength": 3.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Oeil": {
+   "base_color": "#FFFFFF",
+   "roughness": 0.15,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Pupille": {
+   "base_color": "#08223F",
+   "roughness": 0.1,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Blanc": {
+   "base_color": "#FFFFFF",
+   "roughness": 0.15,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Bouche": {
+   "base_color": "#0B2A4F",
+   "roughness": 0.4,
+   "metallic": 0.0,
+   "coat": 0.2,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Langue": {
+   "base_color": "#FF6F8E",
+   "roughness": 0.25,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Pomme_de_Pin": {
+   "base_color": "#8B5A2B",
+   "roughness": 0.35,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Valve_Argent": {
+   "base_color": "#C7D2DC",
+   "roughness": 0.22,
+   "metallic": 0.85,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Algue": {
+   "base_color": "#27B597",
+   "roughness": 0.22,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Déco": {
+   "base_color": "#8EE9FF",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Déco_2": {
+   "base_color": "#FFFFFF",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Bulle": {
+   "base_color": "#B5F4FF",
+   "roughness": 0.03,
+   "metallic": 0.0,
+   "coat": 1.0,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.7
   }
  }
 }

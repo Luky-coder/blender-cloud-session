@@ -26,6 +26,12 @@
     "moving_bone_curves": 90,
     "shape_curves": 3
    },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 190,
+    "moving_bone_curves": 59,
+    "shape_curves": 3
+   },
    "HIT": {
     "frames": 19,
     "bone_curves": 190,
@@ -71,6 +77,12 @@
     "frames": 61,
     "bone_curves": 190,
     "moving_bone_curves": 90,
+    "shape_curves": 3
+   },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 190,
+    "moving_bone_curves": 59,
     "shape_curves": 3
    },
    "HIT": {
@@ -120,6 +132,12 @@
     "moving_bone_curves": 90,
     "shape_curves": 3
    },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 190,
+    "moving_bone_curves": 59,
+    "shape_curves": 3
+   },
    "HIT": {
     "frames": 19,
     "bone_curves": 190,
@@ -165,6 +183,12 @@
     "frames": 61,
     "bone_curves": 190,
     "moving_bone_curves": 90,
+    "shape_curves": 3
+   },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 190,
+    "moving_bone_curves": 59,
     "shape_curves": 3
    },
    "HIT": {
@@ -214,6 +238,12 @@
     "moving_bone_curves": 90,
     "shape_curves": 3
    },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 190,
+    "moving_bone_curves": 59,
+    "shape_curves": 3
+   },
    "HIT": {
     "frames": 19,
     "bone_curves": 190,
@@ -259,6 +289,12 @@
     "frames": 61,
     "bone_curves": 190,
     "moving_bone_curves": 90,
+    "shape_curves": 3
+   },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 190,
+    "moving_bone_curves": 59,
     "shape_curves": 3
    },
    "HIT": {
@@ -308,6 +344,12 @@
     "moving_bone_curves": 90,
     "shape_curves": 3
    },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 190,
+    "moving_bone_curves": 59,
+    "shape_curves": 3
+   },
    "HIT": {
     "frames": 19,
     "bone_curves": 190,
@@ -353,6 +395,12 @@
     "frames": 61,
     "bone_curves": 180,
     "moving_bone_curves": 57,
+    "shape_curves": 3
+   },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 180,
+    "moving_bone_curves": 42,
     "shape_curves": 3
    },
    "HIT": {
@@ -402,6 +450,12 @@
     "moving_bone_curves": 57,
     "shape_curves": 3
    },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 180,
+    "moving_bone_curves": 42,
+    "shape_curves": 3
+   },
    "HIT": {
     "frames": 19,
     "bone_curves": 180,
@@ -447,6 +501,12 @@
     "frames": 61,
     "bone_curves": 180,
     "moving_bone_curves": 57,
+    "shape_curves": 3
+   },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 180,
+    "moving_bone_curves": 42,
     "shape_curves": 3
    },
    "HIT": {
@@ -496,6 +556,12 @@
     "moving_bone_curves": 57,
     "shape_curves": 3
    },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 180,
+    "moving_bone_curves": 42,
+    "shape_curves": 3
+   },
    "HIT": {
     "frames": 19,
     "bone_curves": 180,
@@ -541,6 +607,12 @@
     "frames": 61,
     "bone_curves": 180,
     "moving_bone_curves": 57,
+    "shape_curves": 3
+   },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 180,
+    "moving_bone_curves": 42,
     "shape_curves": 3
    },
    "HIT": {
@@ -590,6 +662,12 @@
     "moving_bone_curves": 57,
     "shape_curves": 3
    },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 180,
+    "moving_bone_curves": 42,
+    "shape_curves": 3
+   },
    "HIT": {
     "frames": 19,
     "bone_curves": 180,
@@ -637,6 +715,12 @@
     "moving_bone_curves": 57,
     "shape_curves": 3
    },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 180,
+    "moving_bone_curves": 42,
+    "shape_curves": 3
+   },
    "HIT": {
     "frames": 19,
     "bone_curves": 180,
@@ -658,11 +742,11 @@
   }
  },
  {
-  "file": "Boss_Gardien_Glaciers_Plante.fbx",
+  "file": "Boss_Gardien_Glaciers_Glace.fbx",
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 48704,
+  "verts": 48914,
   "materials": 18,
   "shape_keys": [
    "Respiration",
@@ -706,6 +790,12 @@
     "frames": 91,
     "bone_curves": 390,
     "moving_bone_curves": 133,
+    "shape_curves": 3
+   },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 390,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "HIT": {
@@ -767,6 +857,12 @@
     "moving_bone_curves": 48,
     "shape_curves": 3
    },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 160,
+    "moving_bone_curves": 37,
+    "shape_curves": 3
+   },
    "HIT": {
     "frames": 19,
     "bone_curves": 160,
@@ -812,6 +908,12 @@
     "frames": 61,
     "bone_curves": 160,
     "moving_bone_curves": 48,
+    "shape_curves": 3
+   },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 160,
+    "moving_bone_curves": 37,
     "shape_curves": 3
    },
    "HIT": {
@@ -861,6 +963,12 @@
     "moving_bone_curves": 48,
     "shape_curves": 3
    },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 160,
+    "moving_bone_curves": 37,
+    "shape_curves": 3
+   },
    "HIT": {
     "frames": 19,
     "bone_curves": 160,
@@ -906,6 +1014,12 @@
     "frames": 61,
     "bone_curves": 160,
     "moving_bone_curves": 48,
+    "shape_curves": 3
+   },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 160,
+    "moving_bone_curves": 37,
     "shape_curves": 3
    },
    "HIT": {
@@ -955,6 +1069,12 @@
     "moving_bone_curves": 48,
     "shape_curves": 3
    },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 160,
+    "moving_bone_curves": 37,
+    "shape_curves": 3
+   },
    "HIT": {
     "frames": 19,
     "bone_curves": 160,
@@ -1000,6 +1120,12 @@
     "frames": 61,
     "bone_curves": 160,
     "moving_bone_curves": 48,
+    "shape_curves": 3
+   },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 160,
+    "moving_bone_curves": 37,
     "shape_curves": 3
    },
    "HIT": {
@@ -1049,6 +1175,12 @@
     "moving_bone_curves": 48,
     "shape_curves": 3
    },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 160,
+    "moving_bone_curves": 37,
+    "shape_curves": 3
+   },
    "HIT": {
     "frames": 19,
     "bone_curves": 160,
@@ -1070,12 +1202,12 @@
   }
  },
  {
-  "file": "MiniBoss_Pin_Gonflable_Plante.fbx",
+  "file": "MiniBoss_Pin_Gonflable_Eau.fbx",
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 41524,
-  "materials": 16,
+  "verts": 48150,
+  "materials": 19,
   "shape_keys": [
    "Respiration",
    "Impact",
@@ -1112,6 +1244,12 @@
     "frames": 81,
     "bone_curves": 300,
     "moving_bone_curves": 115,
+    "shape_curves": 3
+   },
+   "FLY": {
+    "frames": 61,
+    "bone_curves": 300,
+    "moving_bone_curves": 76,
     "shape_curves": 3
    },
    "HIT": {

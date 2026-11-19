@@ -1,7 +1,7 @@
-"""Mini-boss — Le Pin Gonflable (type Plante, PV 900).
+"""Mini-boss — Le Pin Gonflable (type Eau, PV 900).
 
-Immense sapin entièrement gonflable : quatre étages de branches-boudins festonnés (vert foncé /
-vert clair en alternance), tronc côtelé, six racines gonflables au sol, grand visage sur le
+Immense sapin entièrement gonflable, version aquatique : quatre étages de branches-boudins festonnés
+(bleu abysse / turquoise lagon en alternance), bulles et gouttes d'eau sur les branches, algues-lianes, tronc côtelé, six racines gonflables au sol, grand visage sur le
 deuxième étage, étoile dorée au sommet, boules et guirlandes dorées, pommes de pin décoratives,
 neige sur les branches, valve à l'arrière. Deux grandes branches-bras repliées et quatre lianes
 qui se déploient en phase 2. Projectiles intégrés (pomme de pin, racine surgissante, bloc de
@@ -79,17 +79,36 @@ def pine_cone(name, center, size, axis=V((0, 0, -1))):
     return ob
 
 
-def materials():
-    mats = E.materials("plante")
-    mats["main"] = L.mat("Sapin_Fonce", "#1D6633", 0.2)
-    mats["second"] = L.mat("Sapin_Clair", "#58B24C", 0.2)
-    mats["accent"] = L.mat("Sapin_Liseré", "#14472A", 0.25)
-    mats["bark"] = L.mat("Ecorce_Gonflable", "#7A4A28", 0.3)
+def materials(elem="eau"):
+    """Palette Eau : bleu abysse, turquoise lagon, écume blanche, perles, algues, or."""
+    mats = E.materials("eau")
+    mats["main"] = L.mat("Sapin_Abysse", "#1B5EA8", 0.18)
+    mats["second"] = L.mat("Sapin_Lagon", "#38C3D3", 0.18)
+    mats["accent"] = L.mat("Sapin_Liseré", "#0F3A6B", 0.25)
+    mats["bark"] = L.mat("Tronc_Gonflable", "#2E5E82", 0.3)
     mats["cone"] = L.mat("Pomme_de_Pin", "#8B5A2B", 0.35)
-    mats["bauble2"] = L.mat("Boule_Turquoise", "#2EC4C9", 0.12, metal=0.4)
-    mats["deco"] = mats["second"]
-    mats["deco_leaf"] = mats["second"]
+    mats["bauble2"] = L.mat("Perle", "#EAF8FF", 0.1, metal=0.3)
+    mats["deco_leaf"] = L.mat("Algue", "#27B597", 0.22)
+    mats["leaf"] = mats["deco_leaf"]
     return mats
+
+
+def water_decor(m, mats):
+    """Bulles et gouttes d'eau gonflables posées sur les étages (signature du type Eau)."""
+    for k, (zb, h, R, n) in enumerate(TIERS):
+        b = f"Etage_{k + 1}"
+        s_top = find_s(k, 0.9)
+        for j in range(n):
+            ph = math.pi / 2 + TAU * j / n
+            if j % 2 == 1 and k < 3:          # gouttes sur les festons sans neige
+                p = tier_point(k, s_top, ph, 0.0)
+                up = (V((math.cos(ph), math.sin(ph), 0)) * 0.4 + V((0, 0, 1))).normalized()
+                E.droplet(m, mats, p, up, 0.16 + 0.02 * (3 - k), b)
+        for j in range(3):                    # grappes de bulles sur les pentes
+            ph = 0.9 + TAU * j / 3 + 0.4 * k
+            p = tier_point(k, find_s(k, 0.55), ph, 0.08)
+            E.bubble(m, mats, p, 0.09, b)
+            E.bubble(m, mats, p + V((0.08, 0.05, 0.1)), 0.055, b)
 
 
 def build_geometry(m, mats):
@@ -320,6 +339,27 @@ def a_move(t):
     return p
 
 
+def a_fly(t):
+    """VOL : le sapin gonflable décolle, racines et lianes pendantes, plane en se balançant."""
+    p = base_pose(t, vines=0.75)
+    P = 60.0
+    p.set("Root", loc=(0.1 * osc(t, P, 0), 0, 1.1 + 0.15 * osc(t, P, 0.5, 2)))
+    p.set("Tronc", rot=(-7 + 2 * osc(t, P, 1.0, 2), 8 * osc(t, P, 0), 4 * osc(t, P, math.pi / 2)))
+    for k, b in enumerate(TIER_B):
+        p.set(b, rot=(3 + 2.5 * osc(t, P, 1.2 + 0.5 * k, 2), -3 * osc(t, P, 0.4 * k + 0.5), 0))
+    for i in range(6):
+        a = TAU * i / 6 + math.pi / 6
+        droop = 38 + 8 * osc(t, P, i * 0.9, 2)
+        p.set(f"Racine_{i + 1}", rot=(-droop * math.sin(a), droop * math.cos(a), 0))
+    for i in range(4):
+        p.add(f"Liane_{i + 1}", rot=(18 + 6 * osc(t, P, i, 2), 8 * osc(t, P, i + 1), 0))
+    p.set("Bras_G", rot=(0, 25 + 8 * osc(t, P, 0.3, 2), 0))
+    p.set("Bras_D", rot=(0, -25 - 8 * osc(t, P, 0.3, 2), 0))
+    p.set("Etoile", rot=(12, 10 * osc(t, P, 0.6), 0))
+    p.shapes(resp=0.3 + 0.2 * osc(t, P, 0, 2))
+    return p
+
+
 def a_attack(t):
     """Coup de tronc : le sapin se cambre en arrière, fouette vers l'avant et percute."""
     p = base_pose(t)
@@ -476,6 +516,7 @@ def a_phase2(t):
 ACTIONS = {
     "IDLE": (61, True, lambda t: a_idle(t)),
     "MOVE": (41, True, a_move),
+    "FLY": (61, True, a_fly),
     "ATTACK": (45, False, a_attack),
     "HIT": (21, False, a_hit),
     "DEATH": (81, False, a_death),
@@ -487,10 +528,11 @@ ACTIONS = {
 }
 
 
-def build(elem="plante"):
-    m = L.Model("MiniBoss_Pin_Gonflable_Plante", "Le Pin Gonflable")
-    mats = materials()
+def build(elem="eau"):
+    m = L.Model("MiniBoss_Pin_Gonflable_Eau", "Le Pin Gonflable")
+    mats = materials(elem)
     build_geometry(m, mats)
+    water_decor(m, mats)
     m.build(shape_amp=0.5, wrinkle=0.025)
     import anims
     return m, anims.with_eyes(ACTIONS, m.meta.get("eye_r", 0.25))

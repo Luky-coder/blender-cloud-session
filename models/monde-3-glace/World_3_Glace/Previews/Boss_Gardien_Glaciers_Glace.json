@@ -1,0 +1,280 @@
+{
+ "name": "Boss_Gardien_Glaciers_Glace",
+ "title": "Le Grand Gardien des Glaciers",
+ "family": "Boss Grand Gardien des Glaciers",
+ "element": "Glace",
+ "hp": 3000,
+ "blend": "Blender/Boss_Gardien_Glaciers_Glace.blend",
+ "fbx": "FBX/Boss_Gardien_Glaciers_Glace.fbx",
+ "dims": [
+  8.103,
+  16.139,
+  9.791
+ ],
+ "bones": 40,
+ "deform_bones": 39,
+ "shape_keys": [
+  "Respiration",
+  "Impact",
+  "Degonfle"
+ ],
+ "actions": [
+  {
+   "name": "IDLE",
+   "frames": 61,
+   "loop": true,
+   "seconds": 2.0
+  },
+  {
+   "name": "MOVE",
+   "frames": 41,
+   "loop": true,
+   "seconds": 1.33
+  },
+  {
+   "name": "FLY",
+   "frames": 61,
+   "loop": true,
+   "seconds": 2.0
+  },
+  {
+   "name": "ATTACK",
+   "frames": 51,
+   "loop": false,
+   "seconds": 1.67
+  },
+  {
+   "name": "HIT",
+   "frames": 21,
+   "loop": false,
+   "seconds": 0.67
+  },
+  {
+   "name": "DEATH",
+   "frames": 91,
+   "loop": false,
+   "seconds": 3.0
+  },
+  {
+   "name": "ATTACK_VagueRacines",
+   "frames": 61,
+   "loop": false,
+   "seconds": 2.0
+  },
+  {
+   "name": "ATTACK_GrainesExplosives",
+   "frames": 46,
+   "loop": false,
+   "seconds": 1.5
+  },
+  {
+   "name": "ATTACK_TempeteNeige",
+   "frames": 61,
+   "loop": false,
+   "seconds": 2.0
+  },
+  {
+   "name": "ATTACK_Invocation",
+   "frames": 51,
+   "loop": false,
+   "seconds": 1.67
+  },
+  {
+   "name": "PHASE2_Eveil",
+   "frames": 61,
+   "loop": false,
+   "seconds": 2.0
+  },
+  {
+   "name": "IDLE_Phase2",
+   "frames": 61,
+   "loop": true,
+   "seconds": 2.0
+  }
+ ],
+ "materials": {
+  "Ecorce_Gelee": {
+   "base_color": "#6FB6D9",
+   "roughness": 0.2,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Or": {
+   "base_color": "#E8B43A",
+   "roughness": 0.22,
+   "metallic": 0.9,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Valve_Argent": {
+   "base_color": "#C7D2DC",
+   "roughness": 0.22,
+   "metallic": 0.85,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Oeil_Ancien": {
+   "base_color": "#FFFFFF",
+   "roughness": 0.15,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Pupille_Turquoise": {
+   "base_color": "#06302E",
+   "roughness": 0.1,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": "#1FC8BC",
+   "emission_strength": 0.25,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Blanc": {
+   "base_color": "#FFFFFF",
+   "roughness": 0.15,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Neige": {
+   "base_color": "#F4FAFF",
+   "roughness": 0.35,
+   "metallic": 0.0,
+   "coat": 0.3,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Givre": {
+   "base_color": "#BFEFFF",
+   "roughness": 0.05,
+   "metallic": 0.0,
+   "coat": 1.0,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.55
+  },
+  "Bouche": {
+   "base_color": "#123456",
+   "roughness": 0.4,
+   "metallic": 0.0,
+   "coat": 0.2,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Langue": {
+   "base_color": "#FF6F8E",
+   "roughness": 0.25,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Feuillage_Glacier": {
+   "base_color": "#8CCBE6",
+   "roughness": 0.2,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Coeur_de_Glace": {
+   "base_color": "#BFF8FF",
+   "roughness": 0.2,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": "#7FEFFF",
+   "emission_strength": 6.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Feuillage_Givre": {
+   "base_color": "#DDF3FF",
+   "roughness": 0.22,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Ecorce_Liseré": {
+   "base_color": "#2D6E96",
+   "roughness": 0.25,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Aura_Coeur": {
+   "base_color": "#9FEFFF",
+   "roughness": 0.3,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": "#9FEFFF",
+   "emission_strength": 3.0,
+   "alpha": 0.35,
+   "transmission": 0.0
+  },
+  "Cristal_Turquoise": {
+   "base_color": "#3FD8E8",
+   "roughness": 0.06,
+   "metallic": 0.0,
+   "coat": 1.0,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.4
+  },
+  "Racine_Gelee": {
+   "base_color": "#7D93AE",
+   "roughness": 0.3,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  },
+  "Déco_2": {
+   "base_color": "#E9FBFF",
+   "roughness": 0.18,
+   "metallic": 0.0,
+   "coat": 0.7,
+   "emission": null,
+   "emission_strength": 0.0,
+   "alpha": 1.0,
+   "transmission": 0.0
+  }
+ },
+ "verts": 48914,
+ "tris": 96056,
+ "seconds": 165.0
+}

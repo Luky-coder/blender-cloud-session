@@ -13,8 +13,8 @@ import math
 from w3lib import Pose, TAU, decay, ease, osc, track, track3
 
 FPS = 30
-LENGTHS = {"IDLE": 61, "MOVE": 41, "ATTACK": 37, "HIT": 19, "DEATH": 61}
-LOOPS = {"IDLE": True, "MOVE": True, "ATTACK": False, "HIT": False, "DEATH": False}
+LENGTHS = {"IDLE": 61, "MOVE": 41, "FLY": 61, "ATTACK": 37, "HIT": 19, "DEATH": 61}
+LOOPS = {"IDLE": True, "MOVE": True, "FLY": True, "ATTACK": False, "HIT": False, "DEATH": False}
 
 
 def _has(spec, b):
@@ -65,6 +65,29 @@ def move(spec, t):
     if _has(spec, "Deco"):
         p.set("Deco", loc=(0, -0.02 * L, 0), rot=(9 + 4 * osc(t, P, 0.5, 2), 4 * osc(t, P, 1.5), 0))
     p.shapes(resp=0.2, impact=0.15 + 0.05 * osc(t, P, 0.0, 2))
+    return p
+
+
+def fly(spec, t):
+    """VOL (boucle de 2 s) : prend de l'altitude, plane en virages en S (roulis + lacet), nez incliné,
+    corps étiré par la vitesse. L'altitude ajoutée vaut spec['fly_alt'] × taille."""
+    L = spec["L"]
+    P = 60.0
+    p = Pose()
+    alt = spec.get("fly_alt", 0.35) * L
+    p.set("Root", loc=(0.06 * L * osc(t, P, 0.0), 0, alt + 0.07 * L * osc(t, P, 0.4, 2)))
+    p.set("Body", rot=(-9 + 3 * osc(t, P, 1.0, 2), 13 * osc(t, P, 0.0), 7 * osc(t, P, math.pi / 2)))
+    st = 0.03 * osc(t, P, 0.5, 2)
+    p.set("Body", scl=(0.95 - 0.5 * st, 1.1 + st, 0.95 - 0.5 * st))
+    if _has(spec, "Haut"):
+        p.set("Haut", loc=(-0.02 * L * osc(t, P, 0.4), -0.04 * L, 0), scl=(1, 1, 1 + 0.03 * osc(t, P, 0.5, 2)))
+    if _has(spec, "Avant"):
+        p.set("Avant", loc=(0, -0.025 * L, 0), scl=(1.05, 0.92, 1.04))
+    if _has(spec, "Arriere"):
+        p.set("Arriere", loc=(0.015 * L * osc(t, P, 1.2), -0.04 * L, 0), scl=(0.95, 1.08, 0.96))
+    if _has(spec, "Deco"):
+        p.set("Deco", loc=(0, -0.03 * L, 0), rot=(14 + 5 * osc(t, P, 0.5, 2), 6 * osc(t, P, 1.5), 0))
+    p.shapes(resp=0.25, impact=0.2 + 0.05 * osc(t, P, 0.0, 2))
     return p
 
 
@@ -178,6 +201,8 @@ def string_motion(name, t, p):
             p.set(b, rot=(4 * osc(t, 60, lag + 0.5), 6 * osc(t, 60, lag), 0))
         elif name == "MOVE":
             p.set(b, rot=((-12 if i == 0 else -5) + 4 * osc(t, 40, lag, 2), 7 * osc(t, 40, lag), 0))
+        elif name == "FLY":
+            p.set(b, rot=((-22 if i == 0 else -8) + 5 * osc(t, 60, lag, 2), 12 * osc(t, 60, lag + 0.6), 0))
         elif name == "ATTACK":
             p.set(b, rot=(track(t - 1.5 * i, [(0, 0), (9, 12), (14, -30), (19, 22), (26, -10), (32, 4), (36, 0)]),
                           decay(t, 16 + 2 * i, 18, 2.5, 10), 0))
@@ -218,7 +243,7 @@ def eye_motion(name, t, p, n, r):
         raise_ = 0.25 * max(0.0, ud / 9)
         angry = 12 if "Phase2" in name else 4
         wide = 1.0 + 0.04 * math.sin(TAU * u)
-    elif name.startswith("MOVE"):
+    elif name.startswith("MOVE") or name.startswith("FLY"):
         lr = 8 * math.sin(TAU * u)
         ud = -6
         opn = 0.85 * _blink(t, 0.7 * T)
@@ -280,7 +305,7 @@ def with_eyes(actions, r):
 
 def make_mob_actions(spec, attack_fn, extra=None):
     """Retourne {nom: (n_images, boucle, fonction)}."""
-    base = {"IDLE": idle, "MOVE": move, "ATTACK": attack_fn, "HIT": hit, "DEATH": death}
+    base = {"IDLE": idle, "MOVE": move, "FLY": fly, "ATTACK": attack_fn, "HIT": hit, "DEATH": death}
     out = {}
     for name, fn in base.items():
         def f(t, fn=fn, name=name):

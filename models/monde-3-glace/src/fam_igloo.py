@@ -174,6 +174,8 @@ def build(elem):
             p.set("Drapeau", rot=(0, 0, 8 * A.osc(t, 60, 0.0, 2)))
         elif name == "MOVE":
             p.set("Drapeau", rot=(-6, 0, 14 * A.osc(t, 40, 0.0, 2)))
+        elif name == "FLY":
+            p.set("Drapeau", rot=(-12, 0, 20 * A.osc(t, 60, 0.0, 2)))
         elif name == "ATTACK":
             p.set("Drapeau", rot=(A.track(t, [(0, 0), (9, -15), (14, 25), (19, -20), (26, 8), (36, 0)]), 0, 0))
         elif name in ("HIT", "DEATH"):
