@@ -3,12 +3,11 @@
     blender -b <ennemi>.blend --python-exit-code 1 -P src/roblox_export.py -- <dossier_sortie> <triangles_max>
 
 Contraintes Roblox prises en compte :
-  - un seul matériau par MeshPart -> couleurs des matériaux rassemblées dans une texture-palette
-    (une case par couleur, UV au centre de la case), intégrée au FBX et copiée en PNG à côté ;
+  - un seul matériau par MeshPart -> couleurs des matériaux en couleurs de sommets (attribut Couleur) ;
   - au plus 20 000 triangles par maillage -> maillage allégé (Decimate) puis découpé si besoin ;
   - au plus 4 os par sommet -> poids limités à 4 et normalisés ;
-  - pas d'échelle d'os dans les animations -> poses recalculées en position + rotation seulement
-    (positions mondiales des os conservées, échelle abandonnée) ;
+  - pas d'échelle d'os dans les animations -> canaux position + rotation de chaque os conservés,
+    échelle abandonnée partout (maillage et os restent cohérents : les yeux restent collés au corps) ;
   - pas de shape keys génériques -> supprimées ;
   - projectiles intégrés (os Proj_*) et aura -> retirés du modèle, exportés à part (objets statiques) ;
   - une prise par fichier d'animation (import via l'éditeur d'animation de Roblox).
@@ -46,7 +45,7 @@ def ctx(ob, objs=None):
 # 1. Animations : poses recalculées sans échelle (avant toute modification du rig)
 # ------------------------------------------------------------------------------------------
 actions = [a for a in bpy.data.actions if a.slots]
-order = ["IDLE", "MOVE", "ATTACK", "HIT", "DEATH"]
+order = ["FLY", "ATTACK", "IDLE", "MOVE", "HIT", "DEATH"]
 actions.sort(key=lambda a: (order.index(a.name) if a.name in order else 99, a.name))
 keep = [b.name for b in rig.data.bones if b.use_deform and b.name not in HIDE]
 parent_of = {b.name: (b.parent.name if b.parent else None) for b in rig.data.bones}
@@ -63,18 +62,9 @@ for act in actions:
     prev_q = {}
     for f in range(f0, f1 + 1):
         sc.frame_set(f)
-        N = {}
-        for pb in rig.pose.bones:
-            loc, rot, _ = pb.matrix.decompose()
-            N[pb.name] = Matrix.Translation(loc) @ rot.to_matrix().to_4x4()
         pose = {}
         for b in keep:
-            p = parent_of[b]
-            if p:
-                basis = (rest[p].inverted() @ rest[b]).inverted() @ N[p].inverted() @ N[b]
-            else:
-                basis = rest[b].inverted() @ N[b]
-            loc, q, _ = basis.decompose()
+            loc, q, _ = rig.pose.bones[b].matrix_basis.decompose()   # échelle abandonnée
             if b in prev_q and prev_q[b].dot(q) < 0:
                 q.negate()
             prev_q[b] = q.copy()
@@ -89,7 +79,7 @@ for act in actions:
     baked[act.name] = (f0, f1, bool(act.use_cyclic), frames)
 
 # ------------------------------------------------------------------------------------------
-# 2. Maillage : shape keys, texture-palette des couleurs, matériau unique
+# 2. Maillage : shape keys, couleurs de sommets, matériau unique
 # ------------------------------------------------------------------------------------------
 if mesh.data.shape_keys:
     mesh.data.shape_keys.animation_data_clear()
@@ -108,54 +98,25 @@ def mat_color(m):
     return (c[0], c[1], c[2], 1.0)
 
 
-def to_srgb(x):
-    return 12.92 * x if x <= 0.0031308 else 1.055 * x ** (1 / 2.4) - 0.055
-
-
-# Palette : une case de 16 px par couleur de matériau, dans une texture intégrée au FBX.
-slot_cols = [tuple(round(to_srgb(c), 4) for c in mat_color(s.material)[:3]) for s in mesh.material_slots]
-uniq = sorted(set(slot_cols))
-CELL = 16
-grid = max(1, math.ceil(math.sqrt(len(uniq))))
-size = 64
-while size < grid * CELL:
-    size *= 2
-pix = [1.0] * (size * size * 4)
-cell_uv = {}
-for k, c in enumerate(uniq):
-    cx, cy = k % grid, k // grid
-    for y in range(cy * CELL, (cy + 1) * CELL):
-        for x in range(cx * CELL, (cx + 1) * CELL):
-            i = (y * size + x) * 4
-            pix[i:i + 3] = c
-    cell_uv[c] = ((cx + 0.5) * CELL / size, (cy + 0.5) * CELL / size)
-img = bpy.data.images.new(f"{NAME}_Couleurs", size, size, alpha=False)
-img.pixels.foreach_set(pix)
-img.filepath_raw = os.path.join(OUT, f"{NAME}_Couleurs.png")
-img.file_format = "PNG"
-img.save()
-slot_uv = [cell_uv[c] for c in slot_cols]
-
-
-def assign_uv(data):
-    """UV de chaque face = centre de la case de sa couleur (selon son indice de matériau)."""
-    while data.uv_layers:
-        data.uv_layers.remove(data.uv_layers[0])
-    uv = data.uv_layers.new(name="UVCouleurs")
-    for poly in data.polygons:
-        u = slot_uv[min(poly.material_index, len(slot_uv) - 1)]
+if "Couleur" not in me.color_attributes:
+    cols = [mat_color(sl.material) for sl in mesh.material_slots]
+    attr = me.color_attributes.new("Couleur", "BYTE_COLOR", "CORNER")
+    for poly in me.polygons:
         for li in poly.loop_indices:
-            uv.data[li].uv = u
+            attr.data[li].color = cols[poly.material_index]
+me.color_attributes.active_color = me.color_attributes["Couleur"]
+for ca in list(me.color_attributes):
+    if ca.name != "Couleur":
+        me.color_attributes.remove(ca)
 
-
-single = bpy.data.materials.new("Roblox_Couleurs")
+single = bpy.data.materials.new("Roblox_Couleurs_Sommets")
+single.diffuse_color = (1, 1, 1, 1)
 nt = single.node_tree
 bsdf = next(n for n in nt.nodes if n.type == "BSDF_PRINCIPLED")
 bsdf.inputs["Roughness"].default_value = 0.3
-tex = nt.nodes.new("ShaderNodeTexImage")
-tex.image = img
-tex.interpolation = "Closest"
-nt.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
+vc = nt.nodes.new("ShaderNodeVertexColor")
+vc.layer_name = "Couleur"
+nt.links.new(vc.outputs["Color"], bsdf.inputs["Base Color"])
 
 # ------------------------------------------------------------------------------------------
 # 3. Projectiles et aura : extraits en objets statiques, retirés du modèle
@@ -195,7 +156,6 @@ for bone_name, faces in proj_faces.items():
     pm = bpy.data.meshes.new(f"{NAME}_{stem}")
     bm.to_mesh(pm)
     bm.free()
-    assign_uv(pm)
     pm.materials.clear()
     pm.materials.append(single)
     for p in pm.polygons:
@@ -206,8 +166,8 @@ for bone_name, faces in proj_faces.items():
     with ctx(po):
         bpy.ops.export_scene.fbx(filepath=os.path.join(proj_dir, po.name + ".fbx"), use_selection=True,
                                  object_types={"MESH"}, apply_scale_options="FBX_SCALE_UNITS",
-                                 mesh_smooth_type="FACE", use_triangles=True, colors_type="NONE",
-                                 path_mode="COPY", embed_textures=True, bake_anim=False)
+                                 mesh_smooth_type="FACE", use_triangles=True, colors_type="SRGB",
+                                 bake_anim=False)
     bpy.data.objects.remove(po)
 
 all_proj = {i for fs in proj_faces.values() for i in fs}
@@ -248,7 +208,6 @@ if tris > TARGET:
     with ctx(mesh):
         bpy.ops.object.modifier_move_to_index(modifier=dec.name, index=0)
         bpy.ops.object.modifier_apply(modifier=dec.name)
-assign_uv(me)                    # après l'allègement : indices de matériau conservés
 me.materials.clear()
 me.materials.append(single)
 for p in me.polygons:
@@ -333,15 +292,14 @@ for name, (f0, f1, loop, frames) in baked.items():
 
 common = dict(apply_scale_options="FBX_SCALE_UNITS", axis_forward="-Z", axis_up="Y", add_leaf_bones=False,
               use_armature_deform_only=True, primary_bone_axis="Y", secondary_bone_axis="X")
-idle = bpy.data.actions.get("IDLE") or new_actions[0]
+idle = bpy.data.actions.get("ATTACK") or new_actions[0]   # image 1 = pose de repos
 rig.animation_data.action = idle
 rig.animation_data.action_slot = idle.slots[0]
 sc.frame_set(int(idle.frame_start))
 with ctx(rig, parts + [rig]):
     bpy.ops.export_scene.fbx(filepath=os.path.join(OUT, NAME + ".fbx"), use_selection=True,
                              object_types={"ARMATURE", "MESH"}, mesh_smooth_type="FACE", use_triangles=True,
-                             colors_type="NONE", path_mode="COPY", embed_textures=True,
-                             bake_anim=False, **common)
+                             colors_type="SRGB", bake_anim=False, **common)
 anim_dir = os.path.join(OUT, "Animations")
 os.makedirs(anim_dir, exist_ok=True)
 for act in new_actions:

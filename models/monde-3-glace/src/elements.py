@@ -85,6 +85,7 @@ def eye(model, mats, pos, out, r, bone, look=V((0, 0, 0)), squint=0.0, name="oei
         model.bone(f"Oeil_{side}", V(pos), bone, length=r * 0.5)
         model.bone(f"Pupille_{side}", V(pos), f"Oeil_{side}", length=r * 0.4)
         model.meta["eye_r"] = r
+        model.meta.setdefault("eye_centers", []).append(V(pos))
         bone, pbone = f"Oeil_{side}", f"Pupille_{side}"
     else:
         pbone = bone

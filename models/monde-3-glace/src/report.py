@@ -78,8 +78,9 @@ def main():
     L += ["", "Aperçus : `Previews/<Famille>/<Type>.jpg` (3/4 avant · face · profil droit · 3/4 arrière) et",
           "`Previews/<Famille>/<Type>_animations.jpg` (une ligne par Action, 6 images réparties sur sa durée).", "",
           "## Animations", "",
-          "Toutes à 30 images/s. Les boucles (IDLE, MOVE, IDLE_Phase2) ont leur dernière image identique à la",
-          "première (et un modificateur Cycles dans Blender).", ""]
+          "Chaque ennemi a deux animations : `FLY` (vol, boucle) et `ATTACK` (attaque physique vers l'avant),",
+          "à 30 images/s. Les autres animations (IDLE, MOVE, HIT, DEATH, attaques spéciales des boss) restent",
+          "définies dans le code (`EXPORT_ACTIONS` dans `src/generate.py`).", ""]
     seen = set()
     for d in items:
         key = d["family"]
@@ -94,7 +95,7 @@ def main():
           "(X/Y/Z) et cuites dans chaque prise FBX comme courbes de blend shapes ; l'os de contrôle n'est pas",
           "exporté (os de déformation uniquement).", "",
           "## Version Roblox", "",
-          "`Roblox/` contient une version adaptée à Roblox Studio (couleurs dans une texture intégrée au FBX, ≤ 20 000 triangles par",
+          "`Roblox/` contient une version adaptée à Roblox Studio (couleurs de sommets dans le FBX, ≤ 20 000 triangles par",
           "maillage, ≤ 4 os par sommet, animations sans échelle, une animation par fichier, projectiles à part) :",
           "voir [`Roblox/LISEZMOI_ROBLOX.md`](Roblox/LISEZMOI_ROBLOX.md). Régénération : `bash src/run_roblox.sh`.", "",
           "## Conventions", "",

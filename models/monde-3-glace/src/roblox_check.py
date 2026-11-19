@@ -2,7 +2,7 @@
 
     blender -b --factory-startup -q -P src/roblox_check.py -- <dossier_modele_roblox> [apercu.jpg]
 
-Contrôles : triangles <= 20 000 par maillage, <= 4 os par sommet, texture-palette intégrée,
+Contrôles : triangles <= 20 000 par maillage, <= 4 os par sommet, couleurs de sommets présentes,
 un seul matériau, une prise par fichier d'animation, aucune courbe d'échelle d'os.
 Avec apercu.jpg : rend une planche (une ligne par animation) de la version Roblox.
 """
@@ -29,16 +29,14 @@ for o in meshes:
         errors.append(f"{o.name}: {t} triangles")
     if infl > 4:
         errors.append(f"{o.name}: {infl} influences")
-    imgs = [n.image for m in me.materials if m for n in m.node_tree.nodes if n.type == "TEX_IMAGE" and n.image]
-    ok_tex = bool(imgs) and imgs[0].size[0] > 0
-    if not ok_tex:
-        errors.append(f"{o.name}: texture de couleurs absente du FBX")
-    if not me.uv_layers:
-        errors.append(f"{o.name}: pas d'UV")
+    if not me.color_attributes:
+        errors.append(f"{o.name}: pas de couleurs de sommets")
     if len(me.materials) > 1:
         errors.append(f"{o.name}: {len(me.materials)} matériaux")
-    print(f"[rbx] maillage {o.name}: {t} triangles, max {infl} os/sommet, texture: "
-          f"{[(i.name, tuple(i.size), i.packed_file is not None) for i in imgs]}")
+    ncol = len({tuple(round(x, 2) for x in d.color[:3]) for d in me.color_attributes[0].data}) if me.color_attributes else 0
+    print(f"[rbx] maillage {o.name}: {t} triangles, max {infl} os/sommet, couleurs de sommets : {ncol} teintes")
+    if ncol < 3:
+        errors.append(f"{o.name}: couleurs de sommets uniformes")
 arms = [o for o in bpy.data.objects if o.type == "ARMATURE"]
 print(f"[rbx] armature : {arms[0].name}, {len(arms[0].data.bones)} os")
 for f in sorted(glob.glob(os.path.join(d, "Animations", "*.fbx"))):
@@ -68,6 +66,7 @@ if sheet:
     bpy.ops.wm.open_mainfile(filepath=blend)
     sc = bpy.context.scene
     rig = next(o for o in sc.objects if o.type == "ARMATURE")
+    mat = bpy.data.materials["Roblox_Couleurs_Sommets"]
     preview._setup_render(sc, 256, 200, 8)
     preview._ensure_lighting(sc)
     paths = []

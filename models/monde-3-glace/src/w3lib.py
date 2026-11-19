@@ -415,6 +415,7 @@ class Model:
         for n, b in self.bones.items():
             if n not in ("Root", "CTRL_Formes"):
                 b["head"] = b["head"] + V((0, 0, dz))
+        self.meta["eye_centers"] = [c + V((0, 0, dz)) for c in self.meta.get("eye_centers", [])]
 
     # -- pièces
     def add(self, ob, material, bone=None):
@@ -428,11 +429,29 @@ class Model:
         self.parts.append((ob, bone))
         return ob
 
+    def _face_lock(self, co, ws):
+        """Peau autour des yeux verrouillée sur l'os porteur du visage : la surface sous les yeux bouge
+        exactement comme eux, ils restent collés au corps quelle que soit la déformation."""
+        eyes = self.meta.get("eye_centers")
+        if not eyes or "Visage" not in self.bones:
+            return ws
+        face = self.bones["Visage"]["parent"]
+        r = self.meta.get("eye_r", 0.1)
+        d = min((co - c).length for c in eyes)
+        x = (d - 1.8 * r) / (1.7 * r)
+        f = 1.0 if x <= 0 else (0.0 if x >= 1 else 1 - x * x * (3 - 2 * x))
+        if f <= 0:
+            return ws
+        s = sum(ws.values()) or 1.0
+        out = {n: (1 - f) * w / s for n, w in ws.items()}
+        out[face] = out.get(face, 0.0) + f
+        return out
+
     def _weights(self, ob, bone):
         if callable(bone):          # fonction position -> {os: poids}
             groups = {}
             for v in ob.data.vertices:
-                ws = bone(v.co)
+                ws = self._face_lock(v.co, bone(v.co))
                 s = sum(ws.values()) or 1.0
                 for n, w in ws.items():
                     if w / s > 0.002:
@@ -445,9 +464,9 @@ class Model:
             vg.add(list(range(len(ob.data.vertices))), 1.0, "REPLACE")
             return
         names = bone if bone else [n for n, b in self.bones.items() if b["soft"]]
-        groups = {n: ob.vertex_groups.new(name=n) for n in names}
+        groups = {}
         for v in ob.data.vertices:
-            ws = []
+            ws = {}
             for n in names:
                 sig, base = self.bones[n]["soft"]
                 if sig is None:
@@ -455,10 +474,13 @@ class Model:
                 else:
                     d = (v.co - self.bones[n]["head"]).length
                     w = base * math.exp(-(d / sig) ** 2)
-                ws.append(w)
-            s = sum(ws) or 1.0
-            for n, w in zip(names, ws):
+                ws[n] = w
+            ws = self._face_lock(v.co, ws)
+            s = sum(ws.values()) or 1.0
+            for n, w in ws.items():
                 if w / s > 0.002:
+                    if n not in groups:
+                        groups[n] = ob.vertex_groups.new(name=n)
                     groups[n].add([v.index], w / s, "REPLACE")
 
     def build(self, shape_amp=1.0, wrinkle=0.07):

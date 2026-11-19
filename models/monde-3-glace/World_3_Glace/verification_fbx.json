@@ -20,34 +20,10 @@
     "moving_bone_curves": 85,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 190,
-    "moving_bone_curves": 90,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 190,
     "moving_bone_curves": 59,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 190,
-    "moving_bone_curves": 70,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 190,
-    "moving_bone_curves": 83,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 190,
-    "moving_bone_curves": 58,
     "shape_curves": 3
    }
   }
@@ -73,34 +49,10 @@
     "moving_bone_curves": 85,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 190,
-    "moving_bone_curves": 90,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 190,
     "moving_bone_curves": 59,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 190,
-    "moving_bone_curves": 70,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 190,
-    "moving_bone_curves": 83,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 190,
-    "moving_bone_curves": 58,
     "shape_curves": 3
    }
   }
@@ -126,34 +78,10 @@
     "moving_bone_curves": 85,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 190,
-    "moving_bone_curves": 90,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 190,
     "moving_bone_curves": 59,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 190,
-    "moving_bone_curves": 70,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 190,
-    "moving_bone_curves": 83,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 190,
-    "moving_bone_curves": 58,
     "shape_curves": 3
    }
   }
@@ -179,34 +107,10 @@
     "moving_bone_curves": 85,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 190,
-    "moving_bone_curves": 90,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 190,
     "moving_bone_curves": 59,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 190,
-    "moving_bone_curves": 70,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 190,
-    "moving_bone_curves": 83,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 190,
-    "moving_bone_curves": 58,
     "shape_curves": 3
    }
   }
@@ -232,34 +136,10 @@
     "moving_bone_curves": 85,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 190,
-    "moving_bone_curves": 90,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 190,
     "moving_bone_curves": 59,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 190,
-    "moving_bone_curves": 70,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 190,
-    "moving_bone_curves": 83,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 190,
-    "moving_bone_curves": 58,
     "shape_curves": 3
    }
   }
@@ -285,34 +165,10 @@
     "moving_bone_curves": 85,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 190,
-    "moving_bone_curves": 90,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 190,
     "moving_bone_curves": 59,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 190,
-    "moving_bone_curves": 70,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 190,
-    "moving_bone_curves": 83,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 190,
-    "moving_bone_curves": 58,
     "shape_curves": 3
    }
   }
@@ -338,34 +194,10 @@
     "moving_bone_curves": 85,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 190,
-    "moving_bone_curves": 90,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 190,
     "moving_bone_curves": 59,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 190,
-    "moving_bone_curves": 70,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 190,
-    "moving_bone_curves": 83,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 190,
-    "moving_bone_curves": 58,
     "shape_curves": 3
    }
   }
@@ -391,32 +223,8 @@
     "moving_bone_curves": 54,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 57,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 42,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 180,
-    "moving_bone_curves": 55,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 54,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
     "bone_curves": 180,
     "moving_bone_curves": 42,
     "shape_curves": 3
@@ -444,32 +252,8 @@
     "moving_bone_curves": 54,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 57,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 42,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 180,
-    "moving_bone_curves": 55,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 54,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
     "bone_curves": 180,
     "moving_bone_curves": 42,
     "shape_curves": 3
@@ -497,32 +281,8 @@
     "moving_bone_curves": 54,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 57,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 42,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 180,
-    "moving_bone_curves": 55,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 54,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
     "bone_curves": 180,
     "moving_bone_curves": 42,
     "shape_curves": 3
@@ -550,32 +310,8 @@
     "moving_bone_curves": 54,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 57,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 42,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 180,
-    "moving_bone_curves": 55,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 54,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
     "bone_curves": 180,
     "moving_bone_curves": 42,
     "shape_curves": 3
@@ -603,32 +339,8 @@
     "moving_bone_curves": 54,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 57,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 42,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 180,
-    "moving_bone_curves": 55,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 54,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
     "bone_curves": 180,
     "moving_bone_curves": 42,
     "shape_curves": 3
@@ -656,32 +368,8 @@
     "moving_bone_curves": 54,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 57,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 42,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 180,
-    "moving_bone_curves": 55,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 54,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
     "bone_curves": 180,
     "moving_bone_curves": 42,
     "shape_curves": 3
@@ -709,32 +397,8 @@
     "moving_bone_curves": 54,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 57,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 42,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 180,
-    "moving_bone_curves": 55,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 180,
-    "moving_bone_curves": 54,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
     "bone_curves": 180,
     "moving_bone_curves": 42,
     "shape_curves": 3
@@ -762,70 +426,10 @@
     "moving_bone_curves": 87,
     "shape_curves": 3
    },
-   "ATTACK_GrainesExplosives": {
-    "frames": 46,
-    "bone_curves": 390,
-    "moving_bone_curves": 95,
-    "shape_curves": 3
-   },
-   "ATTACK_Invocation": {
-    "frames": 51,
-    "bone_curves": 390,
-    "moving_bone_curves": 99,
-    "shape_curves": 3
-   },
-   "ATTACK_TempeteNeige": {
-    "frames": 61,
-    "bone_curves": 390,
-    "moving_bone_curves": 88,
-    "shape_curves": 3
-   },
-   "ATTACK_VagueRacines": {
-    "frames": 61,
-    "bone_curves": 390,
-    "moving_bone_curves": 107,
-    "shape_curves": 3
-   },
-   "DEATH": {
-    "frames": 91,
-    "bone_curves": 390,
-    "moving_bone_curves": 133,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 390,
     "moving_bone_curves": 83,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 21,
-    "bone_curves": 390,
-    "moving_bone_curves": 91,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 390,
-    "moving_bone_curves": 94,
-    "shape_curves": 3
-   },
-   "IDLE_Phase2": {
-    "frames": 61,
-    "bone_curves": 390,
-    "moving_bone_curves": 97,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 390,
-    "moving_bone_curves": 82,
-    "shape_curves": 3
-   },
-   "PHASE2_Eveil": {
-    "frames": 61,
-    "bone_curves": 390,
-    "moving_bone_curves": 87,
     "shape_curves": 3
    }
   }
@@ -851,34 +455,10 @@
     "moving_bone_curves": 48,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 160,
-    "moving_bone_curves": 48,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 160,
     "moving_bone_curves": 37,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 160,
-    "moving_bone_curves": 46,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 160,
-    "moving_bone_curves": 43,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 160,
-    "moving_bone_curves": 36,
     "shape_curves": 3
    }
   }
@@ -904,34 +484,10 @@
     "moving_bone_curves": 48,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 160,
-    "moving_bone_curves": 48,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 160,
     "moving_bone_curves": 37,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 160,
-    "moving_bone_curves": 46,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 160,
-    "moving_bone_curves": 43,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 160,
-    "moving_bone_curves": 36,
     "shape_curves": 3
    }
   }
@@ -957,34 +513,10 @@
     "moving_bone_curves": 48,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 160,
-    "moving_bone_curves": 48,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 160,
     "moving_bone_curves": 37,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 160,
-    "moving_bone_curves": 46,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 160,
-    "moving_bone_curves": 43,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 160,
-    "moving_bone_curves": 36,
     "shape_curves": 3
    }
   }
@@ -1010,34 +542,10 @@
     "moving_bone_curves": 48,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 160,
-    "moving_bone_curves": 48,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 160,
     "moving_bone_curves": 37,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 160,
-    "moving_bone_curves": 46,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 160,
-    "moving_bone_curves": 43,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 160,
-    "moving_bone_curves": 36,
     "shape_curves": 3
    }
   }
@@ -1063,34 +571,10 @@
     "moving_bone_curves": 48,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 160,
-    "moving_bone_curves": 48,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 160,
     "moving_bone_curves": 37,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 160,
-    "moving_bone_curves": 46,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 160,
-    "moving_bone_curves": 43,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 160,
-    "moving_bone_curves": 36,
     "shape_curves": 3
    }
   }
@@ -1116,34 +600,10 @@
     "moving_bone_curves": 48,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 160,
-    "moving_bone_curves": 48,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 160,
     "moving_bone_curves": 37,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 160,
-    "moving_bone_curves": 46,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 160,
-    "moving_bone_curves": 43,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 160,
-    "moving_bone_curves": 36,
     "shape_curves": 3
    }
   }
@@ -1169,34 +629,10 @@
     "moving_bone_curves": 48,
     "shape_curves": 3
    },
-   "DEATH": {
-    "frames": 61,
-    "bone_curves": 160,
-    "moving_bone_curves": 48,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 160,
     "moving_bone_curves": 37,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 19,
-    "bone_curves": 160,
-    "moving_bone_curves": 46,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 160,
-    "moving_bone_curves": 43,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 160,
-    "moving_bone_curves": 36,
     "shape_curves": 3
    }
   }
@@ -1222,64 +658,10 @@
     "moving_bone_curves": 75,
     "shape_curves": 3
    },
-   "ATTACK_ChuteNeige": {
-    "frames": 46,
-    "bone_curves": 300,
-    "moving_bone_curves": 75,
-    "shape_curves": 3
-   },
-   "ATTACK_PommesDePin": {
-    "frames": 46,
-    "bone_curves": 300,
-    "moving_bone_curves": 68,
-    "shape_curves": 3
-   },
-   "ATTACK_Racines": {
-    "frames": 56,
-    "bone_curves": 300,
-    "moving_bone_curves": 99,
-    "shape_curves": 3
-   },
-   "DEATH": {
-    "frames": 81,
-    "bone_curves": 300,
-    "moving_bone_curves": 115,
-    "shape_curves": 3
-   },
    "FLY": {
     "frames": 61,
     "bone_curves": 300,
     "moving_bone_curves": 76,
-    "shape_curves": 3
-   },
-   "HIT": {
-    "frames": 21,
-    "bone_curves": 300,
-    "moving_bone_curves": 72,
-    "shape_curves": 3
-   },
-   "IDLE": {
-    "frames": 61,
-    "bone_curves": 300,
-    "moving_bone_curves": 77,
-    "shape_curves": 3
-   },
-   "IDLE_Phase2": {
-    "frames": 61,
-    "bone_curves": 300,
-    "moving_bone_curves": 85,
-    "shape_curves": 3
-   },
-   "MOVE": {
-    "frames": 41,
-    "bone_curves": 300,
-    "moving_bone_curves": 77,
-    "shape_curves": 3
-   },
-   "PHASE2_Deploiement": {
-    "frames": 61,
-    "bone_curves": 300,
-    "moving_bone_curves": 78,
     "shape_curves": 3
    }
   }

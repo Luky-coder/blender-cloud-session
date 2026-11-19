@@ -20,18 +20,6 @@
  ],
  "actions": [
   {
-   "name": "IDLE",
-   "frames": 61,
-   "loop": true,
-   "seconds": 2.0
-  },
-  {
-   "name": "MOVE",
-   "frames": 41,
-   "loop": true,
-   "seconds": 1.33
-  },
-  {
    "name": "FLY",
    "frames": 61,
    "loop": true,
@@ -42,54 +30,6 @@
    "frames": 51,
    "loop": false,
    "seconds": 1.67
-  },
-  {
-   "name": "HIT",
-   "frames": 21,
-   "loop": false,
-   "seconds": 0.67
-  },
-  {
-   "name": "DEATH",
-   "frames": 91,
-   "loop": false,
-   "seconds": 3.0
-  },
-  {
-   "name": "ATTACK_VagueRacines",
-   "frames": 61,
-   "loop": false,
-   "seconds": 2.0
-  },
-  {
-   "name": "ATTACK_GrainesExplosives",
-   "frames": 46,
-   "loop": false,
-   "seconds": 1.5
-  },
-  {
-   "name": "ATTACK_TempeteNeige",
-   "frames": 61,
-   "loop": false,
-   "seconds": 2.0
-  },
-  {
-   "name": "ATTACK_Invocation",
-   "frames": 51,
-   "loop": false,
-   "seconds": 1.67
-  },
-  {
-   "name": "PHASE2_Eveil",
-   "frames": 61,
-   "loop": false,
-   "seconds": 2.0
-  },
-  {
-   "name": "IDLE_Phase2",
-   "frames": 61,
-   "loop": true,
-   "seconds": 2.0
   }
  ],
  "materials": {
@@ -276,5 +216,5 @@
  },
  "verts": 48914,
  "tris": 96056,
- "seconds": 165.0
+ "seconds": 58.3
 }

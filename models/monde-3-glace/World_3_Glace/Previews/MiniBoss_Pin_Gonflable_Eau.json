@@ -20,18 +20,6 @@
  ],
  "actions": [
   {
-   "name": "IDLE",
-   "frames": 61,
-   "loop": true,
-   "seconds": 2.0
-  },
-  {
-   "name": "MOVE",
-   "frames": 41,
-   "loop": true,
-   "seconds": 1.33
-  },
-  {
    "name": "FLY",
    "frames": 61,
    "loop": true,
@@ -42,48 +30,6 @@
    "frames": 45,
    "loop": false,
    "seconds": 1.47
-  },
-  {
-   "name": "HIT",
-   "frames": 21,
-   "loop": false,
-   "seconds": 0.67
-  },
-  {
-   "name": "DEATH",
-   "frames": 81,
-   "loop": false,
-   "seconds": 2.67
-  },
-  {
-   "name": "ATTACK_PommesDePin",
-   "frames": 46,
-   "loop": false,
-   "seconds": 1.5
-  },
-  {
-   "name": "ATTACK_Racines",
-   "frames": 56,
-   "loop": false,
-   "seconds": 1.83
-  },
-  {
-   "name": "ATTACK_ChuteNeige",
-   "frames": 46,
-   "loop": false,
-   "seconds": 1.5
-  },
-  {
-   "name": "PHASE2_Deploiement",
-   "frames": 61,
-   "loop": false,
-   "seconds": 2.0
-  },
-  {
-   "name": "IDLE_Phase2",
-   "frames": 61,
-   "loop": true,
-   "seconds": 2.0
   }
  ],
  "materials": {
@@ -280,5 +226,5 @@
  },
  "verts": 48150,
  "tris": 95160,
- "seconds": 159.5
+ "seconds": 61.5
 }

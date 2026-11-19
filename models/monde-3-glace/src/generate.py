@@ -31,7 +31,9 @@ import w3lib as L  # noqa: E402
 FAMILIES = {"igloo": "fam_igloo", "flocon": "fam_flocon", "dirigeable": "fam_dirigeable",
             "pin": "boss_pin", "gardien": "boss_gardien"}
 BOSS_FILES = {"pin": "MiniBoss_Pin_Gonflable_Eau", "gardien": "Boss_Gardien_Glaciers_Glace"}
-CORE_ACTIONS = ["IDLE", "MOVE", "ATTACK", "HIT", "DEATH"]
+# Animations exportées (demande : seulement le vol et l'attaque). Les autres (IDLE, MOVE, HIT, DEATH,
+# attaques spéciales des boss…) restent définies dans le code : les ajouter ici pour les réactiver.
+EXPORT_ACTIONS = ["FLY", "ATTACK"]
 
 
 def parse():
@@ -137,14 +139,27 @@ def main():
         coll.objects.link(ob)
 
     baked = []
-    for name, (n, loop, fn) in actions.items():
+    for name in EXPORT_ACTIONS:
+        n, loop, fn = actions[name]
         act, _ = L.bake_action(rig, name, n, fn, loop)
         baked.append(act)
-    idle = bpy.data.actions["IDLE"]
+    idle = bpy.data.actions["FLY"]
+    rest = bpy.data.actions["ATTACK"]      # image 1 de l'attaque = pose de repos (projectiles cachés)
     L.set_action(rig, idle)
     scene.frame_set(1)
-    # pose de repos visible au cas où les projectiles seraient cachés par l'échelle
     bpy.context.view_layer.update()
+
+    # Couleurs des matériaux recopiées en couleurs de sommets (lues par Roblox et la plupart des moteurs)
+    me0 = mesh.data
+    cols = []
+    for slot in mesh.material_slots:
+        bsdf = next(nd for nd in slot.material.node_tree.nodes if nd.type == "BSDF_PRINCIPLED")
+        src = "Emission Color" if bsdf.inputs["Emission Strength"].default_value > 1.0 else "Base Color"
+        cols.append(tuple(bsdf.inputs[src].default_value))
+    attr = me0.color_attributes.new("Couleur", "BYTE_COLOR", "CORNER")
+    for poly in me0.polygons:
+        for li in poly.loop_indices:
+            attr.data[li].color = cols[poly.material_index]
 
     blend, fbx, prev = paths(args, mod)
     for d in (os.path.dirname(blend), os.path.dirname(fbx), prev):
@@ -159,8 +174,8 @@ def main():
         add_leaf_bones=False, use_armature_deform_only=True, primary_bone_axis="Y", secondary_bone_axis="X",
         bake_anim=True, bake_anim_use_all_bones=True, bake_anim_use_nla_strips=False,
         bake_anim_use_all_actions=True, bake_anim_force_startend_keying=True, bake_anim_step=1.0,
-        bake_anim_simplify_factor=0.0, path_mode="AUTO", embed_textures=False)
-    L.set_action(rig, idle)
+        bake_anim_simplify_factor=0.0, path_mode="AUTO", embed_textures=False, colors_type="SRGB")
+    L.set_action(rig, rest)
     scene.frame_set(1)
 
     # Statistiques

@@ -11,7 +11,7 @@ import sys
 
 import bpy
 
-REQUIRED = ["IDLE", "MOVE", "ATTACK", "HIT", "DEATH"]
+REQUIRED = ["FLY", "ATTACK"]
 
 
 def channelbag_curves(act):
@@ -59,8 +59,10 @@ def check(path):
             res["errors"].append(f"prise {name} absente")
         elif takes[name]["moving_bone_curves"] == 0:
             res["errors"].append(f"prise {name} immobile")
-    if takes.get("DEATH", {}).get("shape_curves", 0) == 0:
-        res["errors"].append("pas de courbes de shape keys dans DEATH")
+    if takes.get("ATTACK", {}).get("shape_curves", 0) == 0:
+        res["errors"].append("pas de courbes de shape keys dans ATTACK")
+    if meshes and not meshes[0].data.color_attributes:
+        res["errors"].append("pas de couleurs de sommets")
     return res
 
 

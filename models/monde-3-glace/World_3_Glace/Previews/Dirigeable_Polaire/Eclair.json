@@ -20,18 +20,6 @@
  ],
  "actions": [
   {
-   "name": "IDLE",
-   "frames": 61,
-   "loop": true,
-   "seconds": 2.0
-  },
-  {
-   "name": "MOVE",
-   "frames": 41,
-   "loop": true,
-   "seconds": 1.33
-  },
-  {
    "name": "FLY",
    "frames": 61,
    "loop": true,
@@ -42,18 +30,6 @@
    "frames": 37,
    "loop": false,
    "seconds": 1.2
-  },
-  {
-   "name": "HIT",
-   "frames": 19,
-   "loop": false,
-   "seconds": 0.6
-  },
-  {
-   "name": "DEATH",
-   "frames": 61,
-   "loop": false,
-   "seconds": 2.0
   }
  ],
  "materials": {
@@ -220,5 +196,5 @@
  },
  "verts": 13656,
  "tris": 26904,
- "seconds": 50.0
+ "seconds": 47.2
 }
