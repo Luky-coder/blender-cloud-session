@@ -136,8 +136,8 @@ def check(folder, render=False):
         notes.append(line)
         shots.append((act, f0, f1, kind))
     kinds = sorted(k for _, _, _, k in shots)
-    if kinds != ["Fly", "Hit"]:
-        err.append(f"animations {kinds} (attendu Fly, Hit)")
+    if kinds != ["Attack", "Fly"]:
+        err.append(f"animations {kinds} (attendu Fly, Attack)")
     props = sorted(os.path.basename(p)[:-4] for p in glob.glob(os.path.join(folder, "Prop_*.fbx")))
     if props:
         notes.append("accessoires séparés : " + ", ".join(props))

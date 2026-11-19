@@ -3,12 +3,12 @@
     blender -b --factory-startup --python-exit-code 1 -P models/monde2-desert/verify_fbx.py
 
 Pour chaque ennemi :
-- .blend : exactement 2 actions (Fly en boucle, Hit), tous les os keyés, aucune échelle d'os animée,
+- .blend : exactement 2 actions (Fly en boucle, Attack), tous les os keyés, aucune échelle d'os animée,
   boucle Fly refermée (image N+1 = image 1), <= 20 000 triangles, 1 seul matériau à texture-palette,
   UV + couleurs de sommets, pas de shape keys, visage pondéré comme la peau du corps ;
 - FBX ré-importé : armature + maillage skinné, texture-palette incluse (couleurs présentes), couleurs de
-  sommets, 2 prises Fly et Hit, aucune échelle animée, mouvement mesuré (vol qui bouge et boucle,
-  coup reçu qui recule).
+  sommets, 2 prises Fly et Attack, aucune échelle animée, mouvement mesuré (vol qui bouge et boucle,
+  attaque qui frappe vers l'avant (+Y)).
 Écrit World_2_Desert/VERIFICATION.md et sort en erreur si un contrôle échoue.
 """
 import glob
@@ -49,8 +49,8 @@ def check_blend(path):
     mesh = next(o for o in bpy.data.objects if o.type == "MESH")
     err, notes = [], []
     acts = sorted(a.name.rsplit("_", 1)[-1] for a in bpy.data.actions)
-    if acts != ["Fly", "Hit"]:
-        err.append(f"actions {acts} (attendu Fly, Hit)")
+    if acts != ["Attack", "Fly"]:
+        err.append(f"actions {acts} (attendu Fly, Attack)")
     for a in bpy.data.actions:
         fcs = fcurves(a)
         bones = {fc.data_path.split('"')[1] for fc in fcs if fc.data_path.startswith("pose.bones")}
@@ -105,8 +105,8 @@ def check_fbx(path):
     if not mesh.data.color_attributes:
         err.append("couleurs de sommets absentes du FBX")
     takes = {a.name.split("|")[-1].rsplit("_", 1)[-1]: a for a in bpy.data.actions}
-    if sorted(takes) != ["Fly", "Hit"]:
-        err.append(f"prises {sorted(takes)} (attendu Fly, Hit)")
+    if sorted(takes) != ["Attack", "Fly"]:
+        err.append(f"prises {sorted(takes)} (attendu Fly, Attack)")
     rig.animation_data_create()
     lo0, hi0 = bbox(mesh)
     size0 = (hi0 - lo0).length
@@ -129,11 +129,11 @@ def check_fbx(path):
         line = f"{act.name.split('|')[-1]} [{f0}-{f1}] : déplacement max {moved:.2f} m"
         if moved < 0.005:
             err.append(f"{kind} immobile")
-        if kind == "Hit":
-            back = min(c.y - c0.y for c in cs)
-            line += f", recul {back:.2f} m"
-            if back > -0.01:
-                err.append("Hit : pas de recul")
+        if kind == "Attack":
+            fwd = max(c.y - c0.y for c in cs)
+            line += f", avancée {fwd:.2f} m"
+            if fwd < 0.03 * size0:
+                err.append("Attack : pas de coup vers l'avant")
         notes.append(line)
     notes.append(f"FBX : 1 matériau, texture-palette incluse ({tex[0].size[0]}×{tex[0].size[1]} px), "
                  f"couleurs de sommets, taille {size0:.2f} m (diagonale)" if tex else "FBX : pas de texture")
@@ -155,7 +155,7 @@ def main():
         else:
             errs.append("FBX absent")
         status = "OK" if not errs else "ÉCHEC"
-        rows.append(f"| {rel} | {info['pv']} | {info['bones']} | {info['verts']} | {info['tris']} | 2 (Fly, Hit) | "
+        rows.append(f"| {rel} | {info['pv']} | {info['bones']} | {info['verts']} | {info['tris']} | 2 (Fly, Attack) | "
                     f"{status} |")
         details.append(f"### {rel}\n\n" + "\n".join(f"- {n}" for n in notes) +
                        ("\n" + "\n".join(f"- **ERREUR** {e}" for e in errs) if errs else "") + "\n")

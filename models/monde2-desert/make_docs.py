@@ -81,8 +81,8 @@ def main():
 
 23 ennemis gonflables (cartoon 3D, plastique brillant, coutures, valves) : 3 familles × 7 types élémentaires,
 le mini-boss **Scaraballon** et le boss final **Grand Ballon Oasis**. Chaque ennemi est un modèle indépendant
-(1 armature + 1 maillage skinné à matériau unique), avec 2 animations : **Fly** (vol, en boucle) et **Hit**
-(coup reçu). Le contrôle automatique des 23 FBX est dans [VERIFICATION.md](VERIFICATION.md).
+(1 armature + 1 maillage skinné à matériau unique), avec 2 animations : **Fly** (vol, en boucle) et **Attack**
+(coup physique vers l'avant). Le contrôle automatique des 23 FBX est dans [VERIFICATION.md](VERIFICATION.md).
 
 ## Fichiers
 
@@ -114,7 +114,8 @@ World_2_Desert/
 - **Animations** : 2 actions indépendantes par ennemi, `<Famille>_<Type>_Fly` (vol en boucle : le ballon
   flotte, se balance, ses membres et sa ficelle suivent ; les cactus, pyramides et le scarabée s'élèvent
   au-dessus du sol, le scarabée bat des ailes ; les dirigeables avancent hélices en route) et
-  `<Famille>_<Type>_Hit` (recul, secousse, retour). 30 im/s, tous les os keyés à chaque image, **positions
+  `<Famille>_<Type>_Attack` (préparation avec recul et compression, projection vers l'avant, impact, petit
+  rebond, retour ; le Scaraballon charge carapace en avant, le Grand Ballon Oasis fonce nez en avant). 30 im/s, tous les os keyés à chaque image, **positions
   et rotations seulement, aucune échelle d'os** (compatible Roblox). Boucle Fly : image N+1 = image 1.
 - **Pas de shape keys** (non prises en charge hors tête sur Roblox), pas de caméra ni de contrainte.
 - **Couleurs** : un seul matériau par ennemi, piloté par une texture-palette (une case par couleur
@@ -128,7 +129,7 @@ World_2_Desert/
 - **Rien autour des ballons** : pas de particules en orbite ni d'accessoires flottants ; seuls les éléments
   fixés au ballon (décor élémentaire planté au sommet, emblèmes, valve, ficelle, nacelle, palmiers...).
 - **Ficelles de ballon** : nœud de gonflage + ficelle portée par une chaîne `String<i>_1..3`, animée en
-  mouvement secondaire (pend sous le ballon en vol, ondule, sursaute au coup reçu).
+  mouvement secondaire (pend sous le ballon en vol, ondule, fouette pendant l'attaque).
 - **Export FBX** : sélection armature + maillage, « All Actions » (une prise par action), os déformants
   seulement, sans os feuilles, échelle `FBX_SCALE_UNITS` (1 unité = 1 m dans Unity), axes par défaut de
   Blender (-Z avant / Y haut côté FBX), propriétés personnalisées incluses (`PV`, `Element`, `Famille`).

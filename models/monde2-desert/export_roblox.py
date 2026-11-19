@@ -355,7 +355,7 @@ avec une planche `Apercu_Roblox.jpg` par ennemi rendue à partir des FBX ré-imp
 <Nom>_Rugosite.png            carte de rugosité (SurfaceAppearance.RoughnessMap)
 <Nom>_Metal.png               carte de métal (SurfaceAppearance.MetalnessMap)
 Animations/<Nom>_Fly.fbx      vol (en boucle)
-Animations/<Nom>_Hit.fbx      coup reçu
+Animations/<Nom>_Attack.fbx   attaque (coup physique vers l'avant)
 Apercu_Roblox.jpg             images clés rendues depuis les FBX ré-importés
 ```
 
@@ -370,7 +370,7 @@ Apercu_Roblox.jpg             images clés rendues depuis les FBX ré-importés
    `ColorMap = <Nom>_Couleur.png` (et `RoughnessMap`, `MetalnessMap`), ou mets `<Nom>_Couleur.png` dans
    `TextureID`. Laisse la couleur du MeshPart en blanc.
 3. **Animations** : sélectionne le modèle, ouvre l'*Animation Editor*, menu « ⋯ » > *Import* >
-   *From FBX Animation*, puis choisis `Animations/<Nom>_Fly.fbx` (coche *Loop*) et `Animations/<Nom>_Hit.fbx`.
+   *From FBX Animation*, puis choisis `Animations/<Nom>_Fly.fbx` (coche *Loop*) et `Animations/<Nom>_Attack.fbx`.
    Publie-les et joue-les avec l'`Animator` du modèle (Humanoid ou AnimationController).
 
 Les animations n'utilisent que des positions et rotations d'os (aucune échelle, que Roblox ne lit pas).

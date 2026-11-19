@@ -5,7 +5,7 @@
 2. build_variant(fam, élément) repart d'une scène vide, AJOUTE (append, pas link) la référence,
    recolore les matériaux de rôle, refait le visage avec l'expression du type, ajoute le décor
    élémentaire posé sur le ballon, fusionne tout en un maillage skinné à matériau-palette unique et crée
-   les 2 actions : Fly (vol, en boucle) et Hit (coup reçu), sans aucune échelle d'os.
+   les 2 actions : Fly (vol, en boucle) et Attack (coup vers l'avant), sans aucune échelle d'os.
    Chaque variante est donc un modèle indépendant, sans reconstruire la géométrie de la famille.
 """
 import math
@@ -34,7 +34,7 @@ class Family:
     face_bone = "Body_Top"
     boss_file = None       # boss : nom de fichier unique (sinon <famille>/<type>)
     # images montrées dans la planche d'animation des aperçus
-    anim_frames = {"Fly": (1, 16, 31), "Hit": (3, 7)}
+    anim_frames = {"Fly": (1, 31), "Attack": (10, 15, 18)}
     anim_cols = 5
     anim_pad_forward = 0.15
     # vol : action d'origine servant de base (« Idle » : ballon qui flotte, « Move » : dirigeable en route)
@@ -69,19 +69,19 @@ class Family:
         return p
 
     def actions(self):
-        """Les 2 actions livrées : Fly (boucle) et Hit, dérivées des actions détaillées."""
+        """Les 2 actions livrées : Fly (boucle) et Attack, dérivées des actions détaillées."""
         leg = {s: (n, fn) for s, n, fn, _ in self.legacy_actions()}
         n_fly, f_fly = leg[self.fly_from]
-        n_hit, f_hit = leg["Hit"]
+        n_atk, f_atk = leg["Attack"]
 
         def fly(t):
             p = f_fly(t)
             p.add("Root", loc=(0, 0, self.fly_lift))
             return self.fly_extra(p, t, n_fly)
 
-        def hit(t):
-            return f_hit(t).add("Root", loc=(0, 0, self.fly_lift))
-        return [("Fly", n_fly, fly, True), ("Hit", n_hit, hit, False)]
+        def attack(t):  # coup physique vers l'avant, porté en vol
+            return f_atk(t).add("Root", loc=(0, 0, self.fly_lift))
+        return [("Fly", n_fly, fly, True), ("Attack", n_atk, attack, False)]
 
     # -- commun -----------------------------------------------------------------------------------
     def rig_bones(self):
@@ -156,7 +156,8 @@ class Family:
                 else:  # attaques : recul, fouet à la projection, oscillation amortie
                     a0, a1 = 0.25 * n, 0.45 * n
                     curve = K((0, 0.0), (a0, 0.35), (a1, -0.6), (a1 + 0.15 * n, 0.3), (n, 0.0))(t - 2 * k)
-                    a = curve * (1.0 if hang else -0.4) + damp(t, a1 + 2 * k, 0.25, 1.3, 6)
+                    a = curve * (1.0 if hang else 0.6) + damp(t, a1 + 2 * k, 0.25, 1.3, 6) + \
+                        (0.0 if hang else (1.25 if k == 0 else 0.0))  # ficelle pendante en vol
                     b = 0.2 * math.sin(t * 0.4 - lag) * math.exp(-t / n)
                 # pendante : X = avant/arrière, Y = latéral ; au sol : X = soulève, Z = serpente
                 p.add(f"String{i + 1}_{k + 1}", rot=(a, b, 0) if hang else (a, 0, b))
