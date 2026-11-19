@@ -3,10 +3,8 @@
 Énorme scarabée entièrement gonflable : grande carapace verte à élytres côtelés et bordure dorée,
 pronotum doré, tête expressive, deux antennes à bourgeons, deux ailes-feuilles décoratives, six pattes
 gonflables à genouillères dorées, motifs végétaux dorés et gemmes turquoise sur la carapace,
-pousses et fleur au sommet. Trois racines-accessoires (cachées) servent à l'attaque « Racines ».
+pousses et fleur au sommet.
 Longueur ~3,3 m, hauteur ~2 m, avant vers +Y, pivot au sol.
-Actions : Idle, Move, Attack (charge frontale), Hit, Death, Attack_Roll (boule qui roule),
-Attack_Roots (racines qui surgissent du sol).
 """
 import math
 
@@ -57,11 +55,11 @@ class Scarab(Family):
     face_params = dict(eye_r=0.125, eye_dx=0.2, eye_v=0.08, mouth_v=-0.17, mouth_w=0.28, mouth_h=0.1, brow_w=0.22,
                        brow=0.6)
     face_bone = "Head"
+    fly_from = "Idle"
+    fly_lift = 0.9
+    prop_prefixes = ('Racine',)
     strings = (dict(parent="Shell", hang=False, dir=(0, -0.6, -0.8), r=0.022, scale=1.6,
                     path=[(0, -1.38, 0.66), (0.05, -1.6, 0.35), (-0.08, -1.95, 0.03), (0.06, -2.5, 0.02)]),)
-    anim_frames = {"Idle": (1,), "Move": (8,), "Attack": (12, 22), "Hit": (4,), "Death": (40, 70),
-                   "Attack_Roll": (14, 30), "Attack_Roots": (14, 32)}
-    anim_cols = 5
     anim_pad_forward = 0.5
 
     BONES = [("Root", (0, 0, 0), None), ("Roll", (0, 0, 0.85), "Root"), ("Body", (0, 0, 0.3), "Roll"),
@@ -209,7 +207,17 @@ class Scarab(Family):
         return Vector((co.x * (1 + 0.05 * f), co.y * (1 + 0.03 * f), co.z * (1 + 0.04 * f)))
 
     # ------------------------------------------------------------------ animations
-    def actions(self):
+    def fly_extra(self, p, t, n):
+        """Le scarabée vole : ailes-feuilles qui battent, pattes pendantes qui pédalent, corps penché."""
+        w = TAU * t / n
+        p.add("Root", rot=(-0.08, 0, 0))
+        for s, b in ((1, "Wing_L"), (-1, "Wing_R")):
+            p.add(b, rot=(0.15, -s * (0.25 + 0.35 * math.sin(4 * w)), s * 0.2))
+        for name, s, _, _ in LEGS:
+            p.add(f"Leg_{name}", rot=(0.15 * math.sin(2 * w + len(name)), s * 0.35, 0))
+        return p
+
+    def legacy_actions(self):
         return [("Idle", 60, self.idle, True), ("Move", 30, self.move, True), ("Attack", 50, self.attack, False),
                 ("Hit", 20, self.hit, False), ("Death", 80, self.death, False),
                 ("Attack_Roll", 80, self.roll, False), ("Attack_Roots", 72, self.roots, False)]

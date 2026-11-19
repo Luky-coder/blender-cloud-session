@@ -1,6 +1,6 @@
 # Textures
 
-Aucune texture image n'est nécessaire : toutes les couleurs sont des matériaux Principled BSDF (couleur, rugosité, métal, vernis, émission) exportés dans les FBX, et tous les motifs (hiéroglyphes, dunes, rayures, losanges berbères, coutures, épines) sont de la vraie géométrie ou des matériaux assignés par face.
+Chaque ennemi a sa texture-palette dans `<Famille>/<Nom>_Couleur.png` (avec `_Rugosite.png` et `_Metal.png`) : une case de 32 px par couleur, les UV de chaque face pointent au centre de sa case. Elle est aussi incluse dans les FBX et dans les .blend.
 
 Les fichiers `Palette_<Type>.png` sont des nuanciers de référence (une case de 64 px par rôle, dans l'ordre) pour recréer les matériaux dans un moteur :
 

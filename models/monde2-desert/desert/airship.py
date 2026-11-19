@@ -48,9 +48,10 @@ class Airship(Family):
     face_frame = dict(center=(0, 0, ZC))
     face_params = dict(eye_r=0.1, eye_dx=0.17, eye_v=0.11, mouth_v=-0.17, mouth_w=0.24, mouth_h=0.085, brow_w=0.17)
     face_bone = "Env_Front"
+    fly_from = "Move"
+    fly_lift = 0.0
     strings = (dict(parent="Envelope", hang=True, dir=(0, 0, -1), r=0.013,
                     path=[(0, -0.62, 1.11), (0.02, -0.66, 0.8), (-0.03, -0.7, 0.5), (0.02, -0.74, 0.2)]),)
-    anim_frames = {"Idle": (1,), "Move": (8,), "Attack": (10, 15, 18), "Hit": (4,), "Death": (30, 50, 64)}
     anim_pad_forward = 0.2
 
     BONES = [("Root", (0, 0, 0), None), ("Hover", (0, 0, ZC), "Root"), ("Envelope", (0, 0, ZC), "Hover"),
@@ -183,7 +184,7 @@ class Airship(Family):
             if f > 0 else co
 
     # ------------------------------------------------------------------ animations
-    def actions(self):
+    def legacy_actions(self):
         return [("Idle", 60, self.idle, True), ("Move", 30, self.move, True), ("Attack", 40, self.attack, False),
                 ("Hit", 20, self.hit, False), ("Death", 70, self.death, False)]
 

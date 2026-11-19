@@ -470,7 +470,7 @@ def build_face(B, ff, p, prefix="Visage"):
         n_eye = (nrm + ff.f * 1.5).normalized()
         rx, ry, rz = er, er * d["eye_tall"], er * 0.6
         M = frame_matrix(loc - n_eye * rz * 0.25, n_eye, up=ff.U)
-        info = dict(eye=M.translation.copy(), pupil=M @ Vector((0, 0, rz)))
+        info = dict(eye=M.translation.copy(), pupil=M @ Vector((0, 0, rz)), ry=ry)
         bl, bn = ff.at(u0, d["eye_v"] + ry + er * 0.45 + d["brow_arch"] * er)
         info["brow"] = (bl + bn * er * 0.12) if bl is not None else M @ Vector((0, ry * 1.6, 0))
         if not hasattr(B, "face_info"):
@@ -629,8 +629,9 @@ def weight_fn(ob, fn):
     return ob
 
 
-def gradient(axis, stops):
-    """Mélange linéaire entre os placés le long d'un axe : stops = [(coord, os), ...] triés."""
+def gradient(axis, stops, smooth=True):
+    """Mélange entre os placés le long d'un axe : stops = [(coord, os), ...] triés.
+    smooth=False : mélange strictement linéaire (deux os qui se rapprochent = mise à l'échelle exacte)."""
     i_ax = "xyz".index(axis)
 
     def fn(co):
@@ -642,7 +643,8 @@ def gradient(axis, stops):
         for (a, ba), (b, bb) in zip(stops, stops[1:]):
             if a <= x <= b:
                 t = (x - a) / (b - a)
-                t = t * t * (3 - 2 * t)
+                if smooth:
+                    t = t * t * (3 - 2 * t)
                 return {ba: 1 - t, bb: t} if ba != bb else {ba: 1.0}
         return {stops[-1][1]: 1.0}
     return fn
@@ -651,7 +653,7 @@ def gradient(axis, stops):
 # ---------------------------------------------------------------------------------------------
 # Rig, assemblage, shape keys
 # ---------------------------------------------------------------------------------------------
-SHAPES = ("Degonfle", "Gonfle")
+SHAPES = ()  # shape keys abandonnées (Roblox) : plus d'os CTRL_*
 
 
 def make_rig(name, bones, coll, length=0.08):
@@ -704,6 +706,29 @@ def add_bones(rig, bones, length=0.05):
     for bname, _, _ in new:
         rig.pose.bones[bname].rotation_mode = "XYZ"
     view.objects.active = prev
+
+
+def copy_weights(objs, sources):
+    """Chaque sommet de `objs` prend les poids du sommet le plus proche des maillages `sources`."""
+    from mathutils.kdtree import KDTree
+    pts = []
+    for s in sources:
+        names = {g.index: g.name for g in s.vertex_groups}
+        for v in s.data.vertices:
+            pts.append((s.matrix_world @ v.co, {names[g.group]: g.weight for g in v.groups if g.weight > 1e-4}))
+    kd = KDTree(len(pts))
+    for i, (co, _) in enumerate(pts):
+        kd.insert(co, i)
+    kd.balance()
+    for o in objs:
+        groups = {}
+        for v in o.data.vertices:
+            _, i, _ = kd.find(o.matrix_world @ v.co)
+            for name, w in pts[i][1].items():
+                if name not in groups:
+                    groups[name] = o.vertex_groups.get(name) or o.vertex_groups.new(name=name)
+                groups[name].add([v.index], w, "REPLACE")
+    return objs
 
 
 def join(objs, name):
@@ -856,7 +881,7 @@ def bake_action(rig, key, name, nframes, fn, loop=False, step=1):
             d = pose.get(pb.name)
             pb.location = d["loc"] if d else (0, 0, 0)
             pb.rotation_euler = d["rot"] if d else (0, 0, 0)
-            pb.scale = d["scl"] if d else (1, 1, 1)
+            pb.scale = (1, 1, 1)  # aucune échelle d'os animée (Roblox ne la lit pas)
             pb.keyframe_insert("location", frame=f, group=pb.name)
             pb.keyframe_insert("rotation_euler", frame=f, group=pb.name)
             pb.keyframe_insert("scale", frame=f, group=pb.name)
@@ -878,9 +903,9 @@ def export_fbx(path, rig, mesh):
     bpy.ops.export_scene.fbx(
         filepath=path, use_selection=True, object_types={"ARMATURE", "MESH"},
         apply_unit_scale=True, apply_scale_options="FBX_SCALE_UNITS",
-        use_mesh_modifiers=False, mesh_smooth_type="FACE", use_triangles=False,  # True casse les blendshapes animés
+        use_mesh_modifiers=False, mesh_smooth_type="FACE", use_triangles=True,
         add_leaf_bones=False, primary_bone_axis="Y", secondary_bone_axis="X", use_armature_deform_only=True,
         bake_anim=True, bake_anim_use_all_bones=True, bake_anim_use_nla_strips=False,
         bake_anim_use_all_actions=True, bake_anim_force_startend_keying=True,
         bake_anim_step=1.0, bake_anim_simplify_factor=0.5, use_custom_props=True,
-        path_mode="AUTO", embed_textures=False)
+        path_mode="COPY", embed_textures=True)  # texture-palette incluse dans le FBX

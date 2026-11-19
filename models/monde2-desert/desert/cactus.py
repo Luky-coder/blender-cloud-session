@@ -41,6 +41,8 @@ class Cactus(Family):
     face_params = dict(eye_r=0.085, eye_dx=0.14, eye_v=0.1, mouth_v=-0.1, mouth_w=0.2, mouth_h=0.075,
                        brow_w=0.16)
     face_bone = "Body_Top"
+    fly_from = "Idle"
+    fly_lift = 0.6
     strings = (dict(parent="Body", hang=False, dir=(0, -1, -0.25), r=0.013,
                     path=[(0, -0.335, 0.07), (0.04, -0.55, 0.02), (-0.06, -0.85, 0.014), (0.05, -1.15, 0.014)]),)
 
@@ -187,7 +189,7 @@ class Cactus(Family):
         return Vector((co.x * (1 + 0.07 * f), co.y * (1 + 0.07 * f), co.z * (1 + 0.025 * f)))
 
     # ------------------------------------------------------------------ animations
-    def actions(self):
+    def legacy_actions(self):
         return [("Idle", 60, self.idle, True), ("Move", 30, self.move, True), ("Attack", 40, self.attack, False),
                 ("Hit", 20, self.hit, False), ("Death", 60, self.death, False)]
 

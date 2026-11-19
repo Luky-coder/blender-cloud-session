@@ -2,8 +2,8 @@
 
 23 ennemis gonflables (cartoon 3D, plastique brillant, coutures, valves) : 3 familles × 7 types élémentaires,
 le mini-boss **Scaraballon** et le boss final **Grand Ballon Oasis**. Chaque ennemi est un modèle indépendant
-(1 armature + 1 maillage skinné), avec 5 animations obligatoires (Idle, Move, Attack, Hit, Death) et des
-attaques spéciales pour les boss. Le contrôle automatique des 23 FBX est dans [VERIFICATION.md](VERIFICATION.md).
+(1 armature + 1 maillage skinné à matériau unique), avec 2 animations : **Fly** (vol, en boucle) et **Hit**
+(coup reçu). Le contrôle automatique des 23 FBX est dans [VERIFICATION.md](VERIFICATION.md).
 
 ## Fichiers
 
@@ -12,10 +12,14 @@ World_2_Desert/
   Blender/<Famille>/<Type>.blend        21 mobs (+ MiniBoss_..., Boss_... à la racine)
   Blender/_References/                  géométrie de référence de chaque famille (palette neutre)
   FBX/<Famille>/<Type>.fbx              mêmes chemins, un FBX par ennemi
-  Textures/                             nuanciers (aucune texture image n'est nécessaire)
+  Textures/<Famille>/<Nom>_*.png        texture-palette de chaque ennemi (couleur, rugosité, métal)
   Previews/<Famille>/<Type>.jpg         4 vues (3/4 avant, face, profil, 3/4 arrière)
   Previews/<Famille>/<Type>_anim.jpg    images clés des actions
+  Roblox/                               version prête pour Roblox Studio (voir Roblox/README.md)
 ```
+
+**Roblox** : utilise le dossier [Roblox/](Roblox/README.md) : un FBX modèle + un FBX par animation (sans
+échelle d'os), une texture-palette par ennemi, notice d'import.
 
 | Ennemi | Type | PV | Fichiers | Aperçus |
 |---|---|---|---|---|
@@ -48,48 +52,45 @@ World_2_Desert/
 - **Unités** : mètres. **Haut** : +Z. **Avant : +Y** (le visage regarde +Y). **Pivot** : os `Root` au sol,
   sous l'ennemi (les volants planent au-dessus : dirigeables à 1,5 m, boss à 7 m).
 - **Rig** : os orientés comme le monde (pointant vers +Y, roll 0) ; `Root` porte le déplacement global.
-  Hiérarchie typique : `Root > Body > Body_Mid > Body_Top` (+ membres, `FX` = décor élémentaire de sommet,
-  `Aura` = particules en orbite). Dirigeables : `Root > Hover > Envelope > Env_Front / Env_Back`, `Prop`
-  (hélice), `Gondola`.
-- **Déformation gonflable** : squash & stretch à volume constant sur les os + 2 shape keys sur le maillage :
-  `Gonfle` (sur-gonflage : respiration, préparation des attaques) et `Degonfle` (ratatinement plissé de la
-  mort). Les shape keys sont pilotées par des drivers lisant la position X des os de contrôle
-  `CTRL_Gonfle` / `CTRL_Degonfle` (non déformants, non exportés) : chaque action ne contient que des
-  courbes d'armature, et le FBX contient des blendshapes animés par prise.
-- **Actions** : une action Blender indépendante par animation (`<Famille>_<Type>_<Anim>`), 30 im/s,
-  tous les os keyés à chaque clé. Boucles (Idle, Move) : plage 1..N, l'image N+1 égale l'image 1.
-  Aucune caméra, aucune contrainte : rien ne dépend de la caméra.
-- **Accessoires d'attaque des boss** (racines, noix de coco, vague, tornades, cactus) : géométrie du
-  maillage portée par leurs propres os, mis à l'échelle 0,001 et repliés dans le corps hors de leur action.
-- **Matériaux** : Principled BSDF (rugosité basse + vernis) par rôle ; motifs en vraie géométrie.
+  Hiérarchie typique : `Root > Body > Body_Mid > Body_Top` (+ membres, `FX` = décor élémentaire posé au
+  sommet). Dirigeables : `Root > Hover > Envelope > Env_Front / Env_Back`, `Prop` (hélice), `Gondola`.
+- **Animations** : 2 actions indépendantes par ennemi, `<Famille>_<Type>_Fly` (vol en boucle : le ballon
+  flotte, se balance, ses membres et sa ficelle suivent ; les cactus, pyramides et le scarabée s'élèvent
+  au-dessus du sol, le scarabée bat des ailes ; les dirigeables avancent hélices en route) et
+  `<Famille>_<Type>_Hit` (recul, secousse, retour). 30 im/s, tous les os keyés à chaque image, **positions
+  et rotations seulement, aucune échelle d'os** (compatible Roblox). Boucle Fly : image N+1 = image 1.
+- **Pas de shape keys** (non prises en charge hors tête sur Roblox), pas de caméra ni de contrainte.
+- **Couleurs** : un seul matériau par ennemi, piloté par une texture-palette (une case par couleur
+  d'origine : corps, coutures, or, sable, turquoise...) incluse dans le FBX et fournie en PNG dans
+  `Textures/` ; les mêmes couleurs sont aussi en couleurs de sommets. Cartes de rugosité et de métal
+  assorties. Motifs (hiéroglyphes, dunes, rayures) en vraie géométrie.
 - **Budget polygones : 20 000 triangles maximum par ennemi** (boss compris), contrôlé par `verify_fbx.py` :
   mobs ~10,5 à 14 k triangles, mini-boss ~17 k, boss ~19,5 k (détail du nombre exact dans VERIFICATION.md).
-- **Yeux animés** : os `Eye_L/R` (clignement, plissement, yeux écarquillés ; `_L` = côté +X), `Pupil_L/R`
-  (regard, dilatation) et `Brow_L/R` (sourcils levés / froncés). Idle : saccades du regard et clignements ;
-  Move : regard concentré ; attaques : yeux plissés puis effort à l'impact ; Hit : yeux fermés de douleur puis
-  écarquillés ; Death : regard choqué, pupilles qui tournent (étourdi), yeux qui se ferment.
+- **Yeux collés au corps** : chaque sommet du visage (yeux, pupilles, sourcils, bouche) reprend les poids
+  du sommet de peau le plus proche : le visage suit exactement la surface du ballon dans toutes les poses.
+- **Rien autour des ballons** : pas de particules en orbite ni d'accessoires flottants ; seuls les éléments
+  fixés au ballon (décor élémentaire planté au sommet, emblèmes, valve, ficelle, nacelle, palmiers...).
 - **Ficelles de ballon** : nœud de gonflage + ficelle portée par une chaîne `String<i>_1..3`, animée en
-  mouvement secondaire (ondule, traîne, fouette, retombe).
+  mouvement secondaire (pend sous le ballon en vol, ondule, sursaute au coup reçu).
 - **Export FBX** : sélection armature + maillage, « All Actions » (une prise par action), os déformants
   seulement, sans os feuilles, échelle `FBX_SCALE_UNITS` (1 unité = 1 m dans Unity), axes par défaut de
   Blender (-Z avant / Y haut côté FBX), propriétés personnalisées incluses (`PV`, `Element`, `Famille`).
-  La triangulation est laissée au moteur (l'option de triangulation de l'exporteur casse les blendshapes
-  animés).
+  Maillage triangulé, texture-palette incluse dans le fichier.
 - **Régénérer** : `blender -b --factory-startup --python-exit-code 1 -P models/monde2-desert/export_all.py`
   (options `--only cactus,pyramide,dirigeable,scaraballon,oasis`, `--elements Feu,Eau`, `--no-render`), puis
   `verify_fbx.py` et `make_docs.py`.
 
 ## Les types élémentaires
 
-| Type | Corps | Couronne (os `FX`) | Aura (os `Aura`) | Emblème en relief |
-|---|---|---|---|---|
-| Lumière | ivoire / jaune / or | halo doré, étoile, perles | étincelles à 4 branches | soleil rayonnant |
-| Ténèbres | violet / noir | colonne de fumée, lune violette | bouffées de fumée | croissant + œil |
-| Glace | bleu clair / blanc | grappe de cristaux | flocons | flocon |
-| Feu | rouge / orange | flamme + cœur jaune | braises | flamme |
-| Eau | bleu / turquoise | goutte et bulles | bulles | vagues (signe « eau ») |
-| Plante | vert / vert clair | fleur de cactus et feuilles | feuilles | feuille nervurée |
-| Éclair | jaune / bleu électrique | éclair, étincelles | mini-éclairs | éclair |
+| Type | Corps | Décor planté au sommet (os `FX`) | Emblème en relief |
+|---|---|---|---|
+| Lumière | ivoire / jaune / or | étoile dorée et anneau-halo posé | soleil rayonnant |
+| Ténèbres | violet / noir | colonne de fumée et lune violette | croissant + œil |
+| Glace | bleu clair / blanc | grappe de cristaux | flocon |
+| Feu | rouge / orange | flamme + cœur jaune | flamme |
+| Eau | bleu / turquoise | goutte d'eau | vagues (signe « eau ») |
+| Plante | vert / vert clair | fleur de cactus et feuilles | feuille nervurée |
+| Éclair | jaune / bleu électrique | éclair | éclair |
 
 ## Galerie
 
@@ -111,7 +112,7 @@ World_2_Desert/
 
 Cactus-saguaro gonflable posé dans un pot gonflable en terre cuite : 8 fuseaux pincés par des coutures, deux bras coudés, touffes d'épines arrondies sur les crêtes, bandana d'explorateur rayé, valve dorée. Hauteur ~1,7 m (couronne élémentaire comprise), avant vers +Y, pivot au sol.
 
-Actions : `Idle` (60 im., boucle), `Move` (30 im., boucle), `Attack` (40 im.), `Hit` (20 im.), `Death` (60 im.).
+Actions : `Fly` (60 im., boucle), `Hit` (20 im.).
 
 ![Cactus Lumiere](Previews/Ballon_Cactus/Lumiere.jpg)
 
@@ -132,7 +133,7 @@ Actions : `Idle` (60 im., boucle), `Move` (30 im., boucle), `Attack` (40 im.), `
 
 Pyramide gonflable à base carrée arrondie : quatre panneaux bombés, assises de « pierres » marquées par des coutures (horizontales, joints décalés, arêtes), frise de dunes sur l'assise basse, hiéroglyphes en relief sur les trois autres faces, pyramidion doré, quatre pieds-coussins et une petite valve. Base ~1,6 m, hauteur ~1,65 m (pyramidion compris), avant (visage) vers +Y, pivot au sol.
 
-Actions : `Idle` (60 im., boucle), `Move` (30 im., boucle), `Attack` (40 im.), `Hit` (20 im.), `Death` (60 im.).
+Actions : `Fly` (60 im., boucle), `Hit` (20 im.).
 
 ![Pyramide Lumiere](Previews/Ballon_Pyramide/Lumiere.jpg)
 
@@ -153,7 +154,7 @@ Actions : `Idle` (60 im., boucle), `Move` (30 im., boucle), `Attack` (40 im.), `
 
 Petit dirigeable-jouet gonflable : enveloppe allongée à 8 fuseaux cousus, bandes de tissu désertique (rayures et losanges berbères), visage sur le nez, 4 ailerons gonflables, hélice arrière dorée, nacelle gonflable tressée suspendue par 4 cordages, sacs de sable, longue-vue d'explorateur et fanion. Longueur ~2,9 m, vol stationnaire à 1,5 m (centre de l'enveloppe), avant vers +Y, pivot au sol.
 
-Actions : `Idle` (60 im., boucle), `Move` (30 im., boucle), `Attack` (40 im.), `Hit` (20 im.), `Death` (70 im.).
+Actions : `Fly` (30 im., boucle), `Hit` (20 im.).
 
 ![Dirigeable Lumiere](Previews/Dirigeable_Desert/Lumiere.jpg)
 
@@ -172,18 +173,18 @@ Actions : `Idle` (60 im., boucle), `Move` (30 im., boucle), `Attack` (40 im.), `
 
 ### Le Scaraballon (mini-boss) — PV 450
 
-Énorme scarabée entièrement gonflable : grande carapace verte à élytres côtelés et bordure dorée, pronotum doré, tête expressive, deux antennes à bourgeons, deux ailes-feuilles décoratives, six pattes gonflables à genouillères dorées, motifs végétaux dorés et gemmes turquoise sur la carapace, pousses et fleur au sommet. Trois racines-accessoires (cachées) servent à l'attaque « Racines ». Longueur ~3,3 m, hauteur ~2 m, avant vers +Y, pivot au sol. Actions : Idle, Move, Attack (charge frontale), Hit, Death, Attack_Roll (boule qui roule), Attack_Roots (racines qui surgissent du sol).
+Énorme scarabée entièrement gonflable : grande carapace verte à élytres côtelés et bordure dorée, pronotum doré, tête expressive, deux antennes à bourgeons, deux ailes-feuilles décoratives, six pattes gonflables à genouillères dorées, motifs végétaux dorés et gemmes turquoise sur la carapace, pousses et fleur au sommet. Longueur ~3,3 m, hauteur ~2 m, avant vers +Y, pivot au sol.
 
-Actions : `Idle` (60 im., boucle), `Move` (30 im., boucle), `Attack` (50 im.), `Hit` (20 im.), `Death` (80 im.), `Attack_Roll` (80 im.), `Attack_Roots` (72 im.).
+Actions : `Fly` (60 im., boucle), `Hit` (20 im.).
 
 ![Scaraballon Plante](Previews/MiniBoss_Scaraballon_Plante.jpg)
 
 
 ### Le Grand Ballon Oasis (boss final) — PV 1800
 
-Immense dirigeable gonflable portant une oasis volante : enveloppe verte à 12 fuseaux, bandes dorées et turquoise à losanges berbères, frise de hiéroglyphes dorés, visage de boss sur le nez ; sur le dos, une île de sable aux rides de dunes avec un bassin gonflable turquoise, trois palmiers gonflables (troncs annelés, palmes, noix de coco), buissons et grande fleur ; dessous, une réserve d'eau gonflable suspendue à des cordages ; lianes feuillues pendantes ; deux nacelles-moteurs latérales et une grande hélice arrière (3 hélices) ; 4 grands ailerons. Accessoires d'attaque (cachés hors de leur action) : 3 noix de coco gonflables, une vague de sable, 2 tornades, 3 cactus gonflables qui surgissent du sol. Longueur ~15 m, centre de l'enveloppe à 7 m, avant vers +Y, pivot au sol. Actions : Idle, Move, Attack (charge éperon), Hit, Death, Attack_SandWave, Attack_Coconuts, Attack_Tornado, Attack_CactusSpawn.
+Immense dirigeable gonflable portant une oasis volante : enveloppe verte à 12 fuseaux, bandes dorées et turquoise à losanges berbères, frise de hiéroglyphes dorés, visage de boss sur le nez ; sur le dos, une île de sable aux rides de dunes avec un bassin gonflable turquoise, trois palmiers gonflables (troncs annelés, palmes, noix de coco), buissons et grande fleur ; dessous, une réserve d'eau gonflable suspendue à des cordages ; lianes feuillues pendantes ; deux nacelles-moteurs latérales et une grande hélice arrière (3 hélices) ; 4 grands ailerons. Longueur ~15 m, centre de l'enveloppe à 7 m, avant vers +Y, pivot au sol.
 
-Actions : `Idle` (90 im., boucle), `Move` (60 im., boucle), `Attack` (60 im.), `Hit` (24 im.), `Death` (120 im.), `Attack_SandWave` (90 im.), `Attack_Coconuts` (90 im.), `Attack_Tornado` (110 im.), `Attack_CactusSpawn` (90 im.).
+Actions : `Fly` (60 im., boucle), `Hit` (24 im.).
 
 ![Oasis Plante](Previews/Boss_Grand_Ballon_Oasis_Plante.jpg)
 

@@ -4,7 +4,7 @@ Chaque type fournit :
 - palette : couleurs des rôles élémentaires (corps, corps2, couture, glyphe, epine, fx, fx2, pupille, joue) ;
 - face : réglages d'expression du visage ;
 - crown(B, M, s) : décor de sommet (halo, flamme, cristaux...) construit en repère local (Z = haut) puis M ;
-- particle(B, M, s, i) : petite particule en orbite (os Aura) ; Z local = direction radiale ;
+- particle(B, M, s, i) : (non utilisée : plus rien ne flotte autour des ballons) ;
 - emblem(B, name, M, bvh, s) : emblème en relief plaqué sur la surface.
 Les décors restent petits et au-dessus / autour du corps : la silhouette de la famille est conservée.
 """
@@ -82,14 +82,11 @@ def _drop(B, name, M, w, h, role, n=10):
 # LUMIÈRE
 # ---------------------------------------------------------------------------------------------
 def crown_lumiere(B, M, s):
-    out = [bake(B.ring("FX_Halo", (0, 0, s * 0.55), s * 0.62, s * 0.075, "fx", nseg=6, n=24), M)]
-    d = s * 0.08
-    out.append(B.prism("FX_Etoile", _star(4, s * 0.32, s * 0.1), d, "fx2",
-                       M=M @ Matrix.Translation((0, 0, s * 0.55)) @ _upright(d), smooth=False))
-    for k in range(6):
-        a = TAU * k / 6
-        loc = Vector((math.cos(a) * s * 0.62, math.sin(a) * s * 0.62, s * 0.55))
-        out.append(B.sphere(f"FX_Perle_{k}", None, (s * 0.07,) * 3, "fx2", 6, 4, M=M @ Matrix.Translation(loc)))
+    """Étoile dorée plantée au sommet, cerclée d'un anneau-halo posé sur la tête (rien ne flotte)."""
+    d = s * 0.1
+    out = [B.prism("FX_Etoile", _star(4, s * 0.36, s * 0.12), d, "fx2",
+                   M=M @ Matrix.Translation((0, 0, s * 0.3)) @ _upright(d), smooth=False),
+           bake(B.ring("FX_Halo", (0, 0, s * 0.03), s * 0.26, s * 0.06, "fx", nseg=6, n=20), M)]
     return out
 
 
@@ -131,7 +128,7 @@ def crown_tenebres(B, M, s):
     d = s * 0.08
     pts = _crescent(s * 0.3)
     pts = pts[::-1]
-    out.append(B.prism("FX_Lune", pts, d, "fx2", M=M @ Matrix.Translation((0, 0, s * 1.45)) @ _upright(d)))
+    out.append(B.prism("FX_Lune", pts, d, "fx2", M=M @ Matrix.Translation((0, 0, s * 1.3)) @ _upright(d)))
     return out
 
 
@@ -227,12 +224,10 @@ def emblem_feu(B, name, M, bvh, s):
 # EAU
 # ---------------------------------------------------------------------------------------------
 def crown_eau(B, M, s):
+    """Goutte d'eau plantée au sommet (avec son reflet)."""
     out = [_drop(B, "FX_Goutte", M @ Matrix.Translation((0, 0, -s * 0.1)), s * 0.34, s * 1.15, "fx")]
     out.append(B.sphere("FX_Goutte_Reflet", None, (s * 0.07, s * 0.05, s * 0.1), "reflet", 8, 6,
                         M=M @ Matrix.Translation((-s * 0.12, s * 0.26, s * 0.32))))
-    for k, (x, y, z, r) in enumerate(((0.42, 0.1, 0.25, 0.12), (-0.38, -0.15, 0.45, 0.09), (0.28, -0.3, 0.75, 0.07))):
-        out.append(B.sphere(f"FX_Bulle_{k}", None, (r * s,) * 3, "fx2", 8, 6,
-                            M=M @ Matrix.Translation((x * s, y * s, z * s))))
     return out
 
 
@@ -286,17 +281,10 @@ def emblem_plante(B, name, M, bvh, s):
 # ÉCLAIR
 # ---------------------------------------------------------------------------------------------
 def crown_eclair(B, M, s):
+    """Éclair planté au sommet."""
     d = s * 0.14
     pts = [(x * s * 1.5, y * s * 1.5) for x, y in BOLT][::-1]
-    out = [B.prism("FX_Eclair", pts, d, "fx2", M=M @ Matrix.Translation((0, 0, s * 0.62)) @ _upright(d))]
-    for k, (x, y, z) in enumerate(((0.45, 0.0, 0.3), (-0.45, 0.05, 0.75), (0.3, -0.1, 1.1))):
-        out.append(B.sphere(f"FX_Etincelle_{k}", None, (s * 0.09,) * 3, "fx", 8, 6,
-                            M=M @ Matrix.Translation((x * s, y * s, z * s))))
-    for k, side in enumerate((-1, 1)):
-        R = Matrix.Translation((side * s * 0.5, 0, s * 0.35)) @ Matrix.Rotation(-side * 0.5, 4, "Y")
-        small = [(x * s * 0.7, y * s * 0.7) for x, y in BOLT][::-1]
-        out.append(B.prism(f"FX_Eclair_{k}", small, d * 0.8, "fx", M=M @ R @ _upright(d * 0.8)))
-    return out
+    return [B.prism("FX_Eclair", pts, d, "fx2", M=M @ Matrix.Translation((0, 0, s * 0.62)) @ _upright(d))]
 
 
 def particle_eclair(B, M, s, i):

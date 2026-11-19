@@ -129,7 +129,8 @@ def main():
         for e in elems:
             t1 = time.time()
             blend, fbx, stem = paths(fam, e)
-            rig, mesh, key, acts = family.build_variant(fam, e, ref, blend, fbx)
+            tex = os.path.join(OUT, "Textures", fam.boss_file or fam.key)
+            rig, mesh, key, acts = family.build_variant(fam, e, ref, blend, fbx, tex)
             nv, nf = len(mesh.data.vertices), sum(len(pp.vertices) - 2 for pp in mesh.data.polygons)
             print(f"[monde2] {fam.key}/{e} : {nv} sommets, {nf} triangles, {len(acts)} actions, "
                   f"{len(rig.pose.bones)} os ({time.time() - t1:.1f}s)")

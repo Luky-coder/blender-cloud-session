@@ -59,9 +59,10 @@ class Pyramid(Family):
     face_frame = dict(center=(0, 0, 0.62))
     face_params = dict(eye_r=0.11, eye_dx=0.2, eye_v=0.13, mouth_v=-0.13, mouth_w=0.3, mouth_h=0.11, brow_w=0.21)
     face_bone = "Body_Mid"
+    fly_from = "Idle"
+    fly_lift = 0.6
     strings = (dict(parent="Body", hang=False, dir=(0, -1, -0.3), r=0.014,
                     path=[(0, -0.74, 0.14), (0.05, -1.0, 0.03), (-0.06, -1.35, 0.015), (0.04, -1.7, 0.015)]),)
-    anim_frames = {"Idle": (1,), "Move": (8,), "Attack": (10, 15, 18), "Hit": (4,), "Death": (24, 42, 54)}
 
     BONES = [("Root", (0, 0, 0), None), ("Body", (0, 0, 0.05), "Root"), ("Body_Mid", (0, 0, 0.6), "Body"),
              ("Body_Top", (0, 0, 1.0), "Body_Mid"), ("Cap", (0, 0, 1.38), "Body_Top"), ("FX", (0, 0, 1.62), "Cap"),
@@ -175,7 +176,7 @@ class Pyramid(Family):
         return Vector((co.x * (1 + 0.06 * f), co.y * (1 + 0.06 * f), co.z * (1 + 0.03 * f)))
 
     # ------------------------------------------------------------------ animations
-    def actions(self):
+    def legacy_actions(self):
         return [("Idle", 60, self.idle, True), ("Move", 30, self.move, True), ("Attack", 40, self.attack, False),
                 ("Hit", 20, self.hit, False), ("Death", 60, self.death, False)]
 

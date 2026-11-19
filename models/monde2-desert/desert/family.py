@@ -3,17 +3,19 @@
 1. build_reference(fam) construit la géométrie de référence d'une famille (palette neutre « sable »,
    pièces séparées déjà pondérées sur le rig) et l'enregistre dans Blender/_References/.
 2. build_variant(fam, élément) repart d'une scène vide, AJOUTE (append, pas link) la référence,
-   recolore les matériaux de rôle, refait le visage avec l'expression du type, ajoute les décors
-   élémentaires, fusionne tout en un maillage skinné, crée les shape keys et les 5 actions (ou plus).
+   recolore les matériaux de rôle, refait le visage avec l'expression du type, ajoute le décor
+   élémentaire posé sur le ballon, fusionne tout en un maillage skinné à matériau-palette unique et crée
+   les 2 actions : Fly (vol, en boucle) et Hit (coup reçu), sans aucune échelle d'os.
    Chaque variante est donc un modèle indépendant, sans reconstruire la géométrie de la famille.
 """
 import math
 import os
+import re
 
 import bpy
 from mathutils import Vector
 
-from . import core
+from . import core, palette
 from .core import TAU, Builder, K, Pose, damp, frame_matrix, jitter, surface
 from .elements import ELEMENTS
 
@@ -32,9 +34,14 @@ class Family:
     face_bone = "Body_Top"
     boss_file = None       # boss : nom de fichier unique (sinon <famille>/<type>)
     # images montrées dans la planche d'animation des aperçus
-    anim_frames = {"Idle": (1,), "Move": (8,), "Attack": (10, 15, 18), "Hit": (4,), "Death": (24, 42, 54)}
-    anim_cols = 3
+    anim_frames = {"Fly": (1, 16, 31), "Hit": (3, 7)}
+    anim_cols = 5
     anim_pad_forward = 0.15
+    # vol : action d'origine servant de base (« Idle » : ballon qui flotte, « Move » : dirigeable en route)
+    fly_from = "Idle"
+    fly_lift = 0.0          # hauteur de vol ajoutée (ballons posés au sol au repos)
+    prop_prefixes = ()      # pièces d'accessoires d'attaque retirées du modèle
+    DROP_BONE = re.compile(r"^(Aura|Roots_\d+|Coco_\d+|SandWave|Tornado_\d+|Cactus_\d+)$")
     # ficelles de ballon : nœud de gonflage + ficelle animée par une chaîne de 3 os (String<i>_1..3)
     # dict(parent=os, path=[nœud, ...points], dir=sortie du nœud, hang=pend (sinon traîne au sol),
     #      r=rayon de la ficelle, scale=taille du nœud)
@@ -54,14 +61,32 @@ class Family:
     def inflate(self, co):
         return co
 
-    def actions(self):
-        """[(suffixe, nb_images, fn(t) -> Pose, boucle ?)]"""
+    def legacy_actions(self):
+        """Actions détaillées de la famille [(suffixe, nb_images, fn(t) -> Pose, boucle ?)]."""
         raise NotImplementedError
+
+    def fly_extra(self, p, t, n):
+        return p
+
+    def actions(self):
+        """Les 2 actions livrées : Fly (boucle) et Hit, dérivées des actions détaillées."""
+        leg = {s: (n, fn) for s, n, fn, _ in self.legacy_actions()}
+        n_fly, f_fly = leg[self.fly_from]
+        n_hit, f_hit = leg["Hit"]
+
+        def fly(t):
+            p = f_fly(t)
+            p.add("Root", loc=(0, 0, self.fly_lift))
+            return self.fly_extra(p, t, n_fly)
+
+        def hit(t):
+            return f_hit(t).add("Root", loc=(0, 0, self.fly_lift))
+        return [("Fly", n_fly, fly, True), ("Hit", n_hit, hit, False)]
 
     # -- commun -----------------------------------------------------------------------------------
     def rig_bones(self):
-        """Os de la famille + chaînes des ficelles."""
-        out = list(self.BONES)
+        """Os de la famille (sans os d'aura ni d'accessoires) + chaînes des ficelles."""
+        out = [b for b in self.BONES if not self.DROP_BONE.match(b[0])]
         for i, st in enumerate(self.strings):
             pts = core.spline(st["path"], 41)
             for k, f in enumerate(self.STRING_SPLIT):
@@ -108,7 +133,13 @@ class Family:
             hang = st.get("hang", True)
             for k in range(3):
                 lag = 0.8 * k + 1.3 * i
-                if suffix == "Idle":
+                if suffix == "Fly":
+                    if hang:
+                        a, b = -0.12 + 0.12 * math.sin(w - lag), 0.1 * math.sin(w + 1 - lag)
+                    else:  # ficelle couchée vers l'arrière au repos : elle pend sous le ballon en vol
+                        a = (1.25 if k == 0 else 0.0) + 0.1 * math.sin(w - lag)
+                        b = 0.12 * math.sin(w + 1 - lag)
+                elif suffix == "Idle":
                     a, b = 0.12 * math.sin(w - lag), 0.1 * math.sin(w + 1 - lag)
                 elif suffix == "Move":
                     if hang:
@@ -116,7 +147,7 @@ class Family:
                     else:
                         a, b = -0.08 * (1 - math.cos(2 * w - lag)), 0.3 * math.sin(2 * w - lag)
                 elif suffix == "Hit":
-                    a = damp(t, 1 + k, 0.5 if hang else -0.3, 1.4, 4)
+                    a = damp(t, 1 + k, 0.5, 1.4, 4) + (0.0 if hang else (1.25 if k == 0 else 0.0))
                     b = damp(t, 2 + k, 0.3, 1.8, 4)
                 elif suffix == "Death":
                     d = core.ease(t / n)
@@ -130,82 +161,20 @@ class Family:
                 # pendante : X = avant/arrière, Y = latéral ; au sol : X = soulève, Z = serpente
                 p.add(f"String{i + 1}_{k + 1}", rot=(a, b, 0) if hang else (a, 0, b))
         return p
+    def body_parts(self, B):
+        return [o for o in B.coll.objects if o.type == "MESH" and o.name in self.surface_parts]
+
     def face(self, B, bvh, overrides):
-        """Visage (expression du type) + os animables des yeux : Eye_L/R (clignement, plissement),
-        Pupil_L/R (regard, dilatation, enfants des yeux), Brow_L/R (sourcils). _L = côté +X."""
+        """Visage (expression du type). Chaque sommet du visage reprend les poids du sommet de corps le plus
+        proche : yeux, sourcils et bouche suivent exactement la peau du ballon (aucun décollement)."""
         params = dict(self.face_params)
         params.update(overrides)
         ff = core.FaceFrame(bvh, self.face_frame["center"], forward=self.face_frame.get("forward", (0, 1, 0)),
                             dist=self.face_frame.get("dist", 3.0))
         B.face_info = {}
         objs = core.build_face(B, ff, params)
-        rig = next(o for o in B.coll.objects if o.type == "ARMATURE")
-        bones = []
-        for side, tag in ((-1, "L"), (1, "R")):
-            info = B.face_info.get(side)
-            if info:
-                bones += [(f"Eye_{tag}", tuple(info["eye"]), self.face_bone),
-                          (f"Pupil_{tag}", tuple(info["pupil"]), f"Eye_{tag}"),
-                          (f"Brow_{tag}", tuple(info["brow"]), self.face_bone)]
-        core.add_bones(rig, bones, length=params.get("eye_r", 0.08) * 0.5)
-        for o in objs:
-            n = o.name
-            side = "L" if (n.endswith("_G") or n.endswith("_-1")) else ("R" if (n.endswith("_D") or n.endswith("_1"))
-                                                                         else None)
-            if "_Oeil_" in n and side:
-                bone = f"Eye_{side}"
-            elif ("_Pupille_" in n or "_Reflet_" in n) and side:
-                bone = f"Pupil_{side}"
-            elif "_Sourcil_" in n and side:
-                bone = f"Brow_{side}"
-            else:
-                bone = self.face_bone
-            core.weight_all(o, bone)
+        core.copy_weights(objs, self.body_parts(B))
         return objs
-
-    def eye_motion(self, p, t, n, suffix):
-        """Regard expressif : clignements, saccades, plissement d'attaque, douleur, étourdissement."""
-        er = self.face_params.get("eye_r", 0.08)
-        w = TAU * t / n
-
-        def blink(t0, dur=6):
-            if t0 <= t <= t0 + dur:
-                x = (t - t0) / dur
-                return 1 - 0.92 * min(1.0, math.sin(math.pi * x) * 1.6)
-            return 1.0
-        lid, look, dil, brow_z, brow_g = 1.0, (0.0, 0.0), 1.0, 0.0, 0.0
-        if suffix == "Idle":
-            lid = blink(0.35 * n) * (blink(0.8 * n) if n >= 80 else 1.0)
-            look = K((0, (0.0, 0.0)), (0.2 * n, (0.0, 0.0)), (0.26 * n, (0.28, 0.06)), (0.5 * n, (0.28, 0.06)),
-                     (0.56 * n, (-0.24, -0.02)), (0.74 * n, (-0.24, -0.02)), (0.8 * n, (0.0, 0.0)), (n, (0.0, 0.0)))(t)
-            brow_z = 0.1 * er * math.sin(w)
-        elif suffix == "Move":
-            lid = blink(0.55 * n, 5)
-            look, brow_z, brow_g = (0.0, -0.12), -0.12 * er, 0.12
-        elif suffix == "Hit":
-            lid = K((0, 1.0), (2, 0.08), (6, 0.08), (9, 1.28), (14, 1.1), (n, 1.0))(t)
-            dil = K((0, 1.0), (6, 1.0), (9, 0.6), (n, 1.0))(t)
-            look = (jitter(t * 4, 0.15) * math.exp(-t / 6), jitter(t * 4 + 2, 0.1) * math.exp(-t / 6))
-            brow_z = K((0, 0.0), (3, -0.15 * er), (9, 0.35 * er), (n, 0.0))(t)
-            brow_g = K((0, 0.0), (3, 0.3), (9, -0.35), (n, 0.0))(t)
-        elif suffix == "Death":
-            lid = K((0, 1.0), (0.08 * n, 1.32), (0.2 * n, 1.15), (0.6 * n, 0.85), (0.72 * n, 0.08), (n, 0.08))(t)
-            dil = K((0, 1.0), (0.08 * n, 0.55), (0.25 * n, 0.8), (n, 0.8))(t)
-            spin = K((0, 0.0), (0.15 * n, 0.0), (0.25 * n, 0.3), (0.65 * n, 0.3), (0.72 * n, 0.0))(t)
-            look = (spin * math.cos(t * 0.6), spin * math.sin(t * 0.6))
-            brow_z = K((0, 0.0), (0.08 * n, 0.4 * er), (0.7 * n, 0.15 * er), (n, -0.1 * er))(t)
-            brow_g = K((0, 0.0), (0.08 * n, -0.4), (n, -0.2))(t)
-        else:  # Attack et attaques spéciales : plisse en préparation, effort à l'impact, yeux grands ouverts
-            lid = K((0, 1.0), (0.25 * n, 0.5), (0.42 * n, 0.55), (0.47 * n, 0.25), (0.58 * n, 1.18), (0.8 * n, 1.0))(t)
-            dil = K((0, 1.0), (0.25 * n, 0.8), (0.58 * n, 0.7), (n, 1.0))(t)
-            look = K((0, (0.0, 0.0)), (0.25 * n, (0.0, -0.12)), (0.7 * n, (0.0, -0.12)), (n, (0.0, 0.0)))(t)
-            brow_z = K((0, 0.0), (0.25 * n, -0.28 * er), (0.5 * n, -0.3 * er), (0.6 * n, 0.15 * er), (n, 0.0))(t)
-            brow_g = K((0, 0.0), (0.25 * n, 0.4), (0.5 * n, 0.45), (0.65 * n, 0.1), (n, 0.0))(t)
-        for tag, sgn in (("L", 1), ("R", -1)):
-            p.add(f"Eye_{tag}", scl=(1.0 + 0.3 * (lid - 1) if lid > 1 else 1.0, 1.0, lid))
-            p.add(f"Pupil_{tag}", loc=(look[0] * er, 0, look[1] * er), scl=dil)
-            p.add(f"Brow_{tag}", loc=(0, 0, brow_z), rot=(0, -brow_g * sgn, 0))
-        return p
 
     def add_element(self, B, elem, bvh):
         E = ELEMENTS[elem]
@@ -214,19 +183,6 @@ class Family:
         M = frame_matrix(c["loc"], c.get("up", (0, 0, 1)), up=(0, 1, 0))
         for o in E["crown"](B, M, c["size"]):
             core.weight_all(o, "FX")
-        # particules en orbite (os Aura)
-        a = self.aura
-        ax = Vector(a["axis"]).normalized()
-        u = Vector(a.get("ref", (1, 0, 0)))
-        u = (u - ax * u.dot(ax)).normalized()
-        v = ax.cross(u)
-        for k in range(a["count"]):
-            ph = TAU * k / a["count"] + a.get("phase", 0.0)
-            radial = u * math.cos(ph) + v * math.sin(ph)
-            pos = Vector(a["center"]) + radial * a["radius"] + ax * (0.12 * a["radius"] * math.sin(2 * ph))
-            Mk = frame_matrix(pos, radial, up=ax)
-            for o in E["particle"](B, Mk, a["size"], k):
-                core.weight_all(o, "Aura")
         # emblèmes en relief sur le corps
         for i, (origin, direction, size) in enumerate(self.emblems):
             loc, n = surface(bvh, origin, direction)
@@ -234,8 +190,7 @@ class Family:
                 print(f"[warn] emblème {i} : pas de surface")
                 continue
             Me = frame_matrix(loc, n, up=(0, 0, 1))
-            for o in E["emblem"](B, f"Emblème_{i}", Me, bvh, size):
-                core.weight_fn(o, self.body_weight)
+            core.copy_weights(E["emblem"](B, f"Emblème_{i}", Me, bvh, size), self.body_parts(B))
 
 
 def valve(B, loc, n, bone, s=1.0):
@@ -302,6 +257,8 @@ def build_reference(fam, path):
     coll = core.collection("REF_" + fam.key)
     B = Builder(coll, mats)
     fam.build(B)
+    for o in [o for o in coll.objects if fam.prop_prefixes and o.name.startswith(fam.prop_prefixes)]:
+        bpy.data.meshes.remove(o.data)
     fam.build_strings(B)
     bvh = core.bvh_of([o for o in coll.objects if o.name in fam.surface_parts])
     fam.face(B, bvh, {})
@@ -347,12 +304,11 @@ def assemble(fam, elem, ref_path, extra_parts=None, animate=True):
     core.bind(mesh, rig)
     rig.name = name
     rig.data.name = name + "_Armature"
-    key = core.add_shape_keys(mesh, {"Degonfle": fam.deflate, "Gonfle": fam.inflate})
-    core.drive_shape_keys(key, rig)
+    key = None  # pas de shape keys (non prises en charge hors tête sur Roblox)
     acts = []
     for suffix, n, fn, loop in (fam.actions() if animate else []):
         def full(t, fn=fn, n=n, suffix=suffix):
-            return fam.eye_motion(fam.string_motion(fn(t), t, n, suffix), t, n, suffix)
+            return fam.string_motion(fn(t), t, n, suffix)
         acts.append(core.bake_action(rig, key, f"{name}_{suffix}", n, full, loop=loop))
     if acts:
         core.assign_action(rig, key, acts[0])
@@ -370,9 +326,10 @@ def assemble(fam, elem, ref_path, extra_parts=None, animate=True):
     return rig, mesh, key, acts
 
 
-def build_variant(fam, elem, ref_path, blend_out, fbx_out):
+def build_variant(fam, elem, ref_path, blend_out, fbx_out, tex_folder):
     reset_scene()
     rig, mesh, key, acts = assemble(fam, elem, ref_path)
+    palette.apply(mesh, rig.name, tex_folder)
     os.makedirs(os.path.dirname(blend_out), exist_ok=True)
     os.makedirs(os.path.dirname(fbx_out), exist_ok=True)
     bpy.ops.wm.save_as_mainfile(filepath=blend_out, compress=True)

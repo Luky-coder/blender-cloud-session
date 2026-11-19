@@ -6,11 +6,7 @@ turquoise à losanges berbères, frise de hiéroglyphes dorés, visage de boss s
 annelés, palmes, noix de coco), buissons et grande fleur ; dessous, une réserve d'eau gonflable suspendue
 à des cordages ; lianes feuillues pendantes ; deux nacelles-moteurs latérales et une grande hélice
 arrière (3 hélices) ; 4 grands ailerons.
-Accessoires d'attaque (cachés hors de leur action) : 3 noix de coco gonflables, une vague de sable,
-2 tornades, 3 cactus gonflables qui surgissent du sol.
 Longueur ~15 m, centre de l'enveloppe à 7 m, avant vers +Y, pivot au sol.
-Actions : Idle, Move, Attack (charge éperon), Hit, Death, Attack_SandWave, Attack_Coconuts,
-Attack_Tornado, Attack_CactusSpawn.
 """
 import math
 
@@ -71,14 +67,13 @@ class Oasis(Family):
     face_params = dict(eye_r=0.5, eye_dx=0.85, eye_v=0.5, mouth_v=-0.75, mouth_w=1.35, mouth_h=0.48, brow_w=1.0,
                        brow=0.65, brow_arch=0.2)
     face_bone = "Env_Front"
+    fly_from = "Move"
+    fly_lift = 0.0
+    prop_prefixes = ('Coco', 'Vague', 'Tornade', 'Mini_Cactus')
     strings = tuple(dict(parent="Envelope", hang=True, dir=(0, 0, -1), r=0.045, scale=3.5,
                          path=[(x, y, z), (x + 0.1, y - 0.1, z - 1.1), (x - 0.12, y - 0.2, z - 2.2),
                                (x + 0.08, y - 0.3, z - 3.2)])
                     for x, y, z in ((0.0, -3.0, 4.98), (-0.9, -2.3, 4.92), (0.9, -2.3, 4.92)))
-    anim_frames = {"Idle": (1,), "Move": (15,), "Attack": (16, 28), "Hit": (5,), "Death": (60, 100),
-                   "Attack_SandWave": (40, 62), "Attack_Coconuts": (32, 44), "Attack_Tornado": (40, 75),
-                   "Attack_CactusSpawn": (36, 50)}
-    anim_cols = 5
     anim_pad_forward = 0.8
 
     def __init__(self):
@@ -366,7 +361,7 @@ class Oasis(Family):
         return Vector((co.x * 1.05, co.y * 1.02, ZC + (co.z - ZC) * 1.05))
 
     # ------------------------------------------------------------------ animations
-    def actions(self):
+    def legacy_actions(self):
         return [("Idle", 90, self.idle, True), ("Move", 60, self.move, True), ("Attack", 60, self.attack, False),
                 ("Hit", 24, self.hit, False), ("Death", 120, self.death, False),
                 ("Attack_SandWave", 90, self.sandwave, False), ("Attack_Coconuts", 90, self.coconuts, False),

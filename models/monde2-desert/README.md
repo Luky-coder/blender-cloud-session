@@ -14,4 +14,4 @@ Vues : [iso_back](screenshots/iso_back.jpg) · [back](screenshots/back.jpg) · [
 | [`monde2-desert.blend`](monde2-desert.blend) | Fichier Blender 5.2.3 LTS |
 | [`build.py`](build.py) | Script qui génère le modèle |
 
-**Dimensions** : 20.677 × 19.627 × 12.819 m (X × Y × Z) · **Objets** : 23 · **Sommets** : 152 366 · **Faces** : 163 083
+**Dimensions** : 20.684 × 19.305 × 12.437 m (X × Y × Z) · **Objets** : 23 · **Sommets** : 140 574 · **Faces** : 149 911
