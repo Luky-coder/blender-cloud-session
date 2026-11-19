@@ -7,7 +7,7 @@
  "blend": "Blender/Dirigeable_Polaire/Plante.blend",
  "fbx": "FBX/Dirigeable_Polaire/Dirigeable_Polaire_Plante.fbx",
  "dims": [
-  1.596,
+  1.595,
   2.118,
   1.524
  ],
@@ -35,9 +35,9 @@
  "materials": {
   "Corps": {
    "base_color": "#3E9C46",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -135,9 +135,9 @@
   },
   "Corps_2": {
    "base_color": "#86CC5C",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -194,7 +194,7 @@
    "transmission": 0.0
   }
  },
- "verts": 21710,
- "tris": 42724,
- "seconds": 53.8
+ "verts": 16512,
+ "tris": 32328,
+ "seconds": 45.2
 }

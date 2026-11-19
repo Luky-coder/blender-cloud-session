@@ -49,8 +49,8 @@ def materials(elem, prefix=""):
     """Jeu complet de matériaux pour un type (plus les matériaux communs au monde 3)."""
     p = PALETTES[elem]
     m = {}
-    m["main"] = L.mat(f"{prefix}Corps", p["main"], 0.18)
-    m["second"] = L.mat(f"{prefix}Corps_2", p["second"], 0.2)
+    m["main"] = L.mat(f"{prefix}Corps", p["main"], 0.18, fabric=p["second"])
+    m["second"] = L.mat(f"{prefix}Corps_2", p["second"], 0.2, fabric=p["main"])
     m["accent"] = L.mat(f"{prefix}Liseré", p["accent"], 0.25)
     m["deco"] = L.mat(f"{prefix}Déco", p["deco"], 0.18)
     m["deco2"] = L.mat(f"{prefix}Déco_2", p["deco2"], 0.18)

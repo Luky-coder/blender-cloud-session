@@ -9,7 +9,7 @@
  "dims": [
   1.756,
   0.495,
-  2.124
+  2.125
  ],
  "bones": 20,
  "deform_bones": 19,
@@ -35,9 +35,9 @@
  "materials": {
   "Corps_2": {
    "base_color": "#4A2C7C",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -45,9 +45,9 @@
   },
   "Corps": {
    "base_color": "#2B2140",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -174,7 +174,7 @@
    "transmission": 0.0
   }
  },
- "verts": 10570,
- "tris": 20748,
- "seconds": 50.8
+ "verts": 6604,
+ "tris": 12840,
+ "seconds": 49.2
 }

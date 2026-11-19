@@ -4,7 +4,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 11082,
+  "verts": 7012,
   "materials": 13,
   "shape_keys": [
    "Respiration",
@@ -33,7 +33,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 9720,
+  "verts": 6718,
   "materials": 13,
   "shape_keys": [
    "Respiration",
@@ -62,7 +62,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 9708,
+  "verts": 6310,
   "materials": 14,
   "shape_keys": [
    "Respiration",
@@ -91,7 +91,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 9924,
+  "verts": 6550,
   "materials": 13,
   "shape_keys": [
    "Respiration",
@@ -120,7 +120,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 10960,
+  "verts": 7754,
   "materials": 13,
   "shape_keys": [
    "Respiration",
@@ -149,7 +149,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 18516,
+  "verts": 14462,
   "materials": 13,
   "shape_keys": [
    "Respiration",
@@ -178,7 +178,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 10570,
+  "verts": 6604,
   "materials": 14,
   "shape_keys": [
    "Respiration",
@@ -207,7 +207,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 12710,
+  "verts": 6915,
   "materials": 14,
   "shape_keys": [
    "Respiration",
@@ -236,7 +236,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 11370,
+  "verts": 6577,
   "materials": 14,
   "shape_keys": [
    "Respiration",
@@ -265,7 +265,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 11418,
+  "verts": 6255,
   "materials": 15,
   "shape_keys": [
    "Respiration",
@@ -294,7 +294,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 11484,
+  "verts": 6381,
   "materials": 14,
   "shape_keys": [
    "Respiration",
@@ -323,7 +323,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 12610,
+  "verts": 7613,
   "materials": 13,
   "shape_keys": [
    "Respiration",
@@ -352,7 +352,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 19210,
+  "verts": 13393,
   "materials": 14,
   "shape_keys": [
    "Respiration",
@@ -381,7 +381,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 12280,
+  "verts": 6549,
   "materials": 15,
   "shape_keys": [
    "Respiration",
@@ -410,25 +410,25 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 48914,
-  "materials": 18,
+  "verts": 26562,
+  "materials": 17,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 38,
-  "bones": 39,
+  "vertex_groups": 30,
+  "bones": 31,
   "takes": {
    "ATTACK": {
     "frames": 51,
-    "bone_curves": 390,
+    "bone_curves": 310,
     "moving_bone_curves": 87,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
-    "bone_curves": 390,
+    "bone_curves": 310,
     "moving_bone_curves": 79,
     "shape_curves": 3
    }
@@ -439,7 +439,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 14616,
+  "verts": 9574,
   "materials": 16,
   "shape_keys": [
    "Respiration",
@@ -468,7 +468,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 13656,
+  "verts": 9484,
   "materials": 16,
   "shape_keys": [
    "Respiration",
@@ -497,7 +497,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 13644,
+  "verts": 9076,
   "materials": 17,
   "shape_keys": [
    "Respiration",
@@ -526,7 +526,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 13860,
+  "verts": 9316,
   "materials": 16,
   "shape_keys": [
    "Respiration",
@@ -555,7 +555,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 14896,
+  "verts": 10520,
   "materials": 15,
   "shape_keys": [
    "Respiration",
@@ -584,7 +584,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 21710,
+  "verts": 16512,
   "materials": 16,
   "shape_keys": [
    "Respiration",
@@ -613,7 +613,7 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 14006,
+  "verts": 9160,
   "materials": 17,
   "shape_keys": [
    "Respiration",
@@ -642,25 +642,25 @@
   "meshes": 1,
   "armatures": 1,
   "errors": [],
-  "verts": 48150,
+  "verts": 28890,
   "materials": 19,
   "shape_keys": [
    "Respiration",
    "Impact",
    "Degonfle"
   ],
-  "vertex_groups": 28,
-  "bones": 30,
+  "vertex_groups": 25,
+  "bones": 27,
   "takes": {
    "ATTACK": {
     "frames": 45,
-    "bone_curves": 300,
+    "bone_curves": 270,
     "moving_bone_curves": 75,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
-    "bone_curves": 300,
+    "bone_curves": 270,
     "moving_bone_curves": 76,
     "shape_curves": 3
    }

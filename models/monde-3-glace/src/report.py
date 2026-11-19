@@ -52,7 +52,8 @@ def main():
     json.dump({d["name"]: d["materials"] for d in items},
               open(os.path.join(ROOT, "Textures", "materiaux.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     with open(os.path.join(ROOT, "Textures", "LISEZMOI.txt"), "w", encoding="utf-8") as f:
-        f.write("Aucune texture image n'est nécessaire.\n\n"
+        f.write("Aucune texture image n'est nécessaire : les couleurs (motif de montgolfière compris) sont\n"
+                "dans l'attribut de sommets Couleur exporté dans les FBX.\n\n"
                 "Tous les matériaux sont des Principled BSDF à couleurs unies (plastique gonflable brillant) : le\n"
                 "FBX transporte la couleur de base, la rugosité, le métal et l'émission. Les motifs élémentaires\n"
                 "(flammes, cristaux, bulles, feuilles, éclairs, montagnes...) sont de la vraie géométrie.\n\n"
@@ -105,10 +106,12 @@ def main():
           "  une orientation de repos alignée sur les axes du monde.",
           "- Export FBX : axes par défaut de Blender (-Z avant, Y haut côté FBX), unités en mètres,",
           "  `add_leaf_bones` désactivé, une prise par Action nommée `<Nom>_Rig|<ACTION>`.",
-          "- Projectiles (pomme de pin, racines surgissantes, bloc de neige, graine, mini-ballons, tempête) :",
-          "  intégrés aux boss sur des os `Proj_*`, à l'échelle 0 hors de leurs attaques.", "",
+          "- Couleurs : attribut de sommets `Couleur` (exporté dans les FBX). Les grandes enveloppes portent un",
+          "  motif de montgolfière : fuseaux verticaux alternant les deux couleurs du type, coutures foncées.",
+          "  Matériaux toile en nylon satiné ; yeux, valves et cristaux en plastique brillant.",
+          "- Boss : uniquement leurs propres éléments (projectiles et aura retirés).", "",
           "## Régénérer", "",
-          "```bash", "bash src/run_batch.sh \"igloo:glace flocon:feu pin:plante\"   # ou n'importe quelle liste",
+          "```bash", "bash src/run_batch.sh \"igloo:glace flocon:feu pin:eau gardien:glace\"   # ou n'importe quelle liste",
           "blender -b --factory-startup -q -P src/verify_fbx.py -- World_3_Glace/FBX World_3_Glace/verification_fbx.json",
           "python3 src/report.py", "```", ""]
     open(os.path.join(ROOT, "RAPPORT.md"), "w", encoding="utf-8").write("\n".join(L) + "\n")

@@ -7,7 +7,7 @@
  "blend": "Blender/Dirigeable_Polaire/Feu.blend",
  "fbx": "FBX/Dirigeable_Polaire/Dirigeable_Polaire_Feu.fbx",
  "dims": [
-  1.596,
+  1.595,
   2.118,
   1.573
  ],
@@ -35,9 +35,9 @@
  "materials": {
   "Corps": {
    "base_color": "#E5402B",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -135,9 +135,9 @@
   },
   "Corps_2": {
    "base_color": "#FF8C2B",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -204,7 +204,7 @@
    "transmission": 0.0
   }
  },
- "verts": 13644,
- "tris": 26868,
- "seconds": 66.1
+ "verts": 9076,
+ "tris": 17732,
+ "seconds": 60.3
 }

@@ -6,11 +6,11 @@ rm -rf "$R"; mkdir -p "$R" .logs
 {
   for fam in Ballon_Igloo Ballon_Flocon Dirigeable_Polaire; do
     for e in Lumiere Tenebres Glace Feu Eau Plante Eclair; do
-      echo "World_3_Glace/Blender/$fam/$e.blend $R/$fam/$e 9500"
+      echo "World_3_Glace/Blender/$fam/$e.blend $R/$fam/$e 0"
     done
   done
-  echo "World_3_Glace/Blender/MiniBoss_Pin_Gonflable_Eau.blend $R/Boss/MiniBoss_Pin_Gonflable_Eau 36000"
-  echo "World_3_Glace/Blender/Boss_Gardien_Glaciers_Glace.blend $R/Boss/Boss_Gardien_Glaciers_Glace 36000"
+  echo "World_3_Glace/Blender/MiniBoss_Pin_Gonflable_Eau.blend $R/Boss/MiniBoss_Pin_Gonflable_Eau 0"
+  echo "World_3_Glace/Blender/Boss_Gardien_Glaciers_Glace.blend $R/Boss/Boss_Gardien_Glaciers_Glace 0"
 } | xargs -P 4 -L 1 bash -c '
   log=".logs/roblox_$(echo $1 | tr / _).log"
   blender -b "$0" --python-exit-code 1 -q -P src/roblox_export.py -- "$1" "$2" > "$log" 2>&1 \

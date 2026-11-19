@@ -35,9 +35,9 @@
  "materials": {
   "Corps_2": {
    "base_color": "#FFD970",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -45,9 +45,9 @@
   },
   "Corps": {
    "base_color": "#FFF3D9",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -164,7 +164,7 @@
    "transmission": 0.0
   }
  },
- "verts": 10960,
- "tris": 21544,
- "seconds": 54.3
+ "verts": 7754,
+ "tris": 15156,
+ "seconds": 52.1
 }

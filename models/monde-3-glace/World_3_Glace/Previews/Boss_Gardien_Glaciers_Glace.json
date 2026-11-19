@@ -7,12 +7,12 @@
  "blend": "Blender/Boss_Gardien_Glaciers_Glace.blend",
  "fbx": "FBX/Boss_Gardien_Glaciers_Glace.fbx",
  "dims": [
-  8.103,
-  16.139,
-  9.791
+  7.005,
+  9.169,
+  9.089
  ],
- "bones": 40,
- "deform_bones": 39,
+ "bones": 32,
+ "deform_bones": 31,
  "shape_keys": [
   "Respiration",
   "Impact",
@@ -35,9 +35,9 @@
  "materials": {
   "Ecorce_Gelee": {
    "base_color": "#6FB6D9",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -135,9 +135,9 @@
   },
   "Feuillage_Glacier": {
    "base_color": "#8CCBE6",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -155,9 +155,9 @@
   },
   "Feuillage_Givre": {
    "base_color": "#DDF3FF",
-   "roughness": 0.22,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -173,16 +173,6 @@
    "alpha": 1.0,
    "transmission": 0.0
   },
-  "Aura_Coeur": {
-   "base_color": "#9FEFFF",
-   "roughness": 0.3,
-   "metallic": 0.0,
-   "coat": 0.7,
-   "emission": "#9FEFFF",
-   "emission_strength": 3.0,
-   "alpha": 0.35,
-   "transmission": 0.0
-  },
   "Cristal_Turquoise": {
    "base_color": "#3FD8E8",
    "roughness": 0.06,
@@ -195,9 +185,9 @@
   },
   "Racine_Gelee": {
    "base_color": "#7D93AE",
-   "roughness": 0.3,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -214,7 +204,7 @@
    "transmission": 0.0
   }
  },
- "verts": 48914,
- "tris": 96056,
- "seconds": 75.0
+ "verts": 26562,
+ "tris": 51676,
+ "seconds": 62.4
 }

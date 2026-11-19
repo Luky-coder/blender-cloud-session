@@ -10,7 +10,6 @@ Roblox/
   ... Ballon_Flocon, Dirigeable_Polaire (7 types chacun)
   Boss/MiniBoss_Pin_Gonflable_Eau/ ...                    mini-boss, type Eau
   Boss/Boss_Gardien_Glaciers_Glace/ ...                   boss final, type Glace
-  Projectiles/                                            projectiles des boss (objets statiques colorés)
 ```
 
 ## Animations de chaque ennemi
@@ -28,25 +27,27 @@ Chaque ennemi a exactement deux animations :
 
 Roblox n'accepte qu'un matériau par MeshPart : les couleurs sont stockées **dans le FBX, sur les
 sommets du maillage** (couleurs de sommets, attribut `Couleur`), que l'importeur 3D lit directement.
+Les grandes enveloppes portent un **motif de montgolfière** : fuseaux verticaux qui alternent les deux
+couleurs du type (ex. rouge / orange pour Feu, jaune / bleu pour Éclair), séparés par des coutures
+foncées et qui convergent vers les pôles.
 Pour qu'elles s'affichent correctement sur chaque MeshPart importée :
 - `Color` = blanc (255, 255, 255) — la couleur de la pièce se multiplie avec les couleurs de sommets ;
 - `TextureID` vide (une texture masquerait les couleurs) ;
 - dans l'importeur, ne pas cocher « Ignorer les couleurs de sommets » ;
 - `Material` conseillé : `SmoothPlastic` (aspect plastique gonflable).
 
-### Aspect « ballon » en un clic
+### Aspect toile de montgolfière en un clic
 
-Les couleurs de sommets contiennent déjà l'ombrage des coutures et des creux (occlusion ambiante
-cuite) et un léger reflet. Pour l'aspect plastique gonflable brillant, sélectionne l'ennemi importé
-dans l'Explorateur puis colle ceci dans la *Barre de commande* (onglet *Affichage*) :
+Sélectionne l'ennemi importé dans l'Explorateur puis colle ceci dans la *Barre de commande* (onglet
+*Affichage*) : couleurs de sommets non assombries, toile lisse légèrement satinée.
 
 ```lua
 for _, p in ipairs(game:GetService("Selection"):Get()[1]:GetDescendants()) do
 	if p:IsA("MeshPart") then
 		p.Color = Color3.new(1, 1, 1)                -- couleurs de sommets non assombries
 		p.TextureID = ""
-		p.Material = Enum.Material.SmoothPlastic    -- plastique lisse
-		p.Reflectance = 0.12                         -- reflet de ballon
+		p.Material = Enum.Material.SmoothPlastic    -- toile lisse
+		p.Reflectance = 0.04                         -- léger satiné du nylon
 	end
 end
 ```
@@ -55,12 +56,12 @@ end
 
 | Contrainte Roblox | Adaptation |
 |---|---|
-| 20 000 triangles max par maillage | Mobs allégés à 9 500 triangles (1 MeshPart) ; boss à 36 000 triangles en 2 MeshParts |
+| 20 000 triangles max par maillage | Modèles conçus légers (mobs ≈ 12 000 à 25 000 triangles, boss ≈ 55 000) et découpés en MeshParts de 19 000 triangles max, sans allègement automatique (motifs nets) |
 | 1 seul matériau par MeshPart | Couleurs des matériaux converties en couleurs de sommets |
 | 4 os max par sommet | Poids limités à 4 et normalisés |
 | Pas d'échelle d'os dans les animations | Animations en position + rotation, échelle retirée partout de façon cohérente : les yeux restent collés au corps (l'écrasement/étirement et les clignements sont perdus) |
 | Pas de shape keys génériques | Supprimées |
-| Projectiles cachés par échelle 0 | Retirés des boss, fournis dans `Projectiles/` pour être lancés par ton script |
+| Éléments étrangers aux boss | Projectiles et aura retirés : les boss ne contiennent que leurs propres éléments |
 
 Avant du modèle = LookVector de Roblox (-Z). Unités : mètres (un mob fait ≈ 5 studs de haut, le
 Gardien ≈ 36).

@@ -1,4 +1,5 @@
-Aucune texture image n'est nécessaire.
+Aucune texture image n'est nécessaire : les couleurs (motif de montgolfière compris) sont
+dans l'attribut de sommets Couleur exporté dans les FBX.
 
 Tous les matériaux sont des Principled BSDF à couleurs unies (plastique gonflable brillant) : le
 FBX transporte la couleur de base, la rugosité, le métal et l'émission. Les motifs élémentaires

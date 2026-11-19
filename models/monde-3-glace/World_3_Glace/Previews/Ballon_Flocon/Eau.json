@@ -8,7 +8,7 @@
  "fbx": "FBX/Ballon_Flocon/Ballon_Flocon_Eau.fbx",
  "dims": [
   1.57,
-  0.486,
+  0.489,
   2.104
  ],
  "bones": 20,
@@ -35,9 +35,9 @@
  "materials": {
   "Corps_2": {
    "base_color": "#39D0C5",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -45,9 +45,9 @@
   },
   "Corps": {
    "base_color": "#2E8BE0",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -164,7 +164,7 @@
    "transmission": 0.7
   }
  },
- "verts": 11082,
- "tris": 21728,
- "seconds": 51.7
+ "verts": 7012,
+ "tris": 13612,
+ "seconds": 48.4
 }

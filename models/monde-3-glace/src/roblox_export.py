@@ -4,7 +4,8 @@
 
 Contraintes Roblox prises en compte :
   - un seul matériau par MeshPart -> couleurs des matériaux en couleurs de sommets (attribut Couleur) ;
-  - au plus 20 000 triangles par maillage -> maillage allégé (Decimate) puis découpé si besoin ;
+  - au plus 20 000 triangles par maillage -> découpe en morceaux de 19 000 triangles (allègement
+    Decimate seulement si un plafond est donné) ;
   - au plus 4 os par sommet -> poids limités à 4 et normalisés ;
   - pas d'échelle d'os dans les animations -> canaux position + rotation de chaque os conservés,
     échelle abandonnée partout (maillage et os restent cohérents : les yeux restent collés au corps) ;
@@ -201,7 +202,7 @@ bmesh.ops.triangulate(bm, faces=bm.faces)
 bm.to_mesh(me)
 bm.free()
 tris = len(me.polygons)
-if tris > TARGET:
+if TARGET and tris > TARGET:      # 0 = pas d'allègement (motifs nets, découpe en morceaux)
     dec = mesh.modifiers.new("Allegement", "DECIMATE")
     dec.ratio = TARGET / tris
     dec.use_collapse_triangulate = True

@@ -38,13 +38,29 @@ def srgb(hexstr):
 MATERIAL_INFO = {}  # nom -> description (exportée en JSON pour les moteurs de jeu)
 
 
+RES = 0.7   # densité des maillages (1 = pleine résolution) : modèles allégés pour le jeu
+
+
 def mat(name, hexcolor, rough=0.2, metal=0.0, coat=0.7, emit=None, strength=0.0, alpha=1.0,
-        transmission=0.0):
-    """Plastique / caoutchouc gonflable brillant (Principled BSDF + vernis)."""
+        transmission=0.0, fabric=False):
+    """Principled BSDF. fabric=True ou '#RRGGBB' (couleur des fuseaux alternés) : toile de montgolfière (nylon satiné, fuseaux et coutures peints
+    dans les couleurs de sommets) ; sinon plastique brillant (yeux, valves, cristaux…).
+    La couleur affichée vient de l'attribut de sommets « Couleur » (motifs compris)."""
     m = bpy.data.materials.get(name) or bpy.data.materials.new(name)
     b = next(n for n in m.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
     col = srgb(hexcolor)
+    if fabric:
+        rough, coat = 0.42, 0.15
+        b.inputs["Sheen Weight"].default_value = 0.5
+        b.inputs["Sheen Roughness"].default_value = 0.35
+        m["tissu"] = 1
+        if isinstance(fabric, str):                       # couleur des fuseaux alternés
+            m["tissu_alt"] = srgb(fabric)
     b.inputs["Base Color"].default_value = (*col, 1.0)
+    if not any(n.type == "VERTEX_COLOR" for n in m.node_tree.nodes):
+        vc = m.node_tree.nodes.new("ShaderNodeVertexColor")
+        vc.layer_name = "Couleur"
+        m.node_tree.links.new(vc.outputs["Color"], b.inputs["Base Color"])
     b.inputs["Roughness"].default_value = rough
     b.inputs["Metallic"].default_value = metal
     b.inputs["Coat Weight"].default_value = coat
@@ -105,6 +121,19 @@ def mesh_from_rows(name, rows, pole0=None, pole1=None, closed=True, recalc=True)
             faces.append((a + i, a + (i + 1) % n, p))
     me = bpy.data.meshes.new(name)
     me.from_pydata(verts, [], faces)
+    R = len(rows) - 1
+    pu, pv = [], []
+    for r in range(R):
+        for i in range(m):
+            pu.append((i + 0.5) / n)
+            pv.append((r + 0.5) / max(R, 1))
+    for v_cap in ([0.0] if idx0 is not None else []) + ([1.0] if pole1 is not None else []):
+        for i in range(m):
+            pu.append((i + 0.5) / n)
+            pv.append(v_cap)
+    for key, vals in (("pat_u", pu), ("pat_v", pv), ("pat_n", [float(n)] * len(pu)), ("pat_r", [float(R)] * len(pu))):
+        at = me.attributes.new(key, "FLOAT", "FACE")
+        at.data.foreach_set("value", vals)
     me.validate()
     if recalc:
         bm = bmesh.new()
@@ -118,6 +147,9 @@ def mesh_from_rows(name, rows, pole0=None, pole1=None, closed=True, recalc=True)
 
 def surface(name, fn, nu, nv, pole0=False, pole1=False, closed=True):
     """Surface paramétrique fn(u, v) -> Vector, u ∈ [0,1) autour, v ∈ [0,1] le long."""
+    step = 8 if nu * RES >= 24 else 4                     # fuseaux alignés sur la grille
+    nu = max(8, step * round(nu * RES / step))
+    nv = max(4, round(nv * RES))
     rows = []
     j0 = 1 if pole0 else 0
     j1 = nv - 1 if pole1 else nv
@@ -174,6 +206,7 @@ def tube(name, pts, radii, nseg=12, caps=(True, True), cap_rings=4, squash=None)
     """Tube gonflable le long d'une polyligne, rayons par point, extrémités hémisphériques.
     squash(i, a) -> facteur sur le rayon (pour les profils non circulaires)."""
     pts = [V(p) for p in pts]
+    nseg = max(6, 2 * round(nseg * RES / 2))
     if not isinstance(radii, (list, tuple)):
         radii = [radii] * len(pts)
     fr = _frames(pts)
@@ -226,6 +259,8 @@ def torus(name, center, R, r, nu=32, nv=10, M=None, lobes=0, lobe_amp=0.0):
         p = V(((R + rr * math.cos(th)) * math.cos(ph), (R + rr * math.cos(th)) * math.sin(ph), rr * math.sin(th)))
         return c + Rm @ p
 
+    nu = max(8, 4 * round(nu * RES / 4))
+    nv = max(4, round(nv * RES))
     rows = [[fn(i / nu, j / nv) for i in range(nu)] for j in range(nv)]
     # fermeture en v : on ajoute la première rangée à la fin
     rows.append(rows[0])
@@ -493,6 +528,19 @@ class Model:
                         groups[n] = ob.vertex_groups.new(name=n)
                     groups[n].add([v.index], w / s, "REPLACE")
 
+    def drop(self, pred):
+        """Retire du modèle les os pred(nom) == True et toutes les pièces qui leur sont attachées."""
+        gone = {n for n in self.bones if pred(n)}
+        keep = []
+        for ob, bone in self.parts:
+            if isinstance(bone, str) and bone in gone:
+                bpy.data.objects.remove(ob)
+            else:
+                keep.append((ob, bone))
+        self.parts = keep
+        for n in gone:
+            del self.bones[n]
+
     def build(self, shape_amp=1.0, wrinkle=0.07):
         for ob, bone in self.parts:
             self._weights(ob, bone)
@@ -505,9 +553,55 @@ class Model:
         main.data.name = self.name
         self.mesh = main
         _merge(main, 1e-6)
+        self._paint()
         self._rig()
         self._shape_keys(shape_amp, wrinkle)
         return main
+
+    def _paint(self):
+        """Attribut « Couleur » : couleur de chaque matériau ; sur les grandes enveloppes en toile
+        (matériaux tissu), motif de montgolfière : fuseaux verticaux alternant les deux couleurs du
+        type, séparés par des coutures foncées, qui convergent vers les pôles."""
+        me = self.mesh.data
+        base, fab = [], []
+        for m in me.materials:
+            b = next(n for n in m.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+            src = "Emission Color" if b.inputs["Emission Strength"].default_value > 1.0 else "Base Color"
+            base.append(tuple(b.inputs[src].default_value)[:3])
+            fab.append(bool(m.get("tissu")))
+        at = me.attributes
+        get = {k: [0.0] * len(me.polygons) for k in ("pat_u", "pat_v", "pat_n", "pat_r")}
+        for k in get:
+            if k in at:
+                at[k].data.foreach_get("value", get[k])
+        col_attr = me.color_attributes.new("Couleur", "BYTE_COLOR", "CORNER")
+        alt = []
+        for m in me.materials:
+            a = m.get("tissu_alt")
+            alt.append(tuple(a) if a else None)
+        for p in me.polygons:
+            c = base[p.material_index]
+            n = int(round(get["pat_n"][p.index]))
+            if fab[p.material_index] and n >= 20:
+                G = 8 if n >= 32 else 4
+                col = min(int(get["pat_u"][p.index] * n), n - 1)
+                gore = col * G // n
+                seam = n // G >= 5 and (col * G) % n < G
+                if seam:                                   # couture entre deux fuseaux
+                    c = tuple(x * 0.5 for x in c)
+                elif gore % 2:                             # fuseau alterné : 2e couleur du type
+                    a = alt[p.material_index]
+                    if a:
+                        c = a
+                    else:
+                        lum = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+                        c = tuple(x * 0.8 for x in c) if lum > 0.6 else tuple(x + (1 - x) * 0.3 for x in c)
+            for li in p.loop_indices:
+                col_attr.data[li].color = (*c, 1.0)
+        me.color_attributes.active_color = col_attr
+        for k in ("pat_u", "pat_v", "pat_n", "pat_r"):
+            if k in me.attributes:
+                me.attributes.remove(me.attributes[k])
 
     def _rig(self):
         arm = bpy.data.armatures.new(self.name + "_Rig")

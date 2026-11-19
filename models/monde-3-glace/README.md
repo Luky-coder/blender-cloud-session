@@ -13,4 +13,4 @@ Vues : [iso_back](screenshots/iso_back.jpg) · [back](screenshots/back.jpg) · [
 | [`monde-3-glace.blend`](monde-3-glace.blend) | Fichier Blender 5.2.3 LTS |
 | [`build.py`](build.py) | Script qui génère le modèle |
 
-**Dimensions** : 1.411 × 1.491 × 1.617 m (X × Y × Z) · **Objets** : 1 · **Sommets** : 11 484 · **Faces** : 11 950
+**Dimensions** : 1.411 × 1.491 × 1.617 m (X × Y × Z) · **Objets** : 1 · **Sommets** : 6 381 · **Faces** : 6 728

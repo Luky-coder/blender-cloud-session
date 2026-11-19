@@ -7,8 +7,8 @@
  "blend": "Blender/Dirigeable_Polaire/Eau.blend",
  "fbx": "FBX/Dirigeable_Polaire/Dirigeable_Polaire_Eau.fbx",
  "dims": [
-  1.596,
-  2.351,
+  1.595,
+  2.354,
   1.557
  ],
  "bones": 17,
@@ -35,9 +35,9 @@
  "materials": {
   "Corps": {
    "base_color": "#2E8BE0",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -135,9 +135,9 @@
   },
   "Corps_2": {
    "base_color": "#39D0C5",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -194,7 +194,7 @@
    "transmission": 0.7
   }
  },
- "verts": 14616,
- "tris": 28764,
- "seconds": 52.3
+ "verts": 9574,
+ "tris": 18680,
+ "seconds": 43.9
 }

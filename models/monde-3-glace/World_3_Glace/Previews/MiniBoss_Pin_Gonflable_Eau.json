@@ -8,11 +8,11 @@
  "fbx": "FBX/MiniBoss_Pin_Gonflable_Eau.fbx",
  "dims": [
   4.033,
-  5.662,
+  3.531,
   5.008
  ],
- "bones": 31,
- "deform_bones": 30,
+ "bones": 28,
+ "deform_bones": 27,
  "shape_keys": [
   "Respiration",
   "Impact",
@@ -35,9 +35,9 @@
  "materials": {
   "Tronc_Gonflable": {
    "base_color": "#2E5E82",
-   "roughness": 0.3,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -65,9 +65,9 @@
   },
   "Sapin_Abysse": {
    "base_color": "#1B5EA8",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -95,9 +95,9 @@
   },
   "Sapin_Lagon": {
    "base_color": "#38C3D3",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -224,7 +224,7 @@
    "transmission": 0.7
   }
  },
- "verts": 48150,
- "tris": 95160,
- "seconds": 75.5
+ "verts": 28890,
+ "tris": 56716,
+ "seconds": 63.0
 }

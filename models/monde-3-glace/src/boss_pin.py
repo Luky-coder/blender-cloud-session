@@ -82,10 +82,10 @@ def pine_cone(name, center, size, axis=V((0, 0, -1))):
 def materials(elem="eau"):
     """Palette Eau : bleu abysse, turquoise lagon, écume blanche, perles, algues, or."""
     mats = E.materials("eau")
-    mats["main"] = L.mat("Sapin_Abysse", "#1B5EA8", 0.18)
-    mats["second"] = L.mat("Sapin_Lagon", "#38C3D3", 0.18)
+    mats["main"] = L.mat("Sapin_Abysse", "#1B5EA8", 0.18, fabric="#38C3D3")
+    mats["second"] = L.mat("Sapin_Lagon", "#38C3D3", 0.18, fabric="#1B5EA8")
     mats["accent"] = L.mat("Sapin_Liseré", "#0F3A6B", 0.25)
-    mats["bark"] = L.mat("Tronc_Gonflable", "#2E5E82", 0.3)
+    mats["bark"] = L.mat("Tronc_Gonflable", "#2E5E82", 0.3, fabric="#3E7BA6")
     mats["cone"] = L.mat("Pomme_de_Pin", "#8B5A2B", 0.35)
     mats["bauble2"] = L.mat("Perle", "#EAF8FF", 0.1, metal=0.3)
     mats["deco_leaf"] = L.mat("Algue", "#27B597", 0.22)
@@ -541,6 +541,8 @@ def build(elem="eau"):
     mats = materials(elem)
     build_geometry(m, mats)
     water_decor(m, mats)
+    # seuls les éléments du boss restent : projectiles et aura (attaques spéciales non exportées) retirés
+    m.drop(lambda n: n.startswith("Proj_") or n == "Coeur_Aura")
     m.build(shape_amp=0.5, wrinkle=0.025)
     import anims
     return m, anims.with_eyes(ACTIONS, m.meta.get("eye_r", 0.25))

@@ -53,11 +53,11 @@ def env(t, ph, off=0.0, bark=True):
 def materials(elem="glace"):
     """Palette Glace : écorce bleu glacier, feuillage givré blanc-bleu, cristaux cyan, cœur de glace lumineux."""
     mats = E.materials("glace")
-    mats["main"] = L.mat("Ecorce_Gelee", "#6FB6D9", 0.2)
-    mats["second"] = L.mat("Feuillage_Givre", "#DDF3FF", 0.22)
-    mats["leaf_dark"] = L.mat("Feuillage_Glacier", "#8CCBE6", 0.2)
+    mats["main"] = L.mat("Ecorce_Gelee", "#6FB6D9", 0.2, fabric="#DDF3FF")
+    mats["second"] = L.mat("Feuillage_Givre", "#DDF3FF", 0.22, fabric="#8CCBE6")
+    mats["leaf_dark"] = L.mat("Feuillage_Glacier", "#8CCBE6", 0.2, fabric="#DDF3FF")
     mats["accent"] = L.mat("Ecorce_Liseré", "#2D6E96", 0.25)
-    mats["root"] = L.mat("Racine_Gelee", "#7D93AE", 0.3)
+    mats["root"] = L.mat("Racine_Gelee", "#7D93AE", 0.3, fabric="#A9BCD3")
     mats["turq"] = L.mat("Cristal_Turquoise", "#3FD8E8", 0.06, coat=1.0, transmission=0.4)
     mats["heart"] = L.mat("Coeur_de_Glace", "#BFF8FF", 0.2, emit="#7FEFFF", strength=6.0)
     mats["aura"] = L.mat("Aura_Coeur", "#9FEFFF", 0.3, emit="#9FEFFF", strength=3.0, alpha=0.35)
@@ -570,6 +570,8 @@ def build(elem="glace"):
     m = L.Model("Boss_Gardien_Glaciers_Glace", "Le Grand Gardien des Glaciers")
     mats = materials(elem)
     build_geometry(m, mats)
+    # seuls les éléments du boss restent : projectiles et aura (attaques spéciales non exportées) retirés
+    m.drop(lambda n: n.startswith("Proj_") or n == "Coeur_Aura")
     m.build(shape_amp=0.4, wrinkle=0.012)
     import anims
     return m, anims.with_eyes(ACTIONS, m.meta.get("eye_r", 0.25))

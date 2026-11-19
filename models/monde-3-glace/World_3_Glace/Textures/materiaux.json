@@ -2,9 +2,9 @@
  "Ballon_Igloo_Lumiere": {
   "Corps": {
    "base_color": "#FFF3D9",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -12,9 +12,9 @@
   },
   "Corps_2": {
    "base_color": "#FFD970",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -134,9 +134,9 @@
  "Ballon_Igloo_Tenebres": {
   "Corps": {
    "base_color": "#2B2140",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -144,9 +144,9 @@
   },
   "Corps_2": {
    "base_color": "#4A2C7C",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -286,9 +286,9 @@
  "Ballon_Igloo_Glace": {
   "Corps": {
    "base_color": "#BDE8FF",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -296,9 +296,9 @@
   },
   "Corps_2": {
    "base_color": "#F2FAFF",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -428,9 +428,9 @@
  "Ballon_Igloo_Feu": {
   "Corps": {
    "base_color": "#E5402B",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -438,9 +438,9 @@
   },
   "Corps_2": {
    "base_color": "#FF8C2B",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -580,9 +580,9 @@
  "Ballon_Igloo_Eau": {
   "Corps": {
    "base_color": "#2E8BE0",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -590,9 +590,9 @@
   },
   "Corps_2": {
    "base_color": "#39D0C5",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -722,9 +722,9 @@
  "Ballon_Igloo_Plante": {
   "Corps": {
    "base_color": "#3E9C46",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -732,9 +732,9 @@
   },
   "Corps_2": {
    "base_color": "#86CC5C",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -864,9 +864,9 @@
  "Ballon_Igloo_Eclair": {
   "Corps": {
    "base_color": "#FFD21C",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -874,9 +874,9 @@
   },
   "Corps_2": {
    "base_color": "#2F7BFF",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1006,9 +1006,9 @@
  "Ballon_Flocon_Lumiere": {
   "Corps_2": {
    "base_color": "#FFD970",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1016,9 +1016,9 @@
   },
   "Corps": {
    "base_color": "#FFF3D9",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1138,9 +1138,9 @@
  "Ballon_Flocon_Tenebres": {
   "Corps_2": {
    "base_color": "#4A2C7C",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1148,9 +1148,9 @@
   },
   "Corps": {
    "base_color": "#2B2140",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1280,9 +1280,9 @@
  "Ballon_Flocon_Glace": {
   "Corps_2": {
    "base_color": "#F2FAFF",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1290,9 +1290,9 @@
   },
   "Corps": {
    "base_color": "#BDE8FF",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1412,9 +1412,9 @@
  "Ballon_Flocon_Feu": {
   "Corps_2": {
    "base_color": "#FF8C2B",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1422,9 +1422,9 @@
   },
   "Corps": {
    "base_color": "#E5402B",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1554,9 +1554,9 @@
  "Ballon_Flocon_Eau": {
   "Corps_2": {
    "base_color": "#39D0C5",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1564,9 +1564,9 @@
   },
   "Corps": {
    "base_color": "#2E8BE0",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1686,9 +1686,9 @@
  "Ballon_Flocon_Plante": {
   "Corps_2": {
    "base_color": "#86CC5C",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1696,9 +1696,9 @@
   },
   "Corps": {
    "base_color": "#3E9C46",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1818,9 +1818,9 @@
  "Ballon_Flocon_Eclair": {
   "Corps_2": {
    "base_color": "#2F7BFF",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1828,9 +1828,9 @@
   },
   "Corps": {
    "base_color": "#FFD21C",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -1950,9 +1950,9 @@
  "Dirigeable_Polaire_Lumiere": {
   "Corps": {
    "base_color": "#FFF3D9",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -2050,9 +2050,9 @@
   },
   "Corps_2": {
    "base_color": "#FFD970",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -2102,9 +2102,9 @@
  "Dirigeable_Polaire_Tenebres": {
   "Corps": {
    "base_color": "#2B2140",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -2202,9 +2202,9 @@
   },
   "Corps_2": {
    "base_color": "#4A2C7C",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -2274,9 +2274,9 @@
  "Dirigeable_Polaire_Glace": {
   "Corps": {
    "base_color": "#BDE8FF",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -2374,9 +2374,9 @@
   },
   "Corps_2": {
    "base_color": "#F2FAFF",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -2436,9 +2436,9 @@
  "Dirigeable_Polaire_Feu": {
   "Corps": {
    "base_color": "#E5402B",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -2536,9 +2536,9 @@
   },
   "Corps_2": {
    "base_color": "#FF8C2B",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -2608,9 +2608,9 @@
  "Dirigeable_Polaire_Eau": {
   "Corps": {
    "base_color": "#2E8BE0",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -2708,9 +2708,9 @@
   },
   "Corps_2": {
    "base_color": "#39D0C5",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -2770,9 +2770,9 @@
  "Dirigeable_Polaire_Plante": {
   "Corps": {
    "base_color": "#3E9C46",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -2870,9 +2870,9 @@
   },
   "Corps_2": {
    "base_color": "#86CC5C",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -2932,9 +2932,9 @@
  "Dirigeable_Polaire_Eclair": {
   "Corps": {
    "base_color": "#FFD21C",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -3032,9 +3032,9 @@
   },
   "Corps_2": {
    "base_color": "#2F7BFF",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -3094,9 +3094,9 @@
  "Boss_Gardien_Glaciers_Glace": {
   "Ecorce_Gelee": {
    "base_color": "#6FB6D9",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -3194,9 +3194,9 @@
   },
   "Feuillage_Glacier": {
    "base_color": "#8CCBE6",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -3214,9 +3214,9 @@
   },
   "Feuillage_Givre": {
    "base_color": "#DDF3FF",
-   "roughness": 0.22,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -3232,16 +3232,6 @@
    "alpha": 1.0,
    "transmission": 0.0
   },
-  "Aura_Coeur": {
-   "base_color": "#9FEFFF",
-   "roughness": 0.3,
-   "metallic": 0.0,
-   "coat": 0.7,
-   "emission": "#9FEFFF",
-   "emission_strength": 3.0,
-   "alpha": 0.35,
-   "transmission": 0.0
-  },
   "Cristal_Turquoise": {
    "base_color": "#3FD8E8",
    "roughness": 0.06,
@@ -3254,9 +3244,9 @@
   },
   "Racine_Gelee": {
    "base_color": "#7D93AE",
-   "roughness": 0.3,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -3276,9 +3266,9 @@
  "MiniBoss_Pin_Gonflable_Eau": {
   "Tronc_Gonflable": {
    "base_color": "#2E5E82",
-   "roughness": 0.3,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -3306,9 +3296,9 @@
   },
   "Sapin_Abysse": {
    "base_color": "#1B5EA8",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -3336,9 +3326,9 @@
   },
   "Sapin_Lagon": {
    "base_color": "#38C3D3",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,

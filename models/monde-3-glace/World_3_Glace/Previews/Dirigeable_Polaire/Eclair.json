@@ -7,7 +7,7 @@
  "blend": "Blender/Dirigeable_Polaire/Eclair.blend",
  "fbx": "FBX/Dirigeable_Polaire/Dirigeable_Polaire_Eclair.fbx",
  "dims": [
-  1.596,
+  1.595,
   2.118,
   1.569
  ],
@@ -35,9 +35,9 @@
  "materials": {
   "Corps": {
    "base_color": "#FFD21C",
-   "roughness": 0.18,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -135,9 +135,9 @@
   },
   "Corps_2": {
    "base_color": "#2F7BFF",
-   "roughness": 0.2,
+   "roughness": 0.42,
    "metallic": 0.0,
-   "coat": 0.7,
+   "coat": 0.15,
    "emission": null,
    "emission_strength": 0.0,
    "alpha": 1.0,
@@ -194,7 +194,7 @@
    "transmission": 0.0
   }
  },
- "verts": 13656,
- "tris": 26904,
- "seconds": 44.2
+ "verts": 9484,
+ "tris": 18560,
+ "seconds": 45.4
 }
