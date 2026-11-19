@@ -123,6 +123,9 @@ def build_geometry(m, mats):
 
     # Fanion d'expédition polaire (os Drapeau)
     pole_base, _ = dome_point(1.25, -math.pi / 2, 0.02)
+    m.bones["Drapeau"]["head"] = pole_base.copy()       # le fanion pivote sur son pied
+    m.lock(pole_base, 0.18, "Haut")
+    m.lock(V((0, 0.72, 0.2)), 0.45, "Bouche")           # le tunnel-bouche suit l'arche
     top = pole_base + V((0, 0, 0.36))
     m.add(L.tube("mat", [pole_base, top], 0.012, 8, cap_rings=2), mats["valve"], "Drapeau")
     m.add(L.sphere("mat_boule", top + V((0, 0, 0.015)), 0.025, 10, 6), mats["gold"], "Drapeau")

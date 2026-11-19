@@ -34,6 +34,23 @@ Pour qu'elles s'affichent correctement sur chaque MeshPart importée :
 - dans l'importeur, ne pas cocher « Ignorer les couleurs de sommets » ;
 - `Material` conseillé : `SmoothPlastic` (aspect plastique gonflable).
 
+### Aspect « ballon » en un clic
+
+Les couleurs de sommets contiennent déjà l'ombrage des coutures et des creux (occlusion ambiante
+cuite) et un léger reflet. Pour l'aspect plastique gonflable brillant, sélectionne l'ennemi importé
+dans l'Explorateur puis colle ceci dans la *Barre de commande* (onglet *Affichage*) :
+
+```lua
+for _, p in ipairs(game:GetService("Selection"):Get()[1]:GetDescendants()) do
+	if p:IsA("MeshPart") then
+		p.Color = Color3.new(1, 1, 1)                -- couleurs de sommets non assombries
+		p.TextureID = ""
+		p.Material = Enum.Material.SmoothPlastic    -- plastique lisse
+		p.Reflectance = 0.12                         -- reflet de ballon
+	end
+end
+```
+
 ## Ce qui a été adapté pour Roblox
 
 | Contrainte Roblox | Adaptation |

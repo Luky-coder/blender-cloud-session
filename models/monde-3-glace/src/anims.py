@@ -291,6 +291,17 @@ def eye_motion(name, t, p, n, r):
         p.set(f"Sourcil_{side}", loc=(0, 0, raise_ * r), rot=(0, -sx * angry, 0))
 
 
+STATIC_BONES = ("Deco", "Ailerons")
+
+
+def glue(pose):
+    """Les décorations (couronnes élémentaires, ailerons) ne bougent plus seules : elles suivent la
+    surface du corps, à laquelle elles sont verrouillées (voir Model.lock)."""
+    for b in STATIC_BONES:
+        pose.pop(b, None)
+    return pose
+
+
 def with_eyes(actions, r):
     """Enveloppe un dictionnaire d'actions {nom: (n, boucle, fn)} avec le jeu des yeux."""
     out = {}
@@ -298,7 +309,7 @@ def with_eyes(actions, r):
         def f(t, fn=fn, name=name, n=n):
             pose = fn(t)
             eye_motion(name, t, pose, n, r)
-            return pose
+            return glue(pose)
         out[name] = (n, loop, f)
     return out
 
@@ -316,6 +327,6 @@ def make_mob_actions(spec, attack_fn, extra=None):
                 string_motion(name, t, pose)
             if "Oeil_G" in spec["bones"]:
                 eye_motion(name, t, pose, LENGTHS[name], spec.get("eye_r", 0.1))
-            return pose
+            return glue(pose)
         out[name] = (LENGTHS[name], LOOPS[name], f)
     return out

@@ -416,6 +416,7 @@ class Model:
             if n not in ("Root", "CTRL_Formes"):
                 b["head"] = b["head"] + V((0, 0, dz))
         self.meta["eye_centers"] = [c + V((0, 0, dz)) for c in self.meta.get("eye_centers", [])]
+        self.meta["locks"] = [(c + V((0, 0, dz)), r, b) for c, r, b in self.meta.get("locks", [])]
 
     # -- pièces
     def add(self, ob, material, bone=None):
@@ -429,22 +430,31 @@ class Model:
         self.parts.append((ob, bone))
         return ob
 
+    def lock(self, point, radius, bone):
+        """Verrou d'attache : autour de `point`, la peau suit exactement `bone` (pleinement jusqu'à la
+        moitié du rayon, puis en fondu). Une pièce animée par `bone` (ou un de ses enfants pivotant sur
+        ce point) reste ainsi collée au corps pendant les animations."""
+        self.meta.setdefault("locks", []).append((V(point), radius, bone))
+
     def _face_lock(self, co, ws):
-        """Peau autour des yeux verrouillée sur l'os porteur du visage : la surface sous les yeux bouge
-        exactement comme eux, ils restent collés au corps quelle que soit la déformation."""
+        """Applique les verrous d'attache (yeux + verrous déclarés) au poids d'un sommet de peau."""
+        locks = list(self.meta.get("locks", []))
         eyes = self.meta.get("eye_centers")
-        if not eyes or "Visage" not in self.bones:
-            return ws
-        face = self.bones["Visage"]["parent"]
-        r = self.meta.get("eye_r", 0.1)
-        d = min((co - c).length for c in eyes)
-        x = (d - 1.8 * r) / (1.7 * r)
-        f = 1.0 if x <= 0 else (0.0 if x >= 1 else 1 - x * x * (3 - 2 * x))
-        if f <= 0:
+        if eyes and "Visage" in self.bones:
+            r = self.meta.get("eye_r", 0.1)
+            for c in eyes:
+                locks.append((c, 3.5 * r, self.bones["Visage"]["parent"]))
+        best_f, best_b = 0.0, None
+        for c, rad, bone in locks:
+            x = ((co - c).length - 0.5 * rad) / (0.5 * rad)
+            f = 1.0 if x <= 0 else (0.0 if x >= 1 else 1 - x * x * (3 - 2 * x))
+            if f > best_f:
+                best_f, best_b = f, bone
+        if best_f <= 0:
             return ws
         s = sum(ws.values()) or 1.0
-        out = {n: (1 - f) * w / s for n, w in ws.items()}
-        out[face] = out.get(face, 0.0) + f
+        out = {n: (1 - best_f) * w / s for n, w in ws.items()}
+        out[best_b] = out.get(best_b, 0.0) + best_f
         return out
 
     def _weights(self, ob, bone):

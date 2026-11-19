@@ -17,13 +17,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 190,
-    "moving_bone_curves": 85,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 190,
-    "moving_bone_curves": 59,
+    "moving_bone_curves": 55,
     "shape_curves": 3
    }
   }
@@ -46,13 +46,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 190,
-    "moving_bone_curves": 85,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 190,
-    "moving_bone_curves": 59,
+    "moving_bone_curves": 55,
     "shape_curves": 3
    }
   }
@@ -75,13 +75,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 190,
-    "moving_bone_curves": 85,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 190,
-    "moving_bone_curves": 59,
+    "moving_bone_curves": 55,
     "shape_curves": 3
    }
   }
@@ -104,13 +104,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 190,
-    "moving_bone_curves": 85,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 190,
-    "moving_bone_curves": 59,
+    "moving_bone_curves": 55,
     "shape_curves": 3
    }
   }
@@ -133,13 +133,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 190,
-    "moving_bone_curves": 85,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 190,
-    "moving_bone_curves": 59,
+    "moving_bone_curves": 55,
     "shape_curves": 3
    }
   }
@@ -162,13 +162,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 190,
-    "moving_bone_curves": 85,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 190,
-    "moving_bone_curves": 59,
+    "moving_bone_curves": 55,
     "shape_curves": 3
    }
   }
@@ -191,13 +191,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 190,
-    "moving_bone_curves": 85,
+    "moving_bone_curves": 83,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 190,
-    "moving_bone_curves": 59,
+    "moving_bone_curves": 55,
     "shape_curves": 3
    }
   }
@@ -220,13 +220,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 180,
-    "moving_bone_curves": 54,
+    "moving_bone_curves": 51,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 180,
-    "moving_bone_curves": 42,
+    "moving_bone_curves": 38,
     "shape_curves": 3
    }
   }
@@ -249,13 +249,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 180,
-    "moving_bone_curves": 54,
+    "moving_bone_curves": 51,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 180,
-    "moving_bone_curves": 42,
+    "moving_bone_curves": 38,
     "shape_curves": 3
    }
   }
@@ -278,13 +278,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 180,
-    "moving_bone_curves": 54,
+    "moving_bone_curves": 51,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 180,
-    "moving_bone_curves": 42,
+    "moving_bone_curves": 38,
     "shape_curves": 3
    }
   }
@@ -307,13 +307,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 180,
-    "moving_bone_curves": 54,
+    "moving_bone_curves": 51,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 180,
-    "moving_bone_curves": 42,
+    "moving_bone_curves": 38,
     "shape_curves": 3
    }
   }
@@ -336,13 +336,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 180,
-    "moving_bone_curves": 54,
+    "moving_bone_curves": 51,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 180,
-    "moving_bone_curves": 42,
+    "moving_bone_curves": 38,
     "shape_curves": 3
    }
   }
@@ -365,13 +365,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 180,
-    "moving_bone_curves": 54,
+    "moving_bone_curves": 51,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 180,
-    "moving_bone_curves": 42,
+    "moving_bone_curves": 38,
     "shape_curves": 3
    }
   }
@@ -394,13 +394,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 180,
-    "moving_bone_curves": 54,
+    "moving_bone_curves": 51,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 180,
-    "moving_bone_curves": 42,
+    "moving_bone_curves": 38,
     "shape_curves": 3
    }
   }
@@ -429,7 +429,7 @@
    "FLY": {
     "frames": 61,
     "bone_curves": 390,
-    "moving_bone_curves": 83,
+    "moving_bone_curves": 79,
     "shape_curves": 3
    }
   }
@@ -452,13 +452,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 160,
-    "moving_bone_curves": 48,
+    "moving_bone_curves": 44,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 160,
-    "moving_bone_curves": 37,
+    "moving_bone_curves": 29,
     "shape_curves": 3
    }
   }
@@ -481,13 +481,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 160,
-    "moving_bone_curves": 48,
+    "moving_bone_curves": 44,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 160,
-    "moving_bone_curves": 37,
+    "moving_bone_curves": 29,
     "shape_curves": 3
    }
   }
@@ -510,13 +510,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 160,
-    "moving_bone_curves": 48,
+    "moving_bone_curves": 44,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 160,
-    "moving_bone_curves": 37,
+    "moving_bone_curves": 29,
     "shape_curves": 3
    }
   }
@@ -539,13 +539,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 160,
-    "moving_bone_curves": 48,
+    "moving_bone_curves": 44,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 160,
-    "moving_bone_curves": 37,
+    "moving_bone_curves": 29,
     "shape_curves": 3
    }
   }
@@ -568,13 +568,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 160,
-    "moving_bone_curves": 48,
+    "moving_bone_curves": 44,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 160,
-    "moving_bone_curves": 37,
+    "moving_bone_curves": 29,
     "shape_curves": 3
    }
   }
@@ -597,13 +597,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 160,
-    "moving_bone_curves": 48,
+    "moving_bone_curves": 44,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 160,
-    "moving_bone_curves": 37,
+    "moving_bone_curves": 29,
     "shape_curves": 3
    }
   }
@@ -626,13 +626,13 @@
    "ATTACK": {
     "frames": 37,
     "bone_curves": 160,
-    "moving_bone_curves": 48,
+    "moving_bone_curves": 44,
     "shape_curves": 3
    },
    "FLY": {
     "frames": 61,
     "bone_curves": 160,
-    "moving_bone_curves": 37,
+    "moving_bone_curves": 29,
     "shape_curves": 3
    }
   }

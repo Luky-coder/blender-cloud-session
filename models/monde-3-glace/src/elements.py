@@ -378,6 +378,7 @@ def add_hanging_string(model, mats, knot, bottom_z=0.02, parent="Body"):
     model.bone("Ficelle_1", heads[0], parent)
     model.bone("Ficelle_2", heads[1], "Ficelle_1")
     model.bone("Ficelle_3", heads[2], "Ficelle_2")
+    model.lock(knot, 0.2, parent)      # le nœud reste collé sous le ballon
     balloon_string(model, mats, pts, [(f"Ficelle_{i + 1}", heads[i]) for i in range(3)])
 
 
@@ -431,6 +432,9 @@ def decorate(model, elem, mats, A):
         face    : direction avant (pour orienter éclairs / vagues)."""
     face = A.get("face", V((0, 1, 0)))
     crown = A.get("crown", [])
+    for p, up, s, b in crown:          # chaque décoration de sommet reste collée à sa base
+        if isinstance(b, str):
+            model.lock(p, max(0.22, 1.3 * s), b)
     scatter = A.get("scatter", [])
     base = A.get("base", [])
     if elem == "lumiere":

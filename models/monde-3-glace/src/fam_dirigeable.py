@@ -97,6 +97,7 @@ def build_geometry(m, mats):
         E.brow(m, mats, pb + V((0, 0.04, 0.02)), nb + V((0, 0.6, 0)), 0.15, 0.025, 20 * sx, "Visage", side=("G" if sx < 0 else "D"))
     pm, nm = env(0.962, -math.pi / 2 + 0.25, -0.01)
     E.grin(m, mats, V((0, pm.y, pm.z)), V((0, 1, -0.35)), 0.15, 0.1, "Visage")
+    m.lock(V((0, pm.y, pm.z)), 0.3, "Nez")
 
     # Montagnes enneigées + glacier sur les deux flancs
     peaks = [(-0.58, 0.0), (-0.45, 0.17), (-0.33, 0.06), (-0.17, 0.27), (-0.02, 0.09), (0.12, 0.23),
@@ -148,6 +149,11 @@ def build_geometry(m, mats):
     cab_c, cab_s = V((0, 0.05, 0.27)), V((0.36, 0.62, 0.24))
     m.add(L.rounded_box("cabine", cab_c, cab_s, 0.08, 3), mats["second"], "Cabine")
     m.add(L.rounded_box("toit", cab_c + V((0, 0, 0.115)), V((0.3, 0.5, 0.04)), 0.018, 2), mats["accent"], "Cabine")
+    for y in (-0.15, 0.22):                               # pylônes et câbles collés à l'enveloppe
+        m.lock(V((0, y, ZC - RM + 0.04)), 0.22, "Body")
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            m.lock(env(t_of(0.05 + sy * 0.42), -math.pi / 2 + sx * 0.7, 0.0)[0], 0.14, "Body")
     for y in (-0.15, 0.22):
         m.add(L.tube("pylone", [V((0, y, 0.38)), V((0, y, ZC - RM + 0.05))], 0.03, 10, cap_rings=2),
               mats["valve"], "Cabine")
@@ -228,6 +234,7 @@ def build_geometry(m, mats):
     anchors["halo"] = (V((0, 0.05, ZC + RM + 0.3)), 0.3, "Deco")
     anchors["vine"] = [([env(0.12 + 0.62 * i / 40, 2.0 + L.TAU * 0.9 * i / 40, 0.015)[0] for i in range(41)], None)]
     anchors["base"] = [(V((0, -1.12, ZC + 0.02)), 0.24, "Ailerons")]
+    m.lock(V((0, -0.78, ZC)), 0.75, "Queue")              # queue + ailerons d'un seul bloc
     return anchors
 
 

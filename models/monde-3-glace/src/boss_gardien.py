@@ -293,6 +293,18 @@ def build_geometry(m, mats):
         if k % 3 == 0:
             E.snowflake_emblem(m, mats, p + V((0, 0, 0.55)), V((math.cos(a), math.sin(a), 0)), 0.3, "Proj_Tempete",
                                mat=mats["turq"])
+    # verrous d'attache : branches, racines, lianes, pylônes, cœur, bouche, queue collés au tronc
+    for i in range(3):
+        m.lock(m.bones[f"Branche_{i + 1}"]["head"], 0.8, "Body")
+    for i in range(5):
+        m.lock(m.bones[f"Racine_{i + 1}"]["head"], 0.45, "Body")
+    for i in range(4):
+        m.lock(m.bones[f"Liane_{i + 1}"]["head"], 0.3, "Body")
+    for sx, y in pods:
+        m.lock(V((sx * 1.3, y, ZC - 0.25)), 0.55, "Body")
+    m.lock(m.bones["Coeur"]["head"], 0.8, "Avant")
+    m.lock(m.bones["Bouche"]["head"], 0.85, "Bouche")
+    m.lock(V((0, -3.35, ZC)), 1.3, "Arriere")
     return branches
 
 

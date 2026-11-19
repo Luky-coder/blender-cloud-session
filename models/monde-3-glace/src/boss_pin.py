@@ -130,7 +130,7 @@ def build_geometry(m, mats):
         m.bone(f"Liane_{i + 1}", (0, 0, 0), "Etage_1" if i < 2 else "Etage_2")   # têtes fixées plus bas
     for i in range(6):
         a = TAU * i / 6 + math.pi / 6
-        m.bone(f"Racine_{i + 1}", (math.cos(a) * 0.4, math.sin(a) * 0.4, 0.25), "Root")
+        m.bone(f"Racine_{i + 1}", (math.cos(a) * 0.4, math.sin(a) * 0.4, 0.25), "Tronc")   # racines liées au tronc
     m.bone("Proj_Pomme", (0.85, 0.9, 1.6), "Root")
     m.bone("Proj_Racine", (0, 3.4, 0.0), "Root")
     m.bone("Proj_Neige", (0, 0.95, 2.4), "Root")
@@ -270,6 +270,14 @@ def build_geometry(m, mats):
     E.leaf(m, mats, rp[-2], V((0.5, -0.3, 1)), V((1, 0, 0)), 0.22, "Proj_Racine")
     m.add(L.lumpy("proj_neige", V((0, 0.95, 2.4)), (0.36, 0.3, 0.26), amp=0.16, seed=7, nu=18, nv=10), mats["snow"],
           "Proj_Neige")
+    # verrous d'attache : bras, lianes, bouche, étoile restent collés aux étages pendant les animations
+    for b in ("Bras_G", "Bras_D"):
+        m.lock(m.bones[b]["head"], 0.4, "Etage_2")
+    for i in range(4):
+        b = f"Liane_{i + 1}"
+        m.lock(m.bones[b]["head"], 0.28, m.bones[b]["parent"])
+    m.lock(m.bones["Bouche"]["head"], 0.65, "Bouche")
+    m.lock(m.bones["Etoile"]["head"], 0.35, "Etage_4")
     return names
 
 

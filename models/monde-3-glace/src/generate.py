@@ -65,6 +65,40 @@ def paths(args, mod):
     return blend, fbx, prev
 
 
+def bake_balloon(ob, size):
+    """Aspect ballon dans les couleurs de sommets : occlusion ambiante cuite (coutures et creux plus
+    sombres, volumes gonflés qui ressortent) + léger reflet sur les faces tournées vers le haut."""
+    sc = bpy.context.scene
+    world = bpy.data.worlds.new("_cuisson")
+    sc.world = world
+    world.light_settings.distance = 0.12 * size
+    sc.render.engine = "CYCLES"
+    sc.cycles.device = "CPU"
+    sc.cycles.samples = 48
+    sc.render.bake.target = "VERTEX_COLORS"
+    arm = ob.modifiers.get("Armature")
+    arm.show_render = arm.show_viewport = False
+    me = ob.data
+    base = me.color_attributes["Couleur"]
+    ao = me.color_attributes.new("_AO", "FLOAT_COLOR", "CORNER")
+    me.color_attributes.active_color = ao
+    with bpy.context.temp_override(object=ob, active_object=ob, selected_objects=[ob],
+                                   selected_editable_objects=[ob]):
+        bpy.ops.object.bake(type="AO", target="VERTEX_COLORS")
+    nz = [v.normal.z for v in me.vertices]
+    for li, loop in enumerate(me.loops):
+        a = ao.data[li].color[0]
+        c = base.data[li].color
+        k = 0.42 + 0.58 * a
+        sheen = 0.07 * max(0.0, nz[loop.vertex_index]) ** 2
+        base.data[li].color = (min(1.0, c[0] * k + sheen), min(1.0, c[1] * k + sheen), min(1.0, c[2] * k + sheen), 1.0)
+    me.color_attributes.remove(me.color_attributes["_AO"])
+    me.color_attributes.active_color = me.color_attributes["Couleur"]
+    arm.show_render = arm.show_viewport = True
+    sc.world = None
+    bpy.data.worlds.remove(world)
+
+
 def eval_bounds(mesh_ob):
     import numpy as np
     dg = bpy.context.evaluated_depsgraph_get()
@@ -160,6 +194,8 @@ def main():
     for poly in me0.polygons:
         for li in poly.loop_indices:
             attr.data[li].color = cols[poly.material_index]
+    lo0, hi0 = m.bounds
+    bake_balloon(mesh, max(hi0 - lo0))
 
     blend, fbx, prev = paths(args, mod)
     for d in (os.path.dirname(blend), os.path.dirname(fbx), prev):
